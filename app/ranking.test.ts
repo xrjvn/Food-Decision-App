@@ -129,8 +129,10 @@ test("penalizes a recent top pick without removing it or overriding a strong moo
 });
 
 
-test("only loads verified seed spots and preserves pre-tax pricing", () => {
-  const verified = seed.filter(({ verified }) => verified);
+test("only loads verified seed spots that can be ranked and preserves pre-tax pricing", () => {
+  const verified = seed.filter((spot) => spot.verified
+    && Number.isFinite(spot.latitude) && Number.isFinite(spot.longitude)
+    && spot.typical_meal_pre_tax_price_cents !== null);
   assert.deepEqual(visibleSpots.map(({ id, priceCents, serves }) => ({ id, priceCents, serves })),
     verified.map(({ id, typical_meal_pre_tax_price_cents, serves }) => ({ id, priceCents: typical_meal_pre_tax_price_cents, serves })));
 });

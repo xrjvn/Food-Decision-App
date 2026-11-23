@@ -106,7 +106,7 @@ export function rankSpots<Spot extends RankingSpot>(
     const deal = activeDeal(spot.deal, date, day, minute);
     const price = deal?.priceCents ?? spot.priceCents;
     const total = price + Math.round(price * ONTARIO_HST);
-    const moodBonus = mood !== "Anything" && spot.moods.includes(mood) ? 12 : 0;
+    const moodBonus = mood !== "Anything" && spot.moods.some((tag) => tag.toLowerCase() === mood.toLowerCase()) ? 12 : 0;
     const dealBonus = deal ? 8 : 0;
     const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
     const score = moodBonus + dealBonus - distance / 100 - noveltyPenalty;

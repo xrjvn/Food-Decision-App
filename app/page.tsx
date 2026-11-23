@@ -11,12 +11,30 @@ const money = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD
 const presets = [10, 15, 20];
 const RECENT_PICK_LIMIT = 3;
 
+function reportPriceUrl(restaurant: string) {
+  const placeholder = "https://docs.google.com/forms/d/e/REPLACE_WITH_FORM_ID/viewform";
+  const configured = process.env.NEXT_PUBLIC_REPORT_URL || placeholder;
+  let url: URL;
+  try {
+    url = new URL(configured);
+    if (url.protocol !== "https:") url = new URL(placeholder);
+  } catch {
+    url = new URL(placeholder);
+  }
+  const field = process.env.NEXT_PUBLIC_REPORT_RESTAURANT_FIELD;
+  url.searchParams.set(field || "restaurant", restaurant);
+  if (field) url.searchParams.set("usp", "pp_url");
+  return url.toString();
+}
+
 function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
   const directions = new URLSearchParams({
     api: "1",
-    destination: spot.name + " Waterloo Ontario " + spot.area,
+    destination: [spot.name, spot.address || spot.area, "Waterloo Ontario"].join(", "),
     travelmode: "walking",
   });
+  const verifiedDate = spot.deal?.priceCents === undefined ? spot.priceSnapshotDate : spot.deal.verifiedOn;
+
   return (
     <article className={primary ? "pick featured" : "pick"}>
       <div className="pick-top">
@@ -29,6 +47,10 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
         <div className="price">
           <strong>{money.format(spot.total / 100)}</strong>
           <small>est. total with tax, tip not included</small>
+          <small>{verifiedDate
+            ? <>Price verified <time dateTime={verifiedDate}>{verifiedDate}</time></>
+            : "Price verification date unavailable"}
+          </small>
         </div>
       </div>
       {spot.deal && <p className="deal">
@@ -36,8 +58,11 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
       </p>}
       <div className="links">
         <a href={`https://www.google.com/maps/dir/?${directions}`} target="_blank" rel="noreferrer">Directions</a>
-        <a href={spot.menu} target="_blank" rel="noreferrer">Menu</a>
+        {spot.menu && <a href={spot.menu} target="_blank" rel="noreferrer">Menu</a>}
       </div>
+      <a className="price-report" href={reportPriceUrl(spot.name)} target="_blank" rel="noreferrer">
+        Report a wrong price
+      </a>
     </article>
   );
 }
