@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import seed from "../data/restaurants.seed.json";
+import type { SeedSpot } from "../scripts/restaurant-import";
 import { spots as visibleSpots } from "./catalogue";
 import { rankSpots, type RankingSpot } from "./ranking";
 
@@ -130,9 +131,21 @@ test("penalizes a recent top pick without removing it or overriding a strong moo
 
 
 test("only loads verified seed spots that can be ranked and preserves pre-tax pricing", () => {
-  const verified = seed.filter((spot) => spot.verified
+  const rows: SeedSpot[] = seed;
+  const verified = rows.filter((spot) => spot.verified
     && Number.isFinite(spot.latitude) && Number.isFinite(spot.longitude)
-    && spot.typical_meal_pre_tax_price_cents !== null);
+    && (spot.cheapest_meal_pre_tax_price_cents === undefined
+      ? spot.typical_meal_pre_tax_price_cents !== null
+      : spot.cheapest_meal_pre_tax_price_cents !== null && Boolean(spot.cheapest_meal)));
   assert.deepEqual(visibleSpots.map(({ id, priceCents, serves }) => ({ id, priceCents, serves })),
-    verified.map(({ id, typical_meal_pre_tax_price_cents, serves }) => ({ id, priceCents: typical_meal_pre_tax_price_cents, serves })));
+    verified.map(({ id, typical_meal_pre_tax_price_cents, cheapest_meal_pre_tax_price_cents, serves }) => ({
+      id, priceCents: typical_meal_pre_tax_price_cents ?? cheapest_meal_pre_tax_price_cents, serves,
+    })));
+});
+
+test("filters and displays the taxed cheapest complete meal price when supplied", () => {
+  const spots = [spot("fits", { priceCents: 1800, cheapestMealPriceCents: 884 }),
+    spot("over", { priceCents: 700, cheapestMealPriceCents: 885 })];
+  const result = rankSpots(spots, { ...search, budgetCents: 999 });
+  assert.deepEqual(result.picks.map(({ id, total }) => [id, total]), [["fits", 999]]);
 });

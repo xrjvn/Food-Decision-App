@@ -24,14 +24,19 @@ const catalogue: SeedSpot[] = seed;
 export const spots: readonly Spot[] = catalogue
   .filter((spot) => spot.verified === true
     && Number.isFinite(spot.latitude) && Number.isFinite(spot.longitude)
-    && spot.typical_meal_pre_tax_price_cents !== null)
+    && (spot.cheapest_meal_pre_tax_price_cents === undefined
+      ? spot.typical_meal_pre_tax_price_cents !== null
+      : spot.cheapest_meal_pre_tax_price_cents !== null && Boolean(spot.cheapest_meal)))
   .map(({
     latitude, longitude, typical_meal_pre_tax_price_cents, deal,
+    cheapest_meal, cheapest_meal_pre_tax_price_cents,
     id, name, meal, area, address, moods, menu, hours, serves, price_snapshot_date,
   }) => ({
     id, name, meal, area, address, moods, menu, hours, serves,
     priceSnapshotDate: price_snapshot_date,
     point: [latitude, longitude],
-    priceCents: typical_meal_pre_tax_price_cents,
+    priceCents: typical_meal_pre_tax_price_cents ?? cheapest_meal_pre_tax_price_cents,
+    cheapestMeal: cheapest_meal || undefined,
+    cheapestMealPriceCents: cheapest_meal_pre_tax_price_cents ?? undefined,
     deal: deal ?? undefined,
   }));

@@ -19,6 +19,8 @@ export type RankingSpot = {
   id: string;
   name: string;
   meal: string;
+  cheapestMeal?: string;
+  cheapestMealPriceCents?: number;
   priceCents: number;
   point: Point;
   moods: readonly string[];
@@ -104,7 +106,7 @@ export function rankSpots<Spot extends RankingSpot>(
     if (distance > EXPANDED_METRES || !isWithinHours(spot.hours, day, minute)) return [];
 
     const deal = activeDeal(spot.deal, date, day, minute);
-    const price = deal?.priceCents ?? spot.priceCents;
+    const price = spot.cheapestMealPriceCents ?? deal?.priceCents ?? spot.priceCents;
     const total = price + Math.round(price * ONTARIO_HST);
     const moodBonus = mood !== "Anything" && spot.moods.some((tag) => tag.toLowerCase() === mood.toLowerCase()) ? 12 : 0;
     const dealBonus = deal ? 8 : 0;

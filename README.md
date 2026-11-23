@@ -8,9 +8,9 @@ Use Node.js 20.9 or newer. Run `npm ci` and `npm run dev`, then open the local U
 
 ## Campus preview
 
-Edit `data/restaurants.seed.json` to maintain the catalogue. Store typical pre-tax meal prices in Canadian cents and use `serves` for the number of people the listed meal feeds. `price_snapshot_date` is the date the menu price was checked (YYYY-MM-DD), or null when unconfirmed. Keep `verified` false until the location, menu price and weekly hours have been checked against the linked sources. Only verified rows enter ranking. Menu prices can still change.
+Edit `data/restaurants.seed.json` to maintain the catalogue. Store cheapest complete meal and typical meal pre-tax prices in Canadian cents and use `serves` for the number of people the listed meal feeds. `price_snapshot_date` is the date the menu price was checked (YYYY-MM-DD), or null when unconfirmed. Keep `verified` false until the location, menu price and weekly hours have been checked against the linked sources. Only verified rows enter ranking. Menu prices can still change.
 
-The browser calculates tax-inclusive totals and ranks by mood, proximity and active deals. A small penalty for the last three distinct top picks within the current page visit helps introduce variety. Approximate walk times use straight-line distance.
+The browser calculates tax-inclusive totals from the cheapest complete meal on new imports and ranks by mood, proximity and active deals. A small penalty for the last three distinct top picks within the current page visit helps introduce variety. Approximate walk times use straight-line distance.
 
 Weekly hours are kept with their sources in the catalogue. The app interprets them in Waterloo time. Holiday exceptions and last-minute closures may differ from the posted schedule.
 
@@ -30,9 +30,9 @@ Start after the pickup flow, catalogue maintenance and pilot measurement are wor
 
 Export the Restaurants sheet as CSV, then run `npm run import:restaurants -- /path/to/Restaurants.csv`. The export replaces the seed's set of rows. Use `--output /path/to/review.json` to preview the result before replacing the seed. Invalid numbers, duplicate IDs, and malformed schedules stop the import before it writes the destination.
 
-Use hours such as `Daily 11am–9pm` or `Mon-Fri 11:00-21:00; Sat-Sun closed`. Separate mood tags with commas, semicolons, or pipes. For snapshot dates, use a status such as `Verified 2026-11-22` or pass `--snapshot-date YYYY-MM-DD` when that date applies to the entire export. Unchanged meals and prices can retain their prior dates.
+Use hours such as `Daily 11am–9pm` or `Mon-Fri 11:00-21:00; Sat-Sun closed`. Separate mood tags with commas, semicolons, or pipes. Use YYYY-MM-DD in `Price date checked`. If blank, use a status such as `Verified 2026-11-22` or pass `--snapshot-date YYYY-MM-DD` when that date applies to the entire export. Unchanged meals and prices can retain their prior dates.
 
-The CSV has no coordinates, menu URLs or deal fields. Matching IDs retain location and menu details from the existing seed. A changed address clears location-specific metadata. Check coordinates for new or moved spots before they can appear in results. A blank hours cell can keep the prior schedule, and a blank price always makes the row unverified.
+The CSV can supply coordinates. Menu URLs and deal details come from the seed. Matching IDs retain location and menu details from the existing seed. A changed address clears location-specific metadata. Check coordinates for new or moved spots before they can appear in results. A blank hours cell can keep the prior schedule, and a blank cheapest meal price or description always makes the row unverified.
 
 ## Configure price reports
 
@@ -40,7 +40,7 @@ Set `NEXT_PUBLIC_REPORT_URL` to the Google Form's full `viewform` URL before bui
 
 ### Spreadsheet column names
 
-Required headers are `ID`, `Name`, `Area`, `Address`, `Cuisine`, `Mood tags`, `Typical meal`, `Serves (people)`, `Typical meal pre-tax`, `Row status`, `Hours`, and `Dietary notes`. Optional headers are `Latitude` and `Longitude`. Fill them together with decimal degrees, or leave both blank to use coordinates already in the seed for that location. The importer ignores other columns, including `Geocode status`.
+Required headers are `ID`, `Name`, `Area`, `Address`, `Cuisine`, `Mood tags`, `Typical meal`, `Serves (people)`, `Typical meal pre-tax`, `Row status`, `Hours`, `Dietary notes`, `Cheapest complete meal`, `Cheapest meal pre-tax`, `Price source`, `Price date checked`, and `Price confidence`. The importer also accepts `Cheapest meal, pre-tax` as an alias. Optional headers are `Latitude` and `Longitude`. Fill them together with decimal degrees, or leave both blank to use coordinates already in the seed for that location. The importer ignores other columns, including `Geocode status`.
 
 ### One-off geocoding
 

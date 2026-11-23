@@ -3,7 +3,7 @@ import { test } from "node:test";
 import seed from "../data/restaurants.seed.json";
 import { importRestaurants } from "./restaurant-import";
 
-const header = "ID,Name,Area,Address,Cuisine,Mood tags,Typical meal,Serves (people),Typical meal pre-tax,Row status,Hours,Dietary notes";
+const header = "ID,Name,Area,Address,Cuisine,Mood tags,Typical meal,Serves (people),Typical meal pre-tax,Row status,Hours,Dietary notes,Cheapest complete meal,Cheapest meal pre-tax,Price source,Price date checked,Price confidence";
 
 function csv(...rows: string[][]) {
   return "\uFEFF" + [header, ...rows.map((row) => row.map((value) => `"${value.replaceAll('"', '""')}"`).join(","))].join("\r\n");
@@ -14,6 +14,7 @@ function row(fields: Record<number, string> = {}) {
     "campus-pizza", 'Campus "Pizza"', "University Plaza", "160 University Ave W, Waterloo",
     "Pizza", "Quick, Filling", "Small cheese pizza", "1", "CA$7.99",
     "Verified 2026-11-22", "Mon-Fri 11am–4am; Sat-Sun closed", "Vegetarian\nAsk about allergens",
+    "Small cheese pizza", "7.99", "Restaurant menu", "", "High",
   ].map((value, index) => fields[index] ?? value);
 }
 
@@ -34,8 +35,8 @@ test("imports quoted spreadsheet cells, cents, dates and overnight hours", () =>
 });
 
 test("a blank price always keeps the row unverified and clears the old snapshot date", () => {
-  const [spot] = importRestaurants(csv(row({ 8: "   " })), seed);
-  assert.equal(spot.typical_meal_pre_tax_price_cents, null);
+  const [spot] = importRestaurants(csv(row({ 13: "   " })), seed);
+  assert.equal(spot.cheapest_meal_pre_tax_price_cents, null);
   assert.equal(spot.verified, false);
   assert.equal(spot.price_snapshot_date, null);
 });
@@ -58,8 +59,8 @@ test("rejects invalid serving counts and duplicate IDs", () => {
 
 test("preserves the snapshot only for an unchanged meal and price unless a date is supplied", () => {
   const [same] = importRestaurants(csv(row({ 9: "Verified", 10: "" })), seed);
-  const [changed] = importRestaurants(csv(row({ 8: "8.25", 9: "Verified" })), seed);
-  const [dated] = importRestaurants(csv(row({ 8: "8.25", 9: "Verified" })), seed, "2026-11-21");
+  const [changed] = importRestaurants(csv(row({ 13: "8.25", 9: "Verified" })), seed);
+  const [dated] = importRestaurants(csv(row({ 13: "8.25", 9: "Verified" })), seed, "2026-11-21");
   assert.equal(same.price_snapshot_date, seed[0].price_snapshot_date);
   assert.deepEqual(same.hours, seed[0].hours);
   assert.equal(changed.price_snapshot_date, null);
@@ -81,4 +82,19 @@ test("reads optional Latitude and Longitude and prefers them over existing seed 
   assert.deepEqual([spot.latitude, spot.longitude], [43.47, -80.54]);
   assert.throws(() => importRestaurants(source.replace("-80.54", "")), /Latitude and Longitude must both/);
   assert.throws(() => importRestaurants(source.replace("43.47", "91")), /Latitude and Longitude must both/);
+});
+
+
+test("keeps the cheapest meal separate and prefers the explicit price-check date", () => {
+  const source = csv(row({ 8: "", 12: "Soup and bread", 13: "5.50", 15: "2026-11-23" }))
+    .replace(",Cheapest meal pre-tax,", ',"Cheapest meal, pre-tax",');
+  const [spot] = importRestaurants(source, seed);
+  assert.equal(spot.verified, true);
+  assert.equal(spot.meal, "Small cheese pizza");
+  assert.equal(spot.cheapest_meal, "Soup and bread");
+  assert.equal(spot.cheapest_meal_pre_tax_price_cents, 550);
+  assert.equal(spot.price_snapshot_date, "2026-11-23");
+  assert.equal(spot.price_source, "Restaurant menu");
+  assert.equal(spot.price_confidence, "High");
+  assert.throws(() => importRestaurants(csv(row({ 13: "unknown" }))), /Cheapest meal pre-tax/);
 });

@@ -33,7 +33,7 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
     destination: [spot.name, spot.address || spot.area, "Waterloo Ontario"].join(", "),
     travelmode: "walking",
   });
-  const verifiedDate = spot.deal?.priceCents === undefined ? spot.priceSnapshotDate : spot.deal.verifiedOn;
+  const verifiedDate = spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined ? spot.priceSnapshotDate : spot.deal.verifiedOn;
 
   return (
     <article className={primary ? "pick featured" : "pick"}>
@@ -41,7 +41,10 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
         <div>
           {primary && <p className="eyebrow">TOP PICK</p>}
           {primary ? <h2>{spot.name}</h2> : <h3>{spot.name}</h3>}
-          <p className="meal">{spot.meal}</p>
+          <p className="meal">{spot.cheapestMeal || spot.meal}</p>
+          {spot.cheapestMeal && spot.meal && spot.meal !== spot.cheapestMeal && (
+            <p className="location">Typical meal · {spot.meal}</p>
+          )}
           <p className="location">~{spot.walkMinutes} min walk · {spot.area}</p>
         </div>
         <div className="price">

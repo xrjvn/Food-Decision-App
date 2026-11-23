@@ -5,6 +5,7 @@ import type { OpeningWindow, RankingSpot } from "../app/ranking";
 const columns = [
   "ID", "Name", "Area", "Address", "Cuisine", "Mood tags", "Typical meal",
   "Serves (people)", "Typical meal pre-tax", "Row status", "Hours", "Dietary notes",
+  "Cheapest complete meal", "Cheapest meal pre-tax", "Price source", "Price date checked", "Price confidence",
 ] as const;
 
 type Row = Record<typeof columns[number], string> & Partial<Record<typeof LATITUDE | typeof LONGITUDE, string>>;
@@ -13,6 +14,10 @@ export type SeedSpot = {
   id: string;
   name: string;
   meal: string;
+  cheapest_meal?: string;
+  cheapest_meal_pre_tax_price_cents?: number | null;
+  price_source?: string;
+  price_confidence?: string;
   area: string;
   address?: string;
   cuisine?: string;
@@ -38,12 +43,12 @@ function isoDate(value: string) {
     && new Date(time).toISOString().slice(0, 10) === value;
 }
 
-function priceCents(value: string) {
+function priceCents(value: string, column = "Typical meal pre-tax") {
   if (!value) return null;
   const match = value.match(/^(?:CA\$|CAD\s*|\$)?\s*(\d+)(?:\.(\d{1,2}))?$/i);
-  if (!match) throw new Error("Typical meal pre-tax must be a non-negative CAD amount with at most two decimals.");
+  if (!match) throw new Error(`${column} must be a non-negative CAD amount with at most two decimals.`);
   const cents = Number(match[1]) * 100 + Number((match[2] ?? "").padEnd(2, "0"));
-  if (!Number.isSafeInteger(cents)) throw new Error("Typical meal pre-tax is too large.");
+  if (!Number.isSafeInteger(cents)) throw new Error(`${column} is too large.`);
   return cents;
 }
 
@@ -99,7 +104,7 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
     trim: true,
     skip_empty_lines: true,
     columns: (header: string[]) => {
-      const names = header.map((name) => name.trim());
+      const names = header.map((name) => name.trim() === "Cheapest meal, pre-tax" ? "Cheapest meal pre-tax" : name.trim());
       for (const column of columns) {
         if (names.filter((name) => name === column).length !== 1) throw new Error(`Expected exactly one "${column}" column.`);
       }
@@ -134,10 +139,19 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
         throw new Error("Latitude and Longitude must both be valid decimal coordinates.");
       }
       const price = priceCents(row["Typical meal pre-tax"]);
-      const verified = row["Row status"].startsWith("Verified") && price !== null;
+      const cheapestMeal = row["Cheapest complete meal"];
+      const cheapestPrice = priceCents(row["Cheapest meal pre-tax"], "Cheapest meal pre-tax");
+      const checkedDate = row["Price date checked"];
+      if (checkedDate && !isoDate(checkedDate)) throw new Error("Price date checked must be a valid YYYY-MM-DD date.");
+      const verified = row["Row status"].startsWith("Verified") && cheapestPrice !== null && Boolean(cheapestMeal);
       const datedStatus = row["Row status"].match(/\b\d{4}-\d{2}-\d{2}\b/)?.[0];
       if (verified && datedStatus && !isoDate(datedStatus)) throw new Error("Row status contains an invalid snapshot date.");
       const samePrice = metadata?.typical_meal_pre_tax_price_cents === price && metadata.meal === row["Typical meal"];
+
+      const sameCheapest = (metadata?.cheapest_meal_pre_tax_price_cents ?? metadata?.typical_meal_pre_tax_price_cents) === cheapestPrice
+        && (metadata?.cheapest_meal ?? metadata?.meal) === cheapestMeal;
+
+      const priceDate = (checkedDate || datedStatus) ?? snapshotDate ?? (sameCheapest ? metadata?.price_snapshot_date : null);
 
       return {
         id,
@@ -148,10 +162,14 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
         dietary_notes: row["Dietary notes"],
         moods: row["Mood tags"].split(/[,;|]/).map((tag) => tag.trim()).filter(Boolean),
         meal: row["Typical meal"],
+        cheapest_meal: cheapestMeal,
+        cheapest_meal_pre_tax_price_cents: cheapestPrice,
+        price_source: row["Price source"],
+        price_confidence: row["Price confidence"],
         serves: servings(row["Serves (people)"]),
         typical_meal_pre_tax_price_cents: price,
         verified,
-        price_snapshot_date: verified ? datedStatus ?? snapshotDate ?? (samePrice ? metadata.price_snapshot_date : null) : null,
+        price_snapshot_date: verified ? priceDate : null,
         hours: parseHours(row.Hours, metadata?.hours),
         hoursSource: row.Hours ? null : metadata?.hoursSource ?? null,
         menu: metadata?.menu ?? null,
