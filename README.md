@@ -37,3 +37,15 @@ The CSV has no coordinates, menu URLs or deal fields. Matching IDs retain locati
 ## Configure price reports
 
 Set `NEXT_PUBLIC_REPORT_URL` to the Google Form's full `viewform` URL before building. Until configured, the link uses a placeholder. To prefill the form's restaurant question, also set `NEXT_PUBLIC_REPORT_RESTAURANT_FIELD` to its `entry.<id>` key from a Google Forms prefilled link. Without that setting, the app appends a generic `restaurant` query parameter. Rebuild the static export after changing either setting.
+
+### Spreadsheet column names
+
+Required headers are `ID`, `Name`, `Area`, `Address`, `Cuisine`, `Mood tags`, `Typical meal`, `Serves (people)`, `Typical meal pre-tax`, `Row status`, `Hours`, and `Dietary notes`. Optional headers are `Latitude` and `Longitude`. Fill them together with decimal degrees, or leave both blank to use coordinates already in the seed for that location. The importer ignores other columns, including `Geocode status`.
+
+### One-off geocoding
+
+Use the public endpoint only for a small, one-time batch on one machine. Run one copy of the script, reuse its cache and submit only public business addresses. See the [Nominatim usage policy](https://operations.osmfoundation.org/policies/nominatim/). Geocoding data is © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright).
+
+Run `npm run geocode:restaurants -- Restaurants.csv`. The script sends sequential lookups at most once per second and caches responses in `.nominatim-cache.jsonl`. It writes `Restaurants.geocoded.csv` alongside the export. Use `--output PATH` or `--cache PATH` to choose different files.
+
+Include the street number, street name, and city in each address. Review the `Geocode status` column before importing. Existing coordinates are preserved, and incomplete pairs, missing or ambiguous matches, and matches outside the City of Waterloo or with an unconfirmed municipality are flagged for manual review.

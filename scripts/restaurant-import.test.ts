@@ -74,3 +74,11 @@ test("new IDs and moved addresses never inherit unverified coordinates", () => {
   assert.equal(moved.longitude, null);
   assert.equal(moved.menu, null);
 });
+
+test("reads optional Latitude and Longitude and prefers them over existing seed coordinates", () => {
+  const source = csv([...row(), "43.47", "-80.54"]).replace(header, header + ",Latitude,Longitude");
+  const [spot] = importRestaurants(source, seed);
+  assert.deepEqual([spot.latitude, spot.longitude], [43.47, -80.54]);
+  assert.throws(() => importRestaurants(source.replace("-80.54", "")), /Latitude and Longitude must both/);
+  assert.throws(() => importRestaurants(source.replace("43.47", "91")), /Latitude and Longitude must both/);
+});

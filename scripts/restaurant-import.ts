@@ -1,4 +1,5 @@
 import { parse } from "csv-parse/sync";
+import { LATITUDE, LONGITUDE, parseCoordinate } from "./coordinates";
 import type { OpeningWindow, RankingSpot } from "../app/ranking";
 
 const columns = [
@@ -6,7 +7,7 @@ const columns = [
   "Serves (people)", "Typical meal pre-tax", "Row status", "Hours", "Dietary notes",
 ] as const;
 
-type Row = Record<typeof columns[number], string>;
+type Row = Record<typeof columns[number], string> & Partial<Record<typeof LATITUDE | typeof LONGITUDE, string>>;
 
 export type SeedSpot = {
   id: string;
@@ -102,6 +103,9 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
       for (const column of columns) {
         if (names.filter((name) => name === column).length !== 1) throw new Error(`Expected exactly one "${column}" column.`);
       }
+      for (const column of [LATITUDE, LONGITUDE]) {
+        if (names.filter((name) => name === column).length > 1) throw new Error(`Duplicate "${column}" column.`);
+      }
       return names;
     },
   });
@@ -121,6 +125,14 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
       const previous = previousById.get(key);
       const sameLocation = !previous?.address || previous.address === row.Address;
       const metadata = sameLocation ? previous : undefined;
+      const latitudeText = raw[LATITUDE]?.trim() ?? "";
+      const longitudeText = raw[LONGITUDE]?.trim() ?? "";
+      const hasCoordinates = Boolean(latitudeText || longitudeText);
+      const latitude = parseCoordinate(latitudeText, 90);
+      const longitude = parseCoordinate(longitudeText, 180);
+      if (hasCoordinates && (latitude === null || longitude === null)) {
+        throw new Error("Latitude and Longitude must both be valid decimal coordinates.");
+      }
       const price = priceCents(row["Typical meal pre-tax"]);
       const verified = row["Row status"].startsWith("Verified") && price !== null;
       const datedStatus = row["Row status"].match(/\b\d{4}-\d{2}-\d{2}\b/)?.[0];
@@ -143,8 +155,8 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
         hours: parseHours(row.Hours, metadata?.hours),
         hoursSource: row.Hours ? null : metadata?.hoursSource ?? null,
         menu: metadata?.menu ?? null,
-        latitude: metadata?.latitude ?? null,
-        longitude: metadata?.longitude ?? null,
+        latitude: hasCoordinates ? latitude : metadata?.latitude ?? null,
+        longitude: hasCoordinates ? longitude : metadata?.longitude ?? null,
         deal: samePrice ? metadata.deal : null,
       };
     } catch (error) {
