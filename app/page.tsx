@@ -9,6 +9,7 @@ type PickData = RankedPick<typeof spots[number]>;
 
 const money = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" });
 const presets = [10, 15, 20];
+const RECENT_PICK_LIMIT = 3;
 
 function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
   const directions = new URLSearchParams({
@@ -47,6 +48,7 @@ export default function Home() {
   const [mood, setMood] = useState<Mood>("Anything");
   const [now, setNow] = useState<Date>();
   const [rejectedIds, setRejectedIds] = useState<ReadonlySet<string>>(new Set());
+  const [recentTopPickIds, setRecentTopPickIds] = useState<string[]>([]);
   const [allowOverBudget, setAllowOverBudget] = useState(false);
 
   useEffect(() => {
@@ -61,12 +63,22 @@ export default function Home() {
     setAllowOverBudget(false);
   }
 
+  function rememberTopPick(id: string) {
+    setRecentTopPickIds((ids) => [id, ...ids.filter((recentId) => recentId !== id)].slice(0, RECENT_PICK_LIMIT));
+  }
+
+  function changePreference() {
+    if (top) rememberTopPick(top.id);
+    resetPicks();
+  }
+
   const result = now && rankSpots(spots, {
     origin: campuses[campus].point,
     mood,
     budgetCents: budget * 100,
     now,
     rejectedIds,
+    recentTopPickIds,
     allowOverBudget,
   });
   const [top, ...alternates] = result?.picks.slice(0, 4) ?? [];
@@ -90,19 +102,19 @@ export default function Home() {
       <div className="columns">
         <section className="filters" aria-label="Meal preferences">
           <label htmlFor="campus">Starting point</label>
-          <select id="campus" value={campus} onChange={(event) => { setCampus(event.target.value as Campus); resetPicks(); }}>
+          <select id="campus" value={campus} onChange={(event) => { setCampus(event.target.value as Campus); changePreference(); }}>
             {Object.entries(campuses).map(([id, item]) => <option key={id} value={id}>{item.name}</option>)}
           </select>
           <fieldset>
             <legend>Meal budget</legend>
             <div className="options">
-              {presets.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => { setBudget(amount); resetPicks(); }}>${amount}</button>)}
+              {presets.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => { if (amount !== budget) { setBudget(amount); changePreference(); } }}>${amount}</button>)}
             </div>
           </fieldset>
           <fieldset>
             <legend>In the mood for</legend>
             <div className="options">
-              {moods.map((item) => <button key={item} aria-pressed={item === mood} onClick={() => { setMood(item); resetPicks(); }}>{item}</button>)}
+              {moods.map((item) => <button key={item} aria-pressed={item === mood} onClick={() => { if (item !== mood) { setMood(item); changePreference(); } }}>{item}</button>)}
             </div>
           </fieldset>
         </section>
@@ -113,7 +125,10 @@ export default function Home() {
           {top ? <>
             {message && <p className="result-note">{message}</p>}
             <Pick spot={top} primary />
-            <button className="result-action" onClick={() => setRejectedIds((ids) => new Set([...ids, top.id]))}>
+            <button className="result-action" onClick={() => {
+              rememberTopPick(top.id);
+              setRejectedIds((ids) => new Set([...ids, top.id]));
+            }}>
               Not feeling it
             </button>
           </> : <div className="pick">

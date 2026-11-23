@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import seed from "../data/restaurants.seed.json";
+import { spots as visibleSpots } from "./catalogue";
 import { rankSpots, type RankingSpot } from "./ranking";
 
 const search = {
@@ -100,4 +102,35 @@ test("expired, stale or out-of-hours deals lose their price, badge and ranking b
     assert.equal(other.total, 1356);
     assert.equal(other.deal, undefined);
   }
+});
+
+test("prefers a mood match over a slightly closer spot and leaves Anything neutral", () => {
+  const spots = [
+    spot("closer", { moods: ["Filling"] }),
+    spot("mood-match", { point: [43.471, -80.54], moods: ["Quick"] }),
+  ];
+  assert.equal(rankSpots(spots, search).picks[0].id, "mood-match");
+  assert.equal(rankSpots(spots, { ...search, mood: "Anything" }).picks[0].id, "closer");
+});
+
+test("penalizes a recent top pick without removing it or overriding a strong mood match", () => {
+  const spots = [
+    spot("recent", { moods: ["Quick"] }),
+    spot("new", { point: [43.471, -80.54] }),
+  ];
+  const neutral = { ...search, mood: "Anything" };
+  assert.equal(rankSpots(spots, neutral).picks[0].id, "recent");
+  const recentTopPickIds = ["recent"];
+  assert.deepEqual(
+    rankSpots(spots, { ...neutral, recentTopPickIds }).picks.map(({ id }) => id),
+    ["new", "recent"],
+  );
+  assert.equal(rankSpots(spots, { ...search, recentTopPickIds }).picks[0].id, "recent");
+});
+
+
+test("only loads verified seed spots and preserves pre-tax pricing", () => {
+  const verified = seed.filter(({ verified }) => verified);
+  assert.deepEqual(visibleSpots.map(({ id, priceCents, serves }) => ({ id, priceCents, serves })),
+    verified.map(({ id, typical_meal_pre_tax_price_cents, serves }) => ({ id, priceCents: typical_meal_pre_tax_price_cents, serves })));
 });

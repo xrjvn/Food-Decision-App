@@ -1,0 +1,301 @@
+[
+  {
+    "id": "campus-pizza",
+    "name": "Campus Pizza",
+    "meal": "Small cheese pizza",
+    "area": "University Plaza",
+    "moods": [
+      "Quick",
+      "Filling"
+    ],
+    "menu": "https://campuspizza-alpha.vercel.app/menu",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 240
+      }
+    ],
+    "hoursSource": "https://campuspizza-alpha.vercel.app/contact",
+    "latitude": 43.4719,
+    "longitude": -80.5378,
+    "typical_meal_pre_tax_price_cents": 799,
+    "serves": 1,
+    "deal": null,
+    "verified": true,
+    "price_snapshot_date": "2026-11-22"
+  },
+  {
+    "id": "shawerma-plus",
+    "name": "Shawerma Plus",
+    "meal": "Falafel wrap",
+    "area": "University Ave W",
+    "moods": [
+      "Quick",
+      "Light"
+    ],
+    "menu": "https://custom.order.online/en-CA/store/ShawermaPlus-318677?hideModal=true&pickup=true",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 660,
+        "closes": 0
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 60
+      }
+    ],
+    "hoursSource": "https://www.restaurantji.com/on/waterloo/shawerma-plus-2/",
+    "latitude": 43.4722,
+    "longitude": -80.5374,
+    "typical_meal_pre_tax_price_cents": 1199,
+    "serves": 1,
+    "deal": null,
+    "verified": true,
+    "price_snapshot_date": "2026-11-22"
+  },
+  {
+    "id": "bao",
+    "name": "Bao Sandwich Bar",
+    "meal": "Baguette sandwich combo",
+    "area": "Balsam Street",
+    "moods": [
+      "Filling",
+      "Treat"
+    ],
+    "menu": "https://www.baosandwichbar.com/menu",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "opens": 660,
+        "closes": 1260
+      },
+      {
+        "days": [
+          4
+        ],
+        "opens": 660,
+        "closes": 1290
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1320
+      }
+    ],
+    "hoursSource": "https://www.baosandwichbar.com/menu",
+    "latitude": 43.4765,
+    "longitude": -80.5271,
+    "typical_meal_pre_tax_price_cents": 1699,
+    "serves": 1,
+    "deal": {
+      "description": "Everyday combo with a side and drink",
+      "verifiedOn": "2026-11-22",
+      "source": "https://www.baosandwichbar.com/menu"
+    },
+    "verified": false,
+    "price_snapshot_date": null
+  },
+  {
+    "id": "gols",
+    "name": "Gol’s Lanzhou Noodle",
+    "meal": "Beef noodle soup",
+    "area": "University Ave W",
+    "moods": [
+      "Filling",
+      "Treat"
+    ],
+    "menu": "https://lanzhou.ca/waterloo/",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1260
+      }
+    ],
+    "hoursSource": "https://lanzhou.ca/waterloo/",
+    "latitude": 43.4725,
+    "longitude": -80.5368,
+    "typical_meal_pre_tax_price_cents": 1649,
+    "serves": 1,
+    "deal": null,
+    "verified": false,
+    "price_snapshot_date": null
+  },
+  {
+    "id": "auntys",
+    "name": "Aunty’s Kitchen",
+    "meal": "Chicken shawarma on rice",
+    "area": "University Ave W",
+    "moods": [
+      "Filling"
+    ],
+    "menu": "https://order.online/en-CA/store/aunty%27s-kitchen-waterloo-278840",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 180
+      }
+    ],
+    "hoursSource": "https://www.restaurantji.com/on/waterloo/auntys-kitchen-waterloo-/",
+    "latitude": 43.4722,
+    "longitude": -80.5374,
+    "typical_meal_pre_tax_price_cents": 1629,
+    "serves": 1,
+    "deal": null,
+    "verified": true,
+    "price_snapshot_date": "2026-11-22"
+  },
+  {
+    "id": "lazeez",
+    "name": "Lazeez Shawarma",
+    "meal": "Chicken shawarma wrap",
+    "area": "University Plaza",
+    "moods": [
+      "Quick",
+      "Filling"
+    ],
+    "menu": "https://menuweb.menu/restaurants/waterloo/lazeez-shawarma-9/menu",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hoursSource": "https://www.restaurantji.com/on/waterloo/lazeez-shawarma-2/",
+    "latitude": 43.4718,
+    "longitude": -80.5379,
+    "typical_meal_pre_tax_price_cents": 1199,
+    "serves": 1,
+    "deal": null,
+    "verified": false,
+    "price_snapshot_date": null
+  },
+  {
+    "id": "fresh-burrito",
+    "name": "Fresh Burrito",
+    "meal": "Bean burrito",
+    "area": "King Street North",
+    "moods": [
+      "Quick",
+      "Light"
+    ],
+    "menu": "https://wnam-cdn.lacarte.menu/storage/media/companies_menu_pdf/114395794/presotea-kingston-menu.pdf",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "opens": 660,
+        "closes": 300
+      },
+      {
+        "days": [
+          0,
+          6
+        ],
+        "opens": 720,
+        "closes": 300
+      }
+    ],
+    "hoursSource": "https://www.restaurantji.com/on/waterloo/fresh-burrito-2/",
+    "latitude": 43.4752,
+    "longitude": -80.5252,
+    "typical_meal_pre_tax_price_cents": 1099,
+    "serves": 1,
+    "deal": null,
+    "verified": false,
+    "price_snapshot_date": null
+  },
+  {
+    "id": "ipotato",
+    "name": "iPotato",
+    "meal": "Falafel sandwich",
+    "area": "University Plaza",
+    "moods": [
+      "Quick",
+      "Light"
+    ],
+    "menu": "https://ipotato.wheree.com/menu",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hoursSource": "https://www.restaurantji.com/on/waterloo/ipotato-/",
+    "latitude": 43.4718,
+    "longitude": -80.5377,
+    "typical_meal_pre_tax_price_cents": 1199,
+    "serves": 1,
+    "deal": null,
+    "verified": false,
+    "price_snapshot_date": null
+  }
+]

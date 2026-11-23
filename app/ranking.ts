@@ -40,6 +40,7 @@ const EXPANDED_METRES = 2000;
 const REROLLS_BEFORE_EXPANDING = 3;
 const MAX_DEAL_AGE_DAYS = 30;
 const DAY_MS = 86_400_000;
+const NOVELTY_PENALTY = 4;
 const radians = Math.PI / 180;
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const waterlooTime = new Intl.DateTimeFormat("en-CA", {
@@ -81,6 +82,7 @@ type Search = {
   budgetCents: number;
   now: Date;
   rejectedIds?: ReadonlySet<string>;
+  recentTopPickIds?: readonly string[];
   allowOverBudget?: boolean;
 };
 
@@ -91,7 +93,7 @@ type RankingResult<Spot extends RankingSpot> = {
 
 export function rankSpots<Spot extends RankingSpot>(
   spots: readonly Spot[],
-  { origin, mood, budgetCents, now, rejectedIds = new Set(), allowOverBudget = false }: Search,
+  { origin, mood, budgetCents, now, rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
 ): RankingResult<Spot> {
   const parts = Object.fromEntries(waterlooTime.formatToParts(now).map(({ type, value }) => [type, value]));
   const date = [parts.year, parts.month, parts.day].join("-");
@@ -104,7 +106,10 @@ export function rankSpots<Spot extends RankingSpot>(
     const deal = activeDeal(spot.deal, date, day, minute);
     const price = deal?.priceCents ?? spot.priceCents;
     const total = price + Math.round(price * ONTARIO_HST);
-    const score = Number(spot.moods.includes(mood)) * 12 + Number(Boolean(deal)) * 8 - distance / 100;
+    const moodBonus = mood !== "Anything" && spot.moods.includes(mood) ? 12 : 0;
+    const dealBonus = deal ? 8 : 0;
+    const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
+    const score = moodBonus + dealBonus - distance / 100 - noveltyPenalty;
     return [{ ...spot, deal, total, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) }];
   });
 
