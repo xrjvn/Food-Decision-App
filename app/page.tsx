@@ -170,7 +170,7 @@ export default function Home() {
             <h2 className="alternate-title">Other nearby picks</h2>
             <div className="alternates">{alternates.map((spot) => <Pick key={spot.id} spot={spot} />)}</div>
           </>}
-          {top && <p className="footnote">Check with the restaurant for current prices and holiday hours. Walk times are based on straight-line distance.</p>}
+          {top && <p className="footnote">Check with the restaurant for current prices and holiday hours. Walk times are based on straight-line distance. Location data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>}
         </section>
       </div>
     </main>

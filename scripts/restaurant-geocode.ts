@@ -4,6 +4,7 @@ import { LATITUDE, LONGITUDE, parseCoordinate } from "./coordinates";
 const STATUS = "Geocode status";
 
 export type Candidate = {
+  name?: string;
   lat: string;
   lon: string;
   address?: {
@@ -33,15 +34,20 @@ function inWaterloo({ address }: Candidate) {
     && (address.city ?? address.town ?? address.municipality)?.toLowerCase() === "waterloo";
 }
 
-function matchAddress(address: string, candidates: Candidate[]) {
+function businessName(value: string) {
+  return value.replace(/\s*\([^)]*\)\s*$/, "").toLowerCase()
+    .replace(/[’']/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function matchAddress(address: string, candidates: Candidate[], name: string) {
   if (!candidates.length) return { status: "Unmatched address" };
   const local = candidates.filter(inWaterloo);
   if (!local.length) return { status: "Outside Waterloo or municipality unconfirmed" };
 
   const street = address.match(/^\s*(\d+[a-z]?)\s+([^,]+)/i);
   if (!street) return { status: "Unmatched street address" };
-  const [, number, name] = street;
-  const normalized = streetName(name);
+  const [, number, streetText] = street;
+  const normalized = streetName(streetText);
   const matches = local.filter(({ lat, lon, address }) => {
     if (!address?.road || address.house_number?.toLowerCase() !== number.toLowerCase()) return false;
     const road = streetName(address.road);
@@ -51,8 +57,11 @@ function matchAddress(address: string, candidates: Candidate[]) {
   });
   const unique = new Map(matches.map((match) => [`${match.lat},${match.lon}`, match]));
   if (!unique.size) return { status: "Unmatched street address" };
-  if (unique.size > 1) return { status: "Ambiguous address" };
-  const [match] = unique.values();
+  const candidatesAtAddress = [...unique.values()];
+  const named = candidatesAtAddress.filter((candidate) => candidate.name
+    && businessName(candidate.name) === businessName(name));
+  const [match] = named.length === 1 ? named : candidatesAtAddress;
+  if (unique.size > 1 && named.length !== 1) return { status: "Ambiguous address" };
   return { status: "Matched (OpenStreetMap)", match };
 }
 
@@ -95,7 +104,7 @@ export async function geocodeRestaurants(csv: string, lookup: (address: string) 
       flagged++;
       continue;
     }
-    const result = matchAddress(address, await lookup(address));
+    const result = matchAddress(address, await lookup(address), row.Name ?? "");
     row[STATUS] = result.status;
     if (result.match) {
       row[LATITUDE] = result.match.lat;

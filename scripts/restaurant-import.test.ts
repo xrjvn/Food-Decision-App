@@ -1,7 +1,41 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import seed from "../data/restaurants.seed.json";
 import { importRestaurants } from "./restaurant-import";
+
+const seed = [{
+  "id": "campus-pizza",
+  "name": "Campus Pizza",
+  "meal": "Small cheese pizza",
+  "area": "University Plaza",
+  "moods": [
+    "Quick",
+    "Filling"
+  ],
+  "menu": "https://campuspizza-alpha.vercel.app/menu",
+  "hours": [
+    {
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "opens": 660,
+      "closes": 240
+    }
+  ],
+  "hoursSource": "https://campuspizza-alpha.vercel.app/contact",
+  "latitude": 43.4719,
+  "longitude": -80.5378,
+  "typical_meal_pre_tax_price_cents": 799,
+  "serves": 1,
+  "deal": null,
+  "verified": true,
+  "price_snapshot_date": "2026-11-22"
+}];
 
 const header = "ID,Name,Area,Address,Cuisine,Mood tags,Typical meal,Serves (people),Typical meal pre-tax,Row status,Hours,Dietary notes,Cheapest complete meal,Cheapest meal pre-tax,Price source,Price date checked,Price confidence";
 

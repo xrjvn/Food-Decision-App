@@ -42,3 +42,13 @@ test("flags outside, unmatched, imprecise, ambiguous and blank addresses without
   assert.ok(rows.every((row) => !row.Latitude && !row.Longitude));
   assert.equal(result.flagged, 5);
 });
+
+test("uses a unique business name to resolve candidates at the same street address", async () => {
+  const csv = "ID,Name,Address\na,Bao Sandwich Bar (Waterloo),160 University Ave W\n";
+  const result = await geocodeRestaurants(csv, async () => [
+    { ...local, name: "Another restaurant", lat: "43.473" },
+    { ...local, name: "Bao Sandwich Bar" },
+  ]);
+  assert.equal(result.filled, 1);
+  assert.equal(result.flagged, 0);
+});
