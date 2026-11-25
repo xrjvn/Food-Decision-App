@@ -132,3 +132,14 @@ test("keeps the cheapest meal separate and prefers the explicit price-check date
   assert.equal(spot.price_confidence, "High");
   assert.throws(() => importRestaurants(csv(row({ 13: "unknown" }))), /Cheapest meal pre-tax/);
 });
+
+test("a blank schedule can mean unknown hours, while an explicit closure stays known", () => {
+  const [unknown, closed] = importRestaurants(csv(
+    row({ 0: "unknown", 10: "" }),
+    row({ 0: "closed", 10: "Daily closed" }),
+  ));
+  assert.deepEqual(unknown.hours, []);
+  assert.equal(unknown.hours_unknown, true);
+  assert.deepEqual(closed.hours, []);
+  assert.equal(closed.hours_unknown, false);
+});

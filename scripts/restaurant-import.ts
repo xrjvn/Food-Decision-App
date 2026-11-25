@@ -25,6 +25,7 @@ export type SeedSpot = {
   moods: string[];
   menu: string | null;
   hours: OpeningWindow[];
+  hours_unknown?: boolean;
   hoursSource: string | null;
   latitude: number | null;
   longitude: number | null;
@@ -153,6 +154,8 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
 
       const priceDate = (checkedDate || datedStatus) ?? snapshotDate ?? (sameCheapest ? metadata?.price_snapshot_date : null);
 
+      const hours = parseHours(row.Hours, metadata?.hours);
+
       return {
         id,
         name: row.Name,
@@ -170,7 +173,8 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
         typical_meal_pre_tax_price_cents: price,
         verified,
         price_snapshot_date: verified ? priceDate : null,
-        hours: parseHours(row.Hours, metadata?.hours),
+        hours,
+        hours_unknown: !row.Hours && (metadata?.hours_unknown ?? hours.length === 0),
         hoursSource: row.Hours ? null : metadata?.hoursSource ?? null,
         menu: metadata?.menu ?? null,
         latitude: hasCoordinates ? latitude : metadata?.latitude ?? null,

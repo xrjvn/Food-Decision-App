@@ -30,10 +30,12 @@ export const spots: readonly Spot[] = catalogue
   .map(({
     latitude, longitude, typical_meal_pre_tax_price_cents, deal,
     cheapest_meal, cheapest_meal_pre_tax_price_cents,
-    id, name, meal, area, address, moods, menu, hours, serves, price_snapshot_date,
+    id, name, meal, area, address, moods, menu, hours, hours_unknown, serves, price_snapshot_date,
   }) => ({
     id, name, meal, area, address, moods, menu, hours, serves,
     priceSnapshotDate: price_snapshot_date,
+    hoursUnknown: hours_unknown ?? hours.length === 0,
+    verifiedPrice: true,
     point: [latitude, longitude],
     priceCents: typical_meal_pre_tax_price_cents ?? cheapest_meal_pre_tax_price_cents,
     cheapestMeal: cheapest_meal || undefined,

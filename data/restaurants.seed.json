@@ -27,14 +27,27 @@
           2,
           3,
           4,
-          5,
-          6,
+          5
+        ],
+        "opens": 660,
+        "closes": 1230
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 660,
+        "closes": 1290
+      },
+      {
+        "days": [
           0
         ],
         "opens": 660,
-        "closes": 1260
+        "closes": 1230
       }
     ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.baosandwichbar.com/menu",
     "latitude": 43.4765166,
@@ -63,6 +76,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/bogda/XsaQzmHoStyz3XG5RGsTRA?diningMode=PICKUP",
     "latitude": 43.4763385,
@@ -100,17 +114,24 @@
           5
         ],
         "opens": 660,
-        "closes": 1350
+        "closes": 1380
       },
       {
         "days": [
-          6,
+          6
+        ],
+        "opens": 720,
+        "closes": 1380
+      },
+      {
+        "days": [
           0
         ],
         "opens": 720,
-        "closes": 1350
+        "closes": 1320
       }
     ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://order.online/store/-570723/?pickup=true&hideModal=true",
     "latitude": null,
@@ -159,6 +180,7 @@
         "closes": 0
       }
     ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/top-chicken/K3bhBbMoSC2NlhoJuQUKxA?diningMode=PICKUP",
     "latitude": 43.4753938,
@@ -187,6 +209,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -215,6 +238,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -243,6 +267,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -271,6 +296,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4767305,
@@ -298,7 +324,22 @@
     "typical_meal_pre_tax_price_cents": 1128,
     "verified": true,
     "price_snapshot_date": "2026-11-22",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 630,
+        "closes": 360
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -326,7 +367,34 @@
     "typical_meal_pre_tax_price_cents": 1689,
     "verified": true,
     "price_snapshot_date": "2026-11-22",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 570,
+        "closes": 230
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 570,
+        "closes": 290
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 570,
+        "closes": 230
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4750052,
@@ -353,7 +421,40 @@
     "typical_meal_pre_tax_price_cents": 1700,
     "verified": true,
     "price_snapshot_date": "2026-11-23",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1,
+          2
+        ],
+        "opens": 480,
+        "closes": 1320
+      },
+      {
+        "days": [
+          3,
+          4,
+          5
+        ],
+        "opens": 480,
+        "closes": 1380
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 480,
+        "closes": 1320
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 540,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://williamsfreshcafe.gpr.globalpaymentsinc.ca/menu?deliveryInstructions=&locationId=12712&orderMethod=3&orderType=1&pickupCurbside=false&shouldShowLink=true",
     "latitude": null,
@@ -381,6 +482,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4774007,
@@ -408,6 +510,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/sowon-korea-dining/nJucf02bTTC9mxRvrqKruA?diningMode=PICKUP",
     "latitude": null,
@@ -436,6 +539,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -463,7 +567,39 @@
     "typical_meal_pre_tax_price_cents": 1307,
     "verified": true,
     "price_snapshot_date": "2026-11-23",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1
+        ],
+        "opens": 660,
+        "closes": 1260
+      },
+      {
+        "days": [
+          3,
+          4
+        ],
+        "opens": 660,
+        "closes": 1260
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1290
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 1230
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://wokwagonexpress.com/vegetable-fried-rice/",
     "latitude": null,
@@ -491,6 +627,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/papa-panchos-kitchen/4NSBE_JUU8SBhdWclmksDA?diningMode=PICKUP",
     "latitude": null,
@@ -518,6 +655,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/the-redbox-280-lester-st/vxhBeg6GUg2ZWfsGFGg5Bg?diningMode=PICKUP",
     "latitude": null,
@@ -546,6 +684,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -587,7 +726,8 @@
         "closes": 1260
       }
     ],
-    "hoursSource": "https://lanzhou.ca/waterloo/",
+    "hours_unknown": false,
+    "hoursSource": null,
     "menu": "https://lanzhou.ca/waterloo/",
     "latitude": null,
     "longitude": null,
@@ -614,6 +754,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -632,16 +773,17 @@
       "quick",
       "treat"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "meal": "Rajma Chawal bowl (kidney bean curry with rice)",
+    "cheapest_meal": "Stuffed Kulcha Channa",
+    "cheapest_meal_pre_tax_price_cents": 1000,
+    "price_source": "DoorDash-powered storefront, pickup selected: https://order.online/store/royal-paan-23161510/?pickup=true",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1199,
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4765452,
@@ -659,16 +801,17 @@
       "filling",
       "quick"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "meal": "MUCHO's Way Bowl",
+    "cheapest_meal": "Two Build Your Own Tacos at $5.45 each",
+    "cheapest_meal_pre_tax_price_cents": 1090,
+    "price_source": "Uber Eats pickup (official ordering page did not load): https://www.ubereats.com/ca/store/mucho-burrito-210-220-king-street-n/I2np05bjRwOP3KB6tFyl4g?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1675,
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4752903,
@@ -677,9 +820,9 @@
   },
   {
     "id": "R23",
-    "name": "Juicy Birds (220 King St N, Unit 5)",
+    "name": "Juicy Birds (220 King St N, Unit F)",
     "area": "Uptown",
-    "address": "220 King St N, Unit 5, Waterloo",
+    "address": "220 King St N, Unit F, Waterloo",
     "cuisine": "Fried chicken sandwiches and waffles",
     "dietary_notes": "Fully halal (Zabiha) per Zabihah",
     "moods": [
@@ -687,16 +830,43 @@
       "treat",
       "filling"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
+    "meal": "G.O.A.T. sandwich + crinkle fries",
+    "cheapest_meal": "G.O.A.T. slider + crinkle fries",
+    "cheapest_meal_pre_tax_price_cents": 1398,
+    "price_source": "Official pickup storefront (Calibre): https://juicybirdswaterloo.bycalibre.ca/menu ; address: https://juicybirds.ca/locations/waterloo/",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1898,
+    "verified": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 720,
+        "closes": 165
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 720,
+        "closes": 225
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 165
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4752903,
@@ -714,16 +884,37 @@
       "filling",
       "quick"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
+    "meal": "Regular Classic Burrito with chicken",
+    "cheapest_meal": "Small Veggie Burrito",
+    "cheapest_meal_pre_tax_price_cents": 949,
+    "price_source": "Official pickup menu (Flipdish): typical https://freshburrito.ca/flipdish#/restaurant/11433/collection/11796?menuItemId=4029 ; cheapest https://freshburrito.ca/flipdish#/restaurant/11433/collection/11796?menuItemId=4155",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1249,
+    "verified": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "opens": 660,
+        "closes": 1320
+      },
+      {
+        "days": [
+          6,
+          0
+        ],
+        "opens": 720,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -741,16 +932,17 @@
       "filling",
       "quick"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "meal": "Chicken Burrito",
+    "cheapest_meal": "Bean & Veggies Burrito",
+    "cheapest_meal_pre_tax_price_cents": 1234,
+    "price_source": "DoorDash-powered storefront, pickup selected: https://order.online/store/guac-mexi-grill-waterloo-25556881/?pickup=true",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1390,
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -793,6 +985,7 @@
         "closes": 240
       }
     ],
+    "hours_unknown": false,
     "hoursSource": "https://campuspizza-alpha.vercel.app/contact",
     "menu": "https://campuspizza-alpha.vercel.app/menu",
     "latitude": null,
@@ -821,6 +1014,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4634622,
@@ -848,6 +1042,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -874,7 +1069,34 @@
     "typical_meal_pre_tax_price_cents": null,
     "verified": true,
     "price_snapshot_date": "2026-11-23",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 390,
+        "closes": 60
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 390,
+        "closes": 120
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 390,
+        "closes": 60
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://order.wendys.com/ca/en/menu/116/30006",
     "latitude": null,
@@ -901,7 +1123,22 @@
     "typical_meal_pre_tax_price_cents": null,
     "verified": true,
     "price_snapshot_date": "2026-11-23",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 420,
+        "closes": 300
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.burgerking.ca/menu/picker/79d63e73-8e7f-4c68-b51c-0e3f298aca61",
     "latitude": 43.4725492,
@@ -928,7 +1165,34 @@
     "typical_meal_pre_tax_price_cents": null,
     "verified": true,
     "price_snapshot_date": "2026-11-22",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "opens": 660,
+        "closes": 180
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 660,
+        "closes": 240
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 180
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4781281,
@@ -955,7 +1219,40 @@
     "typical_meal_pre_tax_price_cents": null,
     "verified": true,
     "price_snapshot_date": "2026-11-22",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3
+        ],
+        "opens": 660,
+        "closes": 1380
+      },
+      {
+        "days": [
+          4,
+          5
+        ],
+        "opens": 660,
+        "closes": 180
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 660,
+        "closes": 240
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -983,6 +1280,7 @@
     "verified": true,
     "price_snapshot_date": "2026-11-23",
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.kfc.ca/menu/snacking-menu/go-bucket-wrap",
     "latitude": 43.4837486,
@@ -1010,6 +1308,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4817406,
@@ -1037,6 +1336,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -1064,6 +1364,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -1090,7 +1391,34 @@
     "typical_meal_pre_tax_price_cents": null,
     "verified": true,
     "price_snapshot_date": "2026-11-22",
-    "hours": [],
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 660,
+        "closes": 120
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 180
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 120
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4864611,
@@ -1117,6 +1445,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": null,
@@ -1143,6 +1472,7 @@
     "verified": false,
     "price_snapshot_date": null,
     "hours": [],
+    "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4477787,

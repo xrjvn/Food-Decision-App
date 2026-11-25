@@ -25,6 +25,8 @@ export type RankingSpot = {
   point: Point;
   moods: readonly string[];
   hours: readonly OpeningWindow[];
+  hoursUnknown?: boolean;
+  verifiedPrice?: boolean;
   deal?: Deal;
 };
 
@@ -91,6 +93,7 @@ type Search = {
 type RankingResult<Spot extends RankingSpot> = {
   kind: "nearby" | "wider" | "ask-over-budget" | "over-budget" | "nothing-open" | "exhausted";
   picks: RankedPick<Spot>[];
+  unknownHoursPicks?: RankedPick<Spot>[];
 };
 
 export function rankSpots<Spot extends RankingSpot>(
@@ -101,34 +104,52 @@ export function rankSpots<Spot extends RankingSpot>(
   const date = [parts.year, parts.month, parts.day].join("-");
   const day = weekdays.indexOf(parts.weekday);
   const minute = Number(parts.hour) * 60 + Number(parts.minute);
+  const unknown: RankedPick<Spot>[] = [];
   const open = spots.flatMap((spot): RankedPick<Spot>[] => {
+    if (!spot.point.every(Number.isFinite)) return [];
     const distance = distanceMetres(origin, spot.point);
-    if (distance > EXPANDED_METRES || !isWithinHours(spot.hours, day, minute)) return [];
+    const unknownHours = spot.hoursUnknown === true && spot.hours.length === 0;
+    if (distance > EXPANDED_METRES || (unknownHours
+      ? spot.verifiedPrice !== true
+      : !isWithinHours(spot.hours, day, minute))) return [];
 
-    const deal = activeDeal(spot.deal, date, day, minute);
+    const deal = unknownHours ? undefined : activeDeal(spot.deal, date, day, minute);
     const price = spot.cheapestMealPriceCents ?? deal?.priceCents ?? spot.priceCents;
     const total = price + Math.round(price * ONTARIO_HST);
     const moodBonus = mood !== "Anything" && spot.moods.some((tag) => tag.toLowerCase() === mood.toLowerCase()) ? 12 : 0;
     const dealBonus = deal ? 8 : 0;
     const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
     const score = moodBonus + dealBonus - distance / 100 - noveltyPenalty;
-    return [{ ...spot, deal, total, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) }];
+    const pick = { ...spot, deal, total, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) };
+    if (unknownHours) {
+      if (total <= budgetCents && !rejectedIds.has(spot.id)) unknown.push(pick);
+      return [];
+    }
+    return [pick];
   });
 
-  if (!open.length) return { kind: "nothing-open", picks: [] };
+  const byScore = (a: RankedPick<Spot>, b: RankedPick<Spot>) => b.score - a.score || a.total - b.total;
+
+  function withFallback(result: RankingResult<Spot>, radius: number): RankingResult<Spot> {
+    if (result.picks.length >= 3) return result;
+    const unknownHoursPicks = unknown.filter((spot) => spot.distance <= radius).sort(byScore);
+    return unknownHoursPicks.length ? { ...result, unknownHoursPicks } : result;
+  }
+
+  if (!open.length) return withFallback({ kind: "nothing-open", picks: [] }, EXPANDED_METRES);
   const remaining = open.filter((spot) => !rejectedIds.has(spot.id));
-  if (!remaining.length) return { kind: "exhausted", picks: [] };
+  if (!remaining.length) return withFallback({ kind: "exhausted", picks: [] }, EXPANDED_METRES);
 
   const affordable = remaining.filter((spot) => spot.total <= budgetCents)
-    .sort((a, b) => b.score - a.score || a.total - b.total);
+    .sort(byScore);
   const nearby = affordable.filter((spot) => spot.distance <= NEARBY_METRES);
   if (nearby.length && rejectedIds.size < REROLLS_BEFORE_EXPANDING) {
-    return { kind: "nearby", picks: nearby };
+    return withFallback({ kind: "nearby", picks: nearby }, NEARBY_METRES);
   }
-  if (affordable.length) return { kind: "wider", picks: affordable };
-  if (!allowOverBudget) return { kind: "ask-over-budget", picks: [] };
-  return {
+  if (affordable.length) return withFallback({ kind: "wider", picks: affordable }, EXPANDED_METRES);
+  if (!allowOverBudget) return withFallback({ kind: "ask-over-budget", picks: [] }, EXPANDED_METRES);
+  return withFallback({
     kind: "over-budget",
     picks: remaining.sort((a, b) => a.total - b.total || b.score - a.score),
-  };
+  }, EXPANDED_METRES);
 }

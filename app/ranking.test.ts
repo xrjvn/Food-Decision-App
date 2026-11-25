@@ -149,3 +149,41 @@ test("filters and displays the taxed cheapest complete meal price when supplied"
   const result = rankSpots(spots, { ...search, budgetCents: 999 });
   assert.deepEqual(result.picks.map(({ id, total }) => [id, total]), [["fits", 999]]);
 });
+
+function unconfirmed(id: string, fields: Partial<RankingSpot> = {}) {
+  return spot(id, { hours: [], hoursUnknown: true, verifiedPrice: true, ...fields });
+}
+
+test("only verified-price spots with coordinates and genuinely unknown hours enter the fallback", () => {
+  const result = rankSpots([
+    unconfirmed("eligible"),
+    unconfirmed("unverified", { verifiedPrice: false }),
+    unconfirmed("missing", { point: [NaN, -80.54] }),
+    unconfirmed("closed-all-week", { hoursUnknown: false }),
+    spot("closed-now", { hours: [{ days: [0], opens: 900, closes: 1000 }] }),
+  ], search);
+  assert.deepEqual(result.picks, []);
+  assert.deepEqual(result.unknownHoursPicks?.map((pick) => pick.id), ["eligible"]);
+});
+
+test("fallback is suppressed at three confirmed-open matches and separate below two regardless of mood", () => {
+  const unknown = unconfirmed("perfect-mood", { moods: ["Quick"] });
+  const two = [spot("first"), spot("second")];
+  const result = rankSpots([unknown, ...two], search);
+  assert.deepEqual(result.picks.map((pick) => pick.id), ["first", "second"]);
+  assert.deepEqual(result.unknownHoursPicks?.map((pick) => pick.id), ["perfect-mood"]);
+  assert.ok(result.unknownHoursPicks[0].score > result.picks[0].score);
+  assert.equal(rankSpots([...two, spot("third"), unknown], search).unknownHoursPicks, undefined);
+});
+
+test("unknown-hours picks obey the active radius and tax-inclusive budget even after over-budget opt-in", () => {
+  const nearby = unconfirmed("nearby");
+  const expanded = unconfirmed("expanded", { point: [43.483, -80.54] });
+  const tooFar = unconfirmed("too-far", { point: [43.50, -80.54] });
+  const tooExpensive = unconfirmed("over-with-tax", { cheapestMealPriceCents: 1400 });
+  const unknown = [nearby, expanded, tooFar, tooExpensive];
+  assert.deepEqual(rankSpots([spot("confirmed"), ...unknown], search).unknownHoursPicks?.map((pick) => pick.id), ["nearby"]);
+  assert.deepEqual(rankSpots([spot("expensive", { priceCents: 2000 }), ...unknown], {
+    ...search, allowOverBudget: true,
+  }).unknownHoursPicks?.map((pick) => pick.id), ["nearby", "expanded"]);
+});

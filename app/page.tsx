@@ -110,12 +110,13 @@ export default function Home() {
     allowOverBudget,
   });
   const [top, ...alternates] = result?.picks.slice(0, 4) ?? [];
+  const unknownHoursPicks = result?.unknownHoursPicks ?? [];
   const messages = {
     nearby: "",
     wider: "Showing open picks within 2 km.",
     "ask-over-budget": "No other open picks fit your budget within 2 km.",
     "over-budget": "Showing the lowest-priced open picks above your budget within 2 km.",
-    "nothing-open": "No listed spots are open within 2 km right now.",
+    "nothing-open": "No spots are confirmed open within 2 km right now.",
     exhausted: "You’ve skipped all the open picks within 2 km.",
   };
   const message = result ? messages[result.kind] : "Checking listed hours…";
@@ -170,7 +171,13 @@ export default function Home() {
             <h2 className="alternate-title">Other nearby picks</h2>
             <div className="alternates">{alternates.map((spot) => <Pick key={spot.id} spot={spot} />)}</div>
           </>}
-          {top && <p className="footnote">Check with the restaurant for current prices and holiday hours. Walk times are based on straight-line distance. Location data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>}
+          {unknownHoursPicks.length > 0 && (
+            <section aria-labelledby="unknown-hours-heading">
+              <h2 className="alternate-title" id="unknown-hours-heading">Hours not confirmed, check before you go</h2>
+              <div className="alternates">{unknownHoursPicks.map((spot) => <Pick key={spot.id} spot={spot} />)}</div>
+            </section>
+          )}
+          {(top || unknownHoursPicks.length > 0) && <p className="footnote">Check with the restaurant for current prices and holiday hours. Walk times are based on straight-line distance. Location data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>}
         </section>
       </div>
     </main>
