@@ -75,8 +75,34 @@
     "typical_meal_pre_tax_price_cents": 2200,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3
+        ],
+        "opens": 960,
+        "closes": 1290
+      },
+      {
+        "days": [
+          4,
+          5,
+          6
+        ],
+        "opens": 720,
+        "closes": 1290
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 1200
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/bogda/XsaQzmHoStyz3XG5RGsTRA?diningMode=PICKUP",
     "latitude": 43.4763385,
@@ -257,17 +283,31 @@
       "cheap",
       "healthy"
     ],
-    "meal": "Sweet Onion Chicken Teriyaki sub + SunChips",
-    "cheapest_meal": "Veggie Delite sub + SunChips",
-    "cheapest_meal_pre_tax_price_cents": 968,
-    "price_source": "Uber Eats pickup per ChatGPT research chat (URL not captured)",
-    "price_confidence": "Medium",
+    "meal": "",
+    "cheapest_meal": "Veggie Delite sub ($5.79) + SunChips ($2.19)",
+    "cheapest_meal_pre_tax_price_cents": 798,
+    "price_source": "Official pickup menu, branch selected: https://www.subway.com/en-ca/restaurant/2969-0/menu/category/sandwiches ; https://www.subway.com/en-ca/restaurant/2969-0/menu/category/snacks-sides",
+    "price_confidence": "High",
     "serves": 1,
-    "typical_meal_pre_tax_price_cents": 1388,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "typical_meal_pre_tax_price_cents": null,
+    "verified": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 0,
+        "closes": 1440
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.472292,
@@ -295,8 +335,22 @@
     "typical_meal_pre_tax_price_cents": 1120,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 240
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4767305,
@@ -509,8 +563,28 @@
     "typical_meal_pre_tax_price_cents": 1599,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 720,
+        "closes": 1320
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 1290
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/sowon-korea-dining/nJucf02bTTC9mxRvrqKruA?diningMode=PICKUP",
     "latitude": 43.471882,
@@ -961,15 +1035,15 @@
       "filling",
       "group"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
-    "verified": false,
-    "price_snapshot_date": null,
+    "meal": "Small 8-inch sauce-and-cheese pizza",
+    "cheapest_meal": "Sauce-and-cheese pizza sub",
+    "cheapest_meal_pre_tax_price_cents": 599,
+    "price_source": "Ritual pickup page (prices match the restaurant's own menu per the research chat): https://ritual.co/order/campus-pizza-university-phillip-waterloo/3db9",
+    "price_confidence": "High (matches restaurant menu)",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 799,
+    "verified": true,
+    "price_snapshot_date": "2026-11-24",
     "hours": [
       {
         "days": [
@@ -986,7 +1060,7 @@
       }
     ],
     "hours_unknown": false,
-    "hoursSource": "https://campuspizza-alpha.vercel.app/contact",
+    "hoursSource": null,
     "menu": "https://campuspizza-alpha.vercel.app/menu",
     "latitude": 43.472153,
     "longitude": -80.538027,
@@ -1004,17 +1078,55 @@
       "filling",
       "group"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "meal": "Build Your Own Pizza",
+    "cheapest_meal": "Mini Build Your Own Pizza",
+    "cheapest_meal_pre_tax_price_cents": 1095,
+    "price_source": "Restaurant-linked Clover ordering: cheapest https://score-pizza-uptownwaterloo.cloveronline.com/menu/mini-build-your-own-pizza-V92VQD0Z1V63M ; typical https://score-pizza-uptownwaterloo.cloveronline.com/menu/build-your-own-pizza-6TFDMB2N8BTQR",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1595,
+    "verified": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          1
+        ],
+        "opens": 660,
+        "closes": 1260
+      },
+      {
+        "days": [
+          2
+        ],
+        "opens": 660,
+        "closes": 1230
+      },
+      {
+        "days": [
+          3,
+          4
+        ],
+        "opens": 660,
+        "closes": 1320
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1380
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4634622,
@@ -1298,17 +1410,31 @@
       "cheap",
       "quick"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "meal": "Big Mac + small fries",
+    "cheapest_meal": "Hamburger + small fries",
+    "cheapest_meal_pre_tax_price_cents": 818,
+    "price_source": "Uber Eats pickup (official web menu showed no store prices; mobile ordering is app-only): https://www.ubereats.com/ca/store/mcdonalds-waterloo/TbEf1HHST021Qg32I62Nww?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1428,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 0,
+        "closes": 1440
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4817406,
@@ -1435,17 +1561,31 @@
     "moods": [
       "filling"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "meal": "Teen Burger + Russet thick-cut fries",
+    "cheapest_meal": "Buddy Burger + Russet thick-cut fries",
+    "cheapest_meal_pre_tax_price_cents": 923,
+    "price_source": "Uber Eats pickup (official app prices not verified): https://www.ubereats.com/ca/store/a%26w-university-st/R4xoBDPAS8mg-xwgMF6YgA?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1698,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 0,
+        "closes": 1440
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.483605,
@@ -1462,17 +1602,31 @@
     "moods": [
       "filling"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
-    "price_confidence": "",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "meal": "Teen Burger + Russet thick-cut fries",
+    "cheapest_meal": "Buddy Burger + Russet thick-cut fries",
+    "cheapest_meal_pre_tax_price_cents": 923,
+    "price_source": "Uber Eats pickup (official app prices not verified): https://www.ubereats.com/ca/store/a%26w-656-erb-st-w/IvnQGK_oTtaMvY5u-7k6Vg?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1698,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 0,
+        "closes": 1440
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4477787,

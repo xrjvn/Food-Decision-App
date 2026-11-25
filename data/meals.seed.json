@@ -52,6 +52,19 @@
     "notes": ""
   },
   {
+    "id": "M009",
+    "restaurantId": "R07",
+    "meal": "Veggie Delite sub ($5.79) + SunChips ($2.19)",
+    "tier": "Value",
+    "period": "Any time",
+    "priceCents": 798,
+    "serves": 1,
+    "priceDate": "2026-11-24",
+    "priceSource": "Official pickup menu, branch selected: https://www.subway.com/en-ca/restaurant/2969-0/menu/category/sandwiches ; https://www.subway.com/en-ca/restaurant/2969-0/menu/category/snacks-sides",
+    "priceConfidence": "High",
+    "notes": ""
+  },
+  {
     "id": "M013",
     "restaurantId": "R09",
     "meal": "Jr. Burger + regular fries",
@@ -234,6 +247,58 @@
     "notes": ""
   },
   {
+    "id": "M037",
+    "restaurantId": "R26",
+    "meal": "Sauce-and-cheese pizza sub",
+    "tier": "Value",
+    "period": "Any time",
+    "priceCents": 599,
+    "serves": 1,
+    "priceDate": "2026-11-24",
+    "priceSource": "Ritual pickup page (prices match the restaurant's own menu per the research chat): https://ritual.co/order/campus-pizza-university-phillip-waterloo/3db9",
+    "priceConfidence": "High (matches restaurant menu)",
+    "notes": ""
+  },
+  {
+    "id": "M038",
+    "restaurantId": "R26",
+    "meal": "Small 8-inch sauce-and-cheese pizza",
+    "tier": "Typical",
+    "period": "Any time",
+    "priceCents": 799,
+    "serves": 1,
+    "priceDate": "2026-11-24",
+    "priceSource": "Ritual pickup page (prices match the restaurant's own menu per the research chat): https://ritual.co/order/campus-pizza-university-phillip-waterloo/3db9",
+    "priceConfidence": "High (matches restaurant menu)",
+    "notes": ""
+  },
+  {
+    "id": "M039",
+    "restaurantId": "R27",
+    "meal": "Mini Build Your Own Pizza",
+    "tier": "Value",
+    "period": "Any time",
+    "priceCents": 1095,
+    "serves": 1,
+    "priceDate": "2026-11-24",
+    "priceSource": "Restaurant-linked Clover ordering: cheapest https://score-pizza-uptownwaterloo.cloveronline.com/menu/mini-build-your-own-pizza-V92VQD0Z1V63M ; typical https://score-pizza-uptownwaterloo.cloveronline.com/menu/build-your-own-pizza-6TFDMB2N8BTQR",
+    "priceConfidence": "High",
+    "notes": ""
+  },
+  {
+    "id": "M040",
+    "restaurantId": "R27",
+    "meal": "Build Your Own Pizza",
+    "tier": "Typical",
+    "period": "Any time",
+    "priceCents": 1595,
+    "serves": 1,
+    "priceDate": "2026-11-24",
+    "priceSource": "Restaurant-linked Clover ordering: cheapest https://score-pizza-uptownwaterloo.cloveronline.com/menu/mini-build-your-own-pizza-V92VQD0Z1V63M ; typical https://score-pizza-uptownwaterloo.cloveronline.com/menu/build-your-own-pizza-6TFDMB2N8BTQR",
+    "priceConfidence": "High",
+    "notes": ""
+  },
+  {
     "id": "M041",
     "restaurantId": "R29",
     "meal": "Jr. Bacon Cheeseburger ($2.99) + Small Fries ($3.59)",
@@ -310,5 +375,18 @@
     "priceSource": "Official pickup page (URL not captured)",
     "priceConfidence": "Not stated; spot-check",
     "notes": ""
+  },
+  {
+    "id": "M055",
+    "restaurantId": "R29",
+    "meal": "Jr. Bacon Cheeseburger ($2.99) + kids' fries ($2.89)",
+    "tier": "Value",
+    "period": "Any time",
+    "priceCents": 588,
+    "serves": 1,
+    "priceDate": "2026-11-24",
+    "priceSource": "https://order.wendys.com/ca/en/menu/116/30006 ; https://order.wendys.com/ca/en/menu/103/30032",
+    "priceConfidence": "High",
+    "notes": "Uses the kids-size fries."
   }
 ]
