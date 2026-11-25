@@ -39,6 +39,12 @@ function businessName(value: string) {
     .replace(/[’']/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+function streetAddress(address: string) {
+  const withoutUnit = address.replace(/^\s*(?:(?:units?|suite|unit|#)\s*[\w-]+\s*,?\s*|[\w]+\s*-\s*(?=\d+\s))/i, "");
+  const street = withoutUnit.match(/(?:^|,\s*|\bplaza\s+)(\d+[a-z]?\s+[^,]+?)(?=\s+(?:units?|suite|plaza)\b|\s+#|,|$)/i)?.[1];
+  return street?.replace(/\s+Waterloo(?:\s+Ontario)?$/i, "").trim();
+}
+
 function matchAddress(address: string, candidates: Candidate[], name: string) {
   if (!candidates.length) return { status: "Unmatched address" };
   const local = candidates.filter(inWaterloo);
@@ -104,7 +110,15 @@ export async function geocodeRestaurants(csv: string, lookup: (address: string) 
       flagged++;
       continue;
     }
-    const result = matchAddress(address, await lookup(address), row.Name ?? "");
+    const street = streetAddress(address);
+    let result = matchAddress(street ?? address, await lookup(address), row.Name ?? "");
+    if (!result.match && street) {
+      const retry = `${street}, Waterloo, Ontario`;
+      if (retry.toLowerCase() !== address.toLowerCase()) {
+        const fallback = matchAddress(street, await lookup(retry), row.Name ?? "");
+        if (fallback.match || result.status !== "Outside Waterloo or municipality unconfirmed") result = fallback;
+      }
+    }
     row[STATUS] = result.status;
     if (result.match) {
       row[LATITUDE] = result.match.lat;

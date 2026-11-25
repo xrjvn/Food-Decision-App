@@ -52,3 +52,22 @@ test("uses a unique business name to resolve candidates at the same street addre
   assert.equal(result.filled, 1);
   assert.equal(result.flagged, 0);
 });
+
+test("retries an ambiguous unit or plaza address using the street address and preserves the CSV address", async () => {
+  for (const address of [
+    "Unit 3, 160 University Ave W, Waterloo",
+    "Suite B-103, 160 University Ave W, Waterloo",
+    "University Plaza, 160 University Ave W, Waterloo",
+    "University Plaza 160 University Ave W, Waterloo",
+    "160 University Ave W, Unit 3, Waterloo",
+  ]) {
+    const queries: string[] = [];
+    const result = await geocodeRestaurants(`ID,Name,Address\na,Example,"${address}"\n`, async (query) => {
+      queries.push(query);
+      return queries.length === 1 ? [local, { ...local, lat: "43.473" }] : [local];
+    });
+    assert.deepEqual(queries, [address, "160 University Ave W, Waterloo, Ontario"]);
+    assert.equal(result.filled, 1);
+    assert.ok(result.csv.includes(`"${address}"`));
+  }
+});
