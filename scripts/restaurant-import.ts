@@ -62,7 +62,8 @@ function servings(value: string) {
   return number;
 }
 
-function minutes(value: string) {
+function minutes(value: string, endOfWindow = false) {
+  if (endOfWindow && value.trim() === "24:00") return 24 * 60;
   const match = value.trim().match(/^(\d{1,2})(?::([0-5]\d))?\s*(am|pm)?$/i);
   if (!match) throw new Error(`Invalid time "${value}".`);
   const [, hourText, minuteText = "00", period] = match;
@@ -94,7 +95,7 @@ function parseHours(value: string, previous: OpeningWindow[] = []) {
     if (/^closed$/i.test(match[2])) return [];
     const times = match[2].split(/\s*(?:[-–—]|\bto\b)\s*/i);
     if (times.length !== 2) throw new Error(`Invalid hours "${line}".`);
-    return [{ days, opens: minutes(times[0]), closes: minutes(times[1]) }];
+    return [{ days, opens: minutes(times[0]), closes: minutes(times[1], true) }];
   });
 }
 

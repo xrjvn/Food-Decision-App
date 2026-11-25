@@ -97,7 +97,7 @@ test("expired, stale or out-of-hours deals lose their price, badge and ranking b
   ];
 
   for (const inactive of inactiveDeals) {
-    const spots = [spot("regular"), spot("former-deal", { priceCents: 1200, deal: inactive })];
+    const spots = [spot("regular", { priceCents: 1200 }), spot("former-deal", { priceCents: 1200, deal: inactive })];
     const [top, other] = rankSpots(spots, search).picks;
     assert.equal(top.id, "regular");
     assert.equal(other.total, 1356);
@@ -186,4 +186,29 @@ test("unknown-hours picks obey the active radius and tax-inclusive budget even a
   assert.deepEqual(rankSpots([spot("expensive", { priceCents: 2000 }), ...unknown], {
     ...search, allowOverBudget: true,
   }).unknownHoursPicks?.map((pick) => pick.id), ["nearby", "expanded"]);
+});
+
+test("value fit prefers an affordable typical meal, then uses the cheapest meal when typical exceeds budget after tax", () => {
+  const options = [
+    spot("cheap", { cheapestMealPriceCents: 500, typicalMealPriceCents: 500 }),
+    spot("better-fit", { cheapestMealPriceCents: 700, typicalMealPriceCents: 1300 }),
+  ];
+  const higher = rankSpots(options, search).picks[0];
+  assert.deepEqual([higher.id, higher.total, higher.usesTypicalMeal], ["better-fit", 1469, true]);
+  const lower = rankSpots(options, { ...search, budgetCents: 1000 }).picks[0];
+  assert.deepEqual([lower.id, lower.total, lower.usesTypicalMeal], ["better-fit", 791, false]);
+  const tight = rankSpots(options, { ...search, budgetCents: 790 }).picks[0];
+  assert.equal(tight.id, "cheap");
+});
+
+test("cheapest first uses tax-inclusive per-person totals and keeps unconfirmed hours separate", () => {
+  const shared = spot("shared", { cheapestMealPriceCents: 1800, typicalMealPriceCents: 1600, serves: 2 });
+  const solo = spot("solo", { cheapestMealPriceCents: 900, typicalMealPriceCents: 1300 });
+  const unknown = unconfirmed("unknown-but-cheaper", { cheapestMealPriceCents: 500 });
+  const result = rankSpots([solo, unknown, shared], { ...search, order: "cheapest" });
+  assert.deepEqual(result.picks.map(x => [x.id, x.total, x.usesPerPersonPrice]), [
+    ["shared", 904, true],
+    ["solo", 1017, false],
+  ]);
+  assert.deepEqual(result.unknownHoursPicks?.map(x => x.id), ["unknown-but-cheaper"]);
 });

@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { campuses, moods, spots, type Campus, type Mood } from "./catalogue";
+import { useEffect, useReducer, useState } from "react";
+import { campuses, moods, spots, type Campus } from "./catalogue";
 
 import { rankSpots, type RankedPick } from "./ranking";
+import { initialSearch, updateSearch } from "./search-state";
 
 type PickData = RankedPick<typeof spots[number]>;
 
 const money = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" });
 const presets = [10, 15, 20];
-const RECENT_PICK_LIMIT = 3;
+
 
 function reportPriceUrl(restaurant: string) {
   const placeholder = "https://docs.google.com/forms/d/e/REPLACE_WITH_FORM_ID/viewform";
@@ -33,7 +34,10 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
     destination: [spot.name, spot.address || spot.area, "Waterloo Ontario"].join(", "),
     travelmode: "walking",
   });
-  const verifiedDate = spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined ? spot.priceSnapshotDate : spot.deal.verifiedOn;
+  const verifiedDate = spot.usesTypicalMeal && spot.cheapestMealPriceCents !== undefined
+    ? null
+    : spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined
+      ? spot.priceSnapshotDate : spot.deal.verifiedOn;
 
   return (
     <article className={primary ? "pick featured" : "pick"}>
@@ -41,14 +45,15 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
         <div>
           {primary && <p className="eyebrow">TOP PICK</p>}
           {primary ? <h2>{spot.name}</h2> : <h3>{spot.name}</h3>}
-          <p className="meal">{spot.cheapestMeal || spot.meal}</p>
-          {spot.cheapestMeal && spot.meal && spot.meal !== spot.cheapestMeal && (
+          <p className="meal">{spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal}</p>
+          {!spot.usesTypicalMeal && spot.cheapestMeal && spot.meal && spot.meal !== spot.cheapestMeal && (
             <p className="location">Typical meal · {spot.meal}</p>
           )}
           <p className="location">~{spot.walkMinutes} min walk · {spot.area}</p>
         </div>
         <div className="price">
           <strong>{money.format(spot.total / 100)}</strong>
+          {spot.usesPerPersonPrice && <small>per person · serves {spot.serves}</small>}
           <small>est. total with tax, tip not included</small>
           <small>{verifiedDate
             ? <>Price verified <time dateTime={verifiedDate}>{verifiedDate}</time></>
@@ -71,13 +76,10 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
 }
 
 export default function Home() {
-  const [campus, setCampus] = useState<Campus>("uw");
-  const [budget, setBudget] = useState(15);
-  const [mood, setMood] = useState<Mood>("Anything");
+  const [search, dispatch] = useReducer(updateSearch, initialSearch);
+  const { preferences, rejectedIds, recentTopPickIds, allowOverBudget } = search;
+  const { campus, budget, mood, order } = preferences;
   const [now, setNow] = useState<Date>();
-  const [rejectedIds, setRejectedIds] = useState<ReadonlySet<string>>(new Set());
-  const [recentTopPickIds, setRecentTopPickIds] = useState<string[]>([]);
-  const [allowOverBudget, setAllowOverBudget] = useState(false);
 
   useEffect(() => {
     const updateTime = () => setNow(new Date());
@@ -86,24 +88,11 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, []);
 
-  function resetPicks() {
-    setRejectedIds(new Set());
-    setAllowOverBudget(false);
-  }
-
-  function rememberTopPick(id: string) {
-    setRecentTopPickIds((ids) => [id, ...ids.filter((recentId) => recentId !== id)].slice(0, RECENT_PICK_LIMIT));
-  }
-
-  function changePreference() {
-    if (top) rememberTopPick(top.id);
-    resetPicks();
-  }
-
   const result = now && rankSpots(spots, {
     origin: campuses[campus].point,
     mood,
     budgetCents: budget * 100,
+    order,
     now,
     rejectedIds,
     recentTopPickIds,
@@ -131,19 +120,26 @@ export default function Home() {
       <div className="columns">
         <section className="filters" aria-label="Meal preferences">
           <label htmlFor="campus">Starting point</label>
-          <select id="campus" value={campus} onChange={(event) => { setCampus(event.target.value as Campus); changePreference(); }}>
+          <select id="campus" value={campus} onChange={(event) => dispatch({ type: "preference", change: { campus: event.target.value as Campus } })}>
             {Object.entries(campuses).map(([id, item]) => <option key={id} value={id}>{item.name}</option>)}
           </select>
           <fieldset>
             <legend>Meal budget</legend>
             <div className="options">
-              {presets.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => { if (amount !== budget) { setBudget(amount); changePreference(); } }}>${amount}</button>)}
+              {presets.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => dispatch({ type: "preference", change: { budget: amount } })}>${amount}</button>)}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Rank results by</legend>
+            <div className="options">
+              <button aria-pressed={order === "best-fit"} onClick={() => dispatch({ type: "preference", change: { order: "best-fit" } })}>Best fit for my budget</button>
+              <button aria-pressed={order === "cheapest"} onClick={() => dispatch({ type: "preference", change: { order: "cheapest" } })}>Cheapest first</button>
             </div>
           </fieldset>
           <fieldset>
             <legend>In the mood for</legend>
             <div className="options">
-              {moods.map((item) => <button key={item} aria-pressed={item === mood} onClick={() => { if (item !== mood) { setMood(item); changePreference(); } }}>{item}</button>)}
+              {moods.map((item) => <button key={item} aria-pressed={item === mood} onClick={() => dispatch({ type: "preference", change: { mood: item } })}>{item}</button>)}
             </div>
           </fieldset>
         </section>
@@ -154,18 +150,15 @@ export default function Home() {
           {top ? <>
             {message && <p className="result-note">{message}</p>}
             <Pick spot={top} primary />
-            <button className="result-action" onClick={() => {
-              rememberTopPick(top.id);
-              setRejectedIds((ids) => new Set([...ids, top.id]));
-            }}>
+            <button className="result-action" onClick={() => dispatch({ type: "reject", id: top.id, preferences })}>
               Not feeling it
             </button>
           </> : <div className="pick">
             <p>{message}</p>
-            {result?.kind === "ask-over-budget" && <button className="result-action" onClick={() => setAllowOverBudget(true)}>
+            {result?.kind === "ask-over-budget" && <button className="result-action" onClick={() => dispatch({ type: "allow-over-budget", preferences })}>
               Show over-budget picks
             </button>}
-            {rejectedIds.size > 0 && <button className="result-action" onClick={resetPicks}>Start over</button>}
+            {rejectedIds.size > 0 && <button className="result-action" onClick={() => dispatch({ type: "reset" })}>Start over</button>}
           </div>}
           {alternates.length > 0 && <>
             <h2 className="alternate-title">Other nearby picks</h2>

@@ -38,6 +38,7 @@ export const spots: readonly Spot[] = catalogue
     verifiedPrice: true,
     point: [latitude, longitude],
     priceCents: typical_meal_pre_tax_price_cents ?? cheapest_meal_pre_tax_price_cents,
+    typicalMealPriceCents: meal ? typical_meal_pre_tax_price_cents ?? undefined : undefined,
     cheapestMeal: cheapest_meal || undefined,
     cheapestMealPriceCents: cheapest_meal_pre_tax_price_cents ?? undefined,
     deal: deal ?? undefined,

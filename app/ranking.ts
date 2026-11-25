@@ -15,12 +15,16 @@ type Deal = {
   priceCents?: number;
 };
 
+export type RankingOrder = "best-fit" | "cheapest";
+
 export type RankingSpot = {
   id: string;
   name: string;
   meal: string;
   cheapestMeal?: string;
   cheapestMealPriceCents?: number;
+  typicalMealPriceCents?: number;
+  serves?: number | null;
   priceCents: number;
   point: Point;
   moods: readonly string[];
@@ -33,6 +37,8 @@ export type RankingSpot = {
 export type RankedPick<Spot extends RankingSpot> = Omit<Spot, "deal"> & {
   deal: Deal | undefined;
   total: number;
+  usesTypicalMeal: boolean;
+  usesPerPersonPrice: boolean;
   distance: number;
   score: number;
   walkMinutes: number;
@@ -45,6 +51,7 @@ const REROLLS_BEFORE_EXPANDING = 3;
 const MAX_DEAL_AGE_DAYS = 30;
 const DAY_MS = 86_400_000;
 const NOVELTY_PENALTY = 4;
+const MAX_VALUE_FIT = 30;
 const radians = Math.PI / 180;
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const waterlooTime = new Intl.DateTimeFormat("en-CA", {
@@ -84,6 +91,7 @@ type Search = {
   origin: Point;
   mood: string;
   budgetCents: number;
+  order?: RankingOrder;
   now: Date;
   rejectedIds?: ReadonlySet<string>;
   recentTopPickIds?: readonly string[];
@@ -98,7 +106,7 @@ type RankingResult<Spot extends RankingSpot> = {
 
 export function rankSpots<Spot extends RankingSpot>(
   spots: readonly Spot[],
-  { origin, mood, budgetCents, now, rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
+  { origin, mood, budgetCents, now, order = "best-fit", rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
 ): RankingResult<Spot> {
   const parts = Object.fromEntries(waterlooTime.formatToParts(now).map(({ type, value }) => [type, value]));
   const date = [parts.year, parts.month, parts.day].join("-");
@@ -115,12 +123,22 @@ export function rankSpots<Spot extends RankingSpot>(
 
     const deal = unknownHours ? undefined : activeDeal(spot.deal, date, day, minute);
     const price = spot.cheapestMealPriceCents ?? deal?.priceCents ?? spot.priceCents;
-    const total = price + Math.round(price * ONTARIO_HST);
+    const minimumTotal = price + Math.round(price * ONTARIO_HST);
+    const typical = spot.typicalMealPriceCents;
+    const servings = order === "cheapest" ? spot.serves || 1 : 1;
+    const typicalTotal = typical === undefined
+      ? undefined : Math.round((typical + Math.round(typical * ONTARIO_HST)) / servings);
+    const usesTypicalMeal = typicalTotal !== undefined && (order === "cheapest"
+      ? typicalTotal < minimumTotal
+      : minimumTotal <= budgetCents && typicalTotal <= budgetCents);
+    const total = usesTypicalMeal ? typicalTotal : minimumTotal;
+    const usesPerPersonPrice = usesTypicalMeal && servings > 1;
+    const valueFit = budgetCents > 0 && total <= budgetCents ? MAX_VALUE_FIT * total / budgetCents : 0;
     const moodBonus = mood !== "Anything" && spot.moods.some((tag) => tag.toLowerCase() === mood.toLowerCase()) ? 12 : 0;
     const dealBonus = deal ? 8 : 0;
     const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
-    const score = moodBonus + dealBonus - distance / 100 - noveltyPenalty;
-    const pick = { ...spot, deal, total, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) };
+    const score = valueFit + moodBonus + dealBonus - distance / 100 - noveltyPenalty;
+    const pick = { ...spot, deal, total, usesTypicalMeal, usesPerPersonPrice, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) };
     if (unknownHours) {
       if (total <= budgetCents && !rejectedIds.has(spot.id)) unknown.push(pick);
       return [];
@@ -130,9 +148,12 @@ export function rankSpots<Spot extends RankingSpot>(
 
   const byScore = (a: RankedPick<Spot>, b: RankedPick<Spot>) => b.score - a.score || a.total - b.total;
 
+  const byPrice = (a: RankedPick<Spot>, b: RankedPick<Spot>) => a.total - b.total || byScore(a, b);
+  const compare = order === "cheapest" ? byPrice : byScore;
+
   function withFallback(result: RankingResult<Spot>, radius: number): RankingResult<Spot> {
     if (result.picks.length >= 3) return result;
-    const unknownHoursPicks = unknown.filter((spot) => spot.distance <= radius).sort(byScore);
+    const unknownHoursPicks = unknown.filter((spot) => spot.distance <= radius).sort(compare);
     return unknownHoursPicks.length ? { ...result, unknownHoursPicks } : result;
   }
 
@@ -141,7 +162,7 @@ export function rankSpots<Spot extends RankingSpot>(
   if (!remaining.length) return withFallback({ kind: "exhausted", picks: [] }, EXPANDED_METRES);
 
   const affordable = remaining.filter((spot) => spot.total <= budgetCents)
-    .sort(byScore);
+    .sort(compare);
   const nearby = affordable.filter((spot) => spot.distance <= NEARBY_METRES);
   if (nearby.length && rejectedIds.size < REROLLS_BEFORE_EXPANDING) {
     return withFallback({ kind: "nearby", picks: nearby }, NEARBY_METRES);
@@ -150,6 +171,6 @@ export function rankSpots<Spot extends RankingSpot>(
   if (!allowOverBudget) return withFallback({ kind: "ask-over-budget", picks: [] }, EXPANDED_METRES);
   return withFallback({
     kind: "over-budget",
-    picks: remaining.sort((a, b) => a.total - b.total || b.score - a.score),
+    picks: remaining.sort(byPrice),
   }, EXPANDED_METRES);
 }

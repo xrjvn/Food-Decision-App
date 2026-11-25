@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { importRestaurants } from "./restaurant-import";
+import { rankSpots } from "../app/ranking";
 
 const seed = [{
   "id": "campus-pizza",
@@ -142,4 +143,17 @@ test("a blank schedule can mean unknown hours, while an explicit closure stays k
   assert.equal(unknown.hours_unknown, true);
   assert.deepEqual(closed.hours, []);
   assert.equal(closed.hours_unknown, false);
+});
+
+test("Daily 00:00-24:00 imports as continuously open through midnight", () => {
+  const [record] = importRestaurants(csv(row({ 10: "Daily 00:00-24:00" })));
+  assert.deepEqual(record.hours, [{ days: [0, 1, 2, 3, 4, 5, 6], opens: 0, closes: 1440 }]);
+  assert.throws(() => importRestaurants(csv(row({ 10: "Daily 24:00-02:00" }))), /Invalid time/);
+  const spot = { ...record, point: [43.47, -80.54] as const, priceCents: 799 };
+  for (const timestamp of ["2026-11-25T04:59:00Z", "2026-11-25T05:00:00Z"]) {
+    const result = rankSpots([spot], {
+      origin: spot.point, mood: "Anything", budgetCents: 1500, now: new Date(timestamp),
+    });
+    assert.equal(result.picks.length, 1);
+  }
 });
