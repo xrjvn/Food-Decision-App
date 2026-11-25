@@ -34,10 +34,12 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
     destination: [spot.name, spot.address || spot.area, "Waterloo Ontario"].join(", "),
     travelmode: "walking",
   });
-  const verifiedDate = spot.usesTypicalMeal && spot.cheapestMealPriceCents !== undefined
+  const legacyDate = spot.usesTypicalMeal && spot.cheapestMealPriceCents !== undefined
     ? null
     : spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined
       ? spot.priceSnapshotDate : spot.deal.verifiedOn;
+  const verifiedDate = spot.selectedMeal ? spot.selectedMeal.priceDate : legacyDate;
+  const mealName = spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal);
 
   return (
     <article className={primary ? "pick featured" : "pick"}>
@@ -45,15 +47,15 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
         <div>
           {primary && <p className="eyebrow">TOP PICK</p>}
           {primary ? <h2>{spot.name}</h2> : <h3>{spot.name}</h3>}
-          <p className="meal">{spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal}</p>
-          {!spot.usesTypicalMeal && spot.cheapestMeal && spot.meal && spot.meal !== spot.cheapestMeal && (
+          <p className="meal">{mealName}</p>
+          {!spot.selectedMeal && !spot.usesTypicalMeal && spot.cheapestMeal && spot.meal && spot.meal !== spot.cheapestMeal && (
             <p className="location">Typical meal · {spot.meal}</p>
           )}
           <p className="location">~{spot.walkMinutes} min walk · {spot.area}</p>
         </div>
         <div className="price">
           <strong>{money.format(spot.total / 100)}</strong>
-          {spot.usesPerPersonPrice && <small>per person · serves {spot.serves}</small>}
+          {spot.usesPerPersonPrice && <small>per person · serves {spot.selectedMeal?.serves ?? spot.serves}</small>}
           <small>est. total with tax, tip not included</small>
           <small>{verifiedDate
             ? <>Price verified <time dateTime={verifiedDate}>{verifiedDate}</time></>

@@ -212,3 +212,47 @@ test("cheapest first uses tax-inclusive per-person totals and keeps unconfirmed 
   ]);
   assert.deepEqual(result.unknownHoursPicks?.map(x => x.id), ["unknown-but-cheaper"]);
 });
+
+function option(id: string, tier: import("./meals").MealOption["tier"], priceCents: number,
+  fields: Partial<import("./meals").MealOption> = {}) {
+  return {
+    id, tier, priceCents, restaurantId: "multi", meal: id, serves: 1,
+    period: "Any time" as const, priceDate: null, priceSource: "", priceConfidence: "", notes: "",
+    ...fields,
+  };
+}
+
+test("falls back to Value when Typical exceeds budget and honors both modes with two Value rows", () => {
+  const restaurant = spot("multi", { mealOptions: [
+    option("low", "Value", 600), option("high", "Value", 800), option("typical", "Typical", 950),
+  ] });
+  const budget = { ...search, budgetCents: 1000 };
+  const fit = rankSpots([restaurant], budget).picks[0];
+  assert.deepEqual([fit.selectedMeal?.id, fit.total], ["high", 904]);
+  const cheap = rankSpots([restaurant], { ...budget, order: "cheapest" }).picks[0];
+  assert.deepEqual([cheap.selectedMeal?.id, cheap.total], ["low", 678]);
+});
+
+test("both modes use per-person totals and best fit prefers affordable Typical or Big", () => {
+  const restaurant = spot("multi", { mealOptions: [
+    option("value", "Value", 850), option("typical", "Typical", 1400, { serves: 2 }),
+    option("big", "Big", 2500, { serves: 3 }),
+  ] });
+  const budget = { ...search, budgetCents: 1000 };
+  const fit = rankSpots([restaurant], budget).picks[0];
+  assert.deepEqual([fit.selectedMeal?.id, fit.total, fit.usesPerPersonPrice], ["big", 942, true]);
+  const cheap = rankSpots([restaurant], { ...budget, order: "cheapest" }).picks[0];
+  assert.deepEqual([cheap.selectedMeal?.id, cheap.total, cheap.usesPerPersonPrice], ["typical", 791, true]);
+});
+
+test("breakfast is available from 06:00 until 11:00 Waterloo time and cannot fall back to the legacy breakfast price", () => {
+  const restaurant = spot("multi", { hours: [{ days: [0], opens: 0, closes: 1440 }], mealOptions: [
+    option("breakfast", "Value", 700, { period: "Breakfast" }),
+  ] });
+  for (const [time, expected] of [["05:59", false], ["06:00", true], ["10:59", true], ["11:00", false], ["21:30", false]] as const) {
+    for (const order of ["best-fit", "cheapest"] as const) {
+      const result = rankSpots([restaurant], { ...search, order, now: new Date(`2026-11-22T${time}:00-05:00`) });
+      assert.equal(result.picks[0]?.selectedMeal?.id === "breakfast", expected);
+    }
+  }
+});

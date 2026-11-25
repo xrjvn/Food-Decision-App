@@ -1,3 +1,5 @@
+import { chooseMeal, type MealOption } from "./meals";
+
 type Point = readonly [latitude: number, longitude: number];
 
 export type OpeningWindow = {
@@ -22,6 +24,7 @@ export type RankingSpot = {
   name: string;
   meal: string;
   cheapestMeal?: string;
+  mealOptions?: readonly MealOption[];
   cheapestMealPriceCents?: number;
   typicalMealPriceCents?: number;
   serves?: number | null;
@@ -38,6 +41,7 @@ export type RankedPick<Spot extends RankingSpot> = Omit<Spot, "deal"> & {
   deal: Deal | undefined;
   total: number;
   usesTypicalMeal: boolean;
+  selectedMeal?: MealOption;
   usesPerPersonPrice: boolean;
   distance: number;
   score: number;
@@ -45,6 +49,7 @@ export type RankedPick<Spot extends RankingSpot> = Omit<Spot, "deal"> & {
 };
 
 const ONTARIO_HST = 0.13;
+const taxed = (price: number) => price + Math.round(price * ONTARIO_HST);
 const NEARBY_METRES = 1000;
 const EXPANDED_METRES = 2000;
 const REROLLS_BEFORE_EXPANDING = 3;
@@ -123,22 +128,25 @@ export function rankSpots<Spot extends RankingSpot>(
 
     const deal = unknownHours ? undefined : activeDeal(spot.deal, date, day, minute);
     const price = spot.cheapestMealPriceCents ?? deal?.priceCents ?? spot.priceCents;
-    const minimumTotal = price + Math.round(price * ONTARIO_HST);
+    const selected = spot.mealOptions && chooseMeal(spot.mealOptions, minute, budgetCents, order === "cheapest", taxed);
+    if (spot.mealOptions && !selected) return [];
+
+    const minimumTotal = taxed(price);
     const typical = spot.typicalMealPriceCents;
     const servings = order === "cheapest" ? spot.serves || 1 : 1;
     const typicalTotal = typical === undefined
-      ? undefined : Math.round((typical + Math.round(typical * ONTARIO_HST)) / servings);
-    const usesTypicalMeal = typicalTotal !== undefined && (order === "cheapest"
+      ? undefined : Math.round(taxed(typical) / servings);
+    const usesTypicalMeal = !selected && typicalTotal !== undefined && (order === "cheapest"
       ? typicalTotal < minimumTotal
       : minimumTotal <= budgetCents && typicalTotal <= budgetCents);
-    const total = usesTypicalMeal ? typicalTotal : minimumTotal;
-    const usesPerPersonPrice = usesTypicalMeal && servings > 1;
+    const total = selected?.total ?? (usesTypicalMeal ? typicalTotal : minimumTotal);
+    const usesPerPersonPrice = selected ? selected.meal.serves > 1 : usesTypicalMeal && servings > 1;
     const valueFit = budgetCents > 0 && total <= budgetCents ? MAX_VALUE_FIT * total / budgetCents : 0;
     const moodBonus = mood !== "Anything" && spot.moods.some((tag) => tag.toLowerCase() === mood.toLowerCase()) ? 12 : 0;
     const dealBonus = deal ? 8 : 0;
     const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
     const score = valueFit + moodBonus + dealBonus - distance / 100 - noveltyPenalty;
-    const pick = { ...spot, deal, total, usesTypicalMeal, usesPerPersonPrice, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) };
+    const pick = { ...spot, deal, total, selectedMeal: selected?.meal, usesTypicalMeal, usesPerPersonPrice, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) };
     if (unknownHours) {
       if (total <= budgetCents && !rejectedIds.has(spot.id)) unknown.push(pick);
       return [];

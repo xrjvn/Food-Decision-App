@@ -38,13 +38,13 @@ export type SeedSpot = {
 
 const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
-function isoDate(value: string) {
+export function isoDate(value: string) {
   const time = Date.parse(value);
   return /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(time)
     && new Date(time).toISOString().slice(0, 10) === value;
 }
 
-function priceCents(value: string, column = "Typical meal pre-tax") {
+export function priceCents(value: string, column = "Typical meal pre-tax") {
   if (!value) return null;
   const match = value.match(/^(?:CA\$|CAD\s*|\$)?\s*(\d+)(?:\.(\d{1,2}))?$/i);
   if (!match) throw new Error(`${column} must be a non-negative CAD amount with at most two decimals.`);
@@ -53,7 +53,7 @@ function priceCents(value: string, column = "Typical meal pre-tax") {
   return cents;
 }
 
-function servings(value: string) {
+export function servings(value: string) {
   if (!value) return null;
   const number = Number(value);
   if (!/^\d+$/.test(value) || !Number.isSafeInteger(number) || number < 1) {

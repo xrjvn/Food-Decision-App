@@ -1,3 +1,5 @@
+import mealSeed from "../data/meals.seed.json";
+import type { MealOption } from "./meals";
 import seed from "../data/restaurants.seed.json";
 import type { SeedSpot } from "../scripts/restaurant-import";
 import type { RankingSpot } from "./ranking";
@@ -20,6 +22,13 @@ type Spot = RankingSpot & {
 };
 
 const catalogue: SeedSpot[] = seed;
+const meals = mealSeed as readonly MealOption[];
+const mealsByRestaurant = new Map<string, MealOption[]>();
+for (const meal of meals) {
+  const options = mealsByRestaurant.get(meal.restaurantId) ?? [];
+  options.push(meal);
+  mealsByRestaurant.set(meal.restaurantId, options);
+}
 
 export const spots: readonly Spot[] = catalogue
   .filter((spot) => spot.verified === true
@@ -34,6 +43,7 @@ export const spots: readonly Spot[] = catalogue
   }) => ({
     id, name, meal, area, address, moods, menu, hours, serves,
     priceSnapshotDate: price_snapshot_date,
+    mealOptions: mealsByRestaurant.get(id),
     hoursUnknown: hours_unknown ?? hours.length === 0,
     verifiedPrice: true,
     point: [latitude, longitude],
