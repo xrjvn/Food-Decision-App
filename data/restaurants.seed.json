@@ -134,8 +134,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://order.online/store/-570723/?pickup=true&hideModal=true",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472209,
+    "longitude": -80.537968,
     "deal": null
   },
   {
@@ -212,8 +212,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.46485,
+    "longitude": -80.518596,
     "deal": null
   },
   {
@@ -241,8 +241,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472036,
+    "longitude": -80.537189,
     "deal": null
   },
   {
@@ -270,8 +270,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472292,
+    "longitude": -80.537834,
     "deal": null
   },
   {
@@ -307,7 +307,7 @@
     "id": "R09",
     "name": "Harvey's (University Ave)",
     "area": "Between",
-    "address": "170 University Ave W, Waterloo",
+    "address": "170 University Ave W, Unit 10, Waterloo",
     "cuisine": "Burgers (chain)",
     "dietary_notes": "Unknown",
     "moods": [
@@ -342,8 +342,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.471776,
+    "longitude": -80.538886,
     "deal": null
   },
   {
@@ -457,8 +457,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://williamsfreshcafe.gpr.globalpaymentsinc.ca/menu?deliveryInstructions=&locationId=12712&orderMethod=3&orderType=1&pickupCurbside=false&shouldShowLink=true",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472406,
+    "longitude": -80.53862,
     "deal": null
   },
   {
@@ -513,8 +513,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/sowon-korea-dining/nJucf02bTTC9mxRvrqKruA?diningMode=PICKUP",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.471882,
+    "longitude": -80.538926,
     "deal": null
   },
   {
@@ -542,8 +542,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472792,
+    "longitude": -80.537851,
     "deal": null
   },
   {
@@ -602,8 +602,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://wokwagonexpress.com/vegetable-fried-rice/",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.467788,
+    "longitude": -80.568699,
     "deal": null
   },
   {
@@ -630,8 +630,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/papa-panchos-kitchen/4NSBE_JUU8SBhdWclmksDA?diningMode=PICKUP",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.47687,
+    "longitude": -80.52072,
     "deal": null
   },
   {
@@ -658,8 +658,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/the-redbox-280-lester-st/vxhBeg6GUg2ZWfsGFGg5Bg?diningMode=PICKUP",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.475842,
+    "longitude": -80.535486,
     "deal": null
   },
   {
@@ -687,8 +687,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.478727,
+    "longitude": -80.519905,
     "deal": null
   },
   {
@@ -729,8 +729,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://lanzhou.ca/waterloo/",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472636,
+    "longitude": -80.536253,
     "deal": null
   },
   {
@@ -757,8 +757,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.476918,
+    "longitude": -80.524783,
     "deal": null
   },
   {
@@ -917,8 +917,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472696,
+    "longitude": -80.537859,
     "deal": null
   },
   {
@@ -945,8 +945,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.476965,
+    "longitude": -80.520584,
     "deal": null
   },
   {
@@ -988,8 +988,8 @@
     "hours_unknown": false,
     "hoursSource": "https://campuspizza-alpha.vercel.app/contact",
     "menu": "https://campuspizza-alpha.vercel.app/menu",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.472153,
+    "longitude": -80.538027,
     "deal": null
   },
   {
@@ -1099,8 +1099,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://order.wendys.com/ca/en/menu/116/30006",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.476938,
+    "longitude": -80.519536,
     "deal": null
   },
   {
@@ -1255,8 +1255,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.461637,
+    "longitude": -80.537628,
     "deal": null
   },
   {
@@ -1448,8 +1448,8 @@
     "hours_unknown": true,
     "hoursSource": null,
     "menu": null,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.483605,
+    "longitude": -80.506896,
     "deal": null
   },
   {
