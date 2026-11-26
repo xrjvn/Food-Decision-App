@@ -44,7 +44,9 @@ test("walking limits apply to derived distances and widen only when asked", () =
   assert.equal(nextWalkLimit(5, 1), 10);
   assert.equal(nextWalkLimit(10, 2), 15);
   assert.equal(nextWalkLimit(10, 3), undefined);
-  assert.equal(nextWalkLimit(15, 0), undefined);
+  assert.equal(nextWalkLimit(15, 0), 20);
+  assert.equal(nextWalkLimit(20, 0), undefined);
+  assert.equal(rankSpots(options, { ...search, walkLimit: 20, distances }).picks.length, 4);
 });
 
 test("insecure, unavailable, denied and far-away requests supply no location for ranking", () => {

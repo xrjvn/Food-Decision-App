@@ -1,7 +1,7 @@
 import { moods, type Mood } from "./catalogue";
 import { walkOptions, type WalkLimit } from "./location";
 import { rankingOrders, type RankingOrder } from "./ranking";
-import { budgetOptions } from "./search-state";
+import { isValidBudget } from "./search-state";
 
 export const locationModes = ["campus", "device"] as const;
 const sectionEventTypes = ["ranking_toggle", "hours_fallback_shown"] as const;
@@ -29,7 +29,7 @@ const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{1
 export function eventPayload(identity: Identity, context: Context, event: Event) {
   if (typeof identity.browserId !== "string" || typeof identity.sessionId !== "string"
       || !uuid.test(identity.browserId) || !uuid.test(identity.sessionId)) return null;
-  if (!budgetOptions.some((budget) => budget === context.budget) ||
+  if (!isValidBudget(context.budget) ||
       !moods.includes(context.mood) ||
       !rankingOrders.includes(context.rankingMode) ||
       !locationModes.includes(context.locationMode) ||

@@ -1,5 +1,5 @@
 export type Point = readonly [latitude: number, longitude: number];
-export const walkOptions = [5, 10, 15] as const;
+export const walkOptions = [5, 10, 15, 20] as const;
 export type WalkLimit = typeof walkOptions[number];
 const walkingPaceMetresPerMinute = 80;
 const detourFactor = 1.3;

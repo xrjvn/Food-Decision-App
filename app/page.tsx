@@ -7,7 +7,7 @@ import { rankSpots, type RankedPick } from "./ranking";
 import { nextWalkLimit, requestLocation, walkOptions } from "./location";
 import { directionsUrl, reportPriceUrl } from "./outbound-links";
 import { pilotLoggingEnabled, sendPilotEvents, type SpotEventType } from "./pilot-events";
-import { budgetOptions, initialSearch, updateSearch } from "./search-state";
+import { budgetOptions, initialSearch, maxBudget, minBudget, updateSearch } from "./search-state";
 
 type PickData = RankedPick<typeof spots[number]>;
 
@@ -70,6 +70,7 @@ export default function Home() {
   const { preferences, rejectedIds, recentTopPickIds, allowOverBudget } = search;
   const { campus, budget, mood, order, walkLimit } = preferences;
   const [now, setNow] = useState<Date>();
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const updateTime = () => setNow(new Date());
@@ -115,23 +116,26 @@ export default function Home() {
     });
   }
 
+  const budgetCents = Math.round(budget * 100);
   const result = now && rankSpots(spots, {
     origin: campuses[campus].point,
     walkLimit,
     distances,
     mood,
-    budgetCents: budget * 100,
+    budgetCents,
     order,
     now,
     rejectedIds,
     recentTopPickIds,
     allowOverBudget,
   });
-  const [top, ...alternates] = result?.picks.slice(0, 4) ?? [];
+  const matches = result?.picks ?? [];
+  const [top, ...alternates] = matches.slice(0, 4);
   const unknownHoursPicks = result?.unknownHoursPicks ?? [];
   const locationMode = distances ? "device" : "campus";
   const pilotContext = { budget, mood, rankingMode: order, locationMode, walkLimitMinutes: walkLimit } as const;
   const lastImpression = useRef("");
+  const lastExpandedImpression = useRef("");
   const fallbackVisible = useRef(false);
 
   function spotEvent(type: SpotEventType, spot: PickData, rankPosition: number) {
@@ -149,26 +153,32 @@ export default function Home() {
 
   useEffect(() => {
     if (!pilotLoggingEnabled || !result) return;
-    const displayed = [...result.picks.slice(0, 4), ...(result.unknownHoursPicks ?? [])];
-    const shown = displayed.map((spot, index) => spotEvent("result_shown", spot, index + 1));
+    const shown = [
+      ...result.picks.slice(0, 4).map((spot, index) => spotEvent("result_shown", spot, index + 1)),
+      ...(result.unknownHoursPicks ?? []).map((spot, index) => spotEvent("result_shown", spot, result.picks.length + index + 1)),
+    ];
+    const additional = showAll ? result.picks.slice(4).map((spot, index) => spotEvent("result_shown", spot, index + 5)) : [];
+    const expandedSignature = JSON.stringify([pilotContext, additional]);
     const signature = JSON.stringify([pilotContext, shown]);
     const fallback = Boolean(result.unknownHoursPicks?.length);
     const events: Parameters<typeof sendPilotEvents>[1][number][] = [];
     if (signature !== lastImpression.current) events.push(...shown);
+    if (expandedSignature !== lastExpandedImpression.current) events.push(...additional);
+    lastExpandedImpression.current = expandedSignature;
     if (fallback && !fallbackVisible.current) events.push({ type: "hours_fallback_shown" });
     lastImpression.current = signature;
     fallbackVisible.current = fallback;
     if (events.length) void sendPilotEvents(pilotContext, events);
-  }, [result, pilotContext]);
+  }, [result, pilotContext, showAll]);
 
-  const widerLimit = result && nextWalkLimit(walkLimit, result.picks.filter((pick) => pick.total <= budget * 100).length);
+  const widerLimit = result && nextWalkLimit(walkLimit, result.picks.filter((pick) => pick.total <= budgetCents).length);
   const messages = {
     nearby: `Showing picks within a ${walkLimit}-minute walk.`,
     wider: "Showing open picks within your walking limit.",
     "ask-over-budget": `No other open picks fit your budget within a ${walkLimit}-minute walk.`,
     "over-budget": `Showing the lowest-priced open picks above your budget within a ${walkLimit}-minute walk.`,
     "nothing-open": `No spots are confirmed open within a ${walkLimit}-minute walk right now.`,
-    exhausted: "You’ve skipped all the open picks within 2 km.",
+    exhausted: `You’ve skipped all the open picks within a ${walkLimit}-minute walk.`,
   };
   const message = result ? messages[result.kind] : "Checking listed hours…";
 
@@ -206,6 +216,16 @@ export default function Home() {
             <div className="options">
               {budgetOptions.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => dispatch({ type: "preference", change: { budget: amount } })}>${amount}</button>)}
             </div>
+            <form className="options custom-budget" onSubmit={(event) => {
+              event.preventDefault();
+              const amount = Number(new FormData(event.currentTarget).get("customBudget"));
+              dispatch({ type: "preference", change: { budget: amount } });
+            }}>
+              <label htmlFor="custom-budget">Custom budget ($)</label>
+              <input key={budget} id="custom-budget" name="customBudget" type="number" inputMode="decimal"
+                min={minBudget} max={maxBudget} step="0.01" defaultValue={budget} required />
+              <button type="submit">Apply</button>
+            </form>
           </fieldset>
           <fieldset>
             <legend>Rank results by</legend>
@@ -245,6 +265,21 @@ export default function Home() {
             <h2 className="alternate-title">Other nearby picks</h2>
             <div className="alternates">{alternates.map((spot, i) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} onTap={(type) => logTap(type, spot, i + 2)} />)}</div>
           </>}
+          {matches.length > 0 && (
+            <details className="footnote" onToggle={(event) => setShowAll(event.currentTarget.open)}>
+              <summary>See all matches ({matches.length})</summary>
+              <ol>
+                {matches.map((spot) => (
+                  <li key={spot.id}>
+                    <strong>{spot.name}</strong> · {spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal)}
+                    {" · "}{money.format(spot.total / 100)}{spot.usesPerPersonPrice ? " per person" : ""}
+                    {" · "}approx. {spot.walkMinutes} min walk
+                    {(spot.deliveryAppPrice || spot.selectedMeal?.deliveryAppPrice) && " · Delivery-app price, likely lower in store."}
+                  </li>
+                ))}
+              </ol>
+            </details>
+          )}
           {widerLimit && (
             <button className="result-action" onClick={() => dispatch({ type: "preference", change: { walkLimit: widerLimit } })}>
               Too few matches? Widen to {widerLimit} min
@@ -253,7 +288,7 @@ export default function Home() {
           {unknownHoursPicks.length > 0 && (
             <section aria-labelledby="unknown-hours-heading">
               <h2 className="alternate-title" id="unknown-hours-heading">Hours not confirmed, check before you go</h2>
-              <div className="alternates">{unknownHoursPicks.map((spot, i) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} onTap={(type) => logTap(type, spot, i + (top ? alternates.length + 1 : 0) + 1)} />)}</div>
+              <div className="alternates">{unknownHoursPicks.map((spot, i) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} onTap={(type) => logTap(type, spot, matches.length + i + 1)} />)}</div>
             </section>
           )}
           <details className="footnote">

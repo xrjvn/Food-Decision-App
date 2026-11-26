@@ -13,11 +13,11 @@ create table public.events (
   restaurant_id varchar(12) check (restaurant_id ~ '^R[0-9]{1,11}$'),
   meal_id varchar(12) check (meal_id ~ '^M[0-9]{1,11}$'),
   rank_position smallint check (rank_position between 1 and 100),
-  budget smallint not null check (budget in (10, 15, 20)),
+  budget numeric(5,2) not null check (budget between 1 and 100),
   mood varchar(12) not null check (mood in ('Anything', 'Quick', 'Filling', 'Light', 'Treat')),
   ranking_mode varchar(12) not null check (ranking_mode in ('best-fit', 'cheapest')),
   location_mode varchar(6) not null check (location_mode in ('campus', 'device')),
-  walk_limit_minutes smallint not null check (walk_limit_minutes in (5, 10, 15)),
+  walk_limit_minutes smallint not null check (walk_limit_minutes in (5, 10, 15, 20)),
   check (
     (event_type in ('ranking_toggle', 'hours_fallback_shown')
       and restaurant_id is null and meal_id is null and rank_position is null)

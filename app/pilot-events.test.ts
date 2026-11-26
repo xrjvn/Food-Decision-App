@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { moods } from "./catalogue";
 import { walkOptions } from "./location";
 import { rankingOrders } from "./ranking";
-import { budgetOptions } from "./search-state";
+import { minBudget, maxBudget } from "./search-state";
 import { test } from "node:test";
 import { eventPayload, locationModes, pilotEventTypes, sendPilotEvents } from "./pilot-events";
 
@@ -87,8 +87,9 @@ test("configured logger batches inserts without returning rows or sending browse
 
 test("the SQL CHECK constraints exactly match app and logger options", () => {
   const sql = readFileSync(new URL("../supabase/events.sql", import.meta.url), "utf8");
+  assert.ok(sql.includes(`budget numeric(5,2) not null check (budget between ${minBudget} and ${maxBudget})`));
   for (const [column, values] of Object.entries({
-    mood: moods, budget: budgetOptions, walk_limit_minutes: walkOptions,
+    mood: moods, walk_limit_minutes: walkOptions,
     ranking_mode: rankingOrders, location_mode: locationModes, event_type: pilotEventTypes,
   })) {
     const match = sql.match(new RegExp(String.raw`check \(${column} in \(([^)]*)\)`));
@@ -114,4 +115,13 @@ test("rejected, thrown, and HTTP-error inserts all resolve without disrupting th
   post.mock.mockImplementation(async () => new Response(null, { status: 403 }));
   await assert.doesNotReject(sendPilotEvents(context, [event]));
   assert.equal(post.mock.callCount(), 3);
+});
+
+
+test("pilot events accept decimal budgets and a twenty-minute limit", () => {
+  const custom = { ...context, budget: 12.35, walkLimitMinutes: 20 } as const;
+  assert.equal(eventPayload(identity, custom, event)?.budget, 12.35);
+  for (const budget of [0, 100.01, 12.345, NaN]) {
+    assert.equal(eventPayload(identity, { ...custom, budget }, event), null);
+  }
 });

@@ -58,3 +58,7 @@ button[aria-pressed="true"] { background: var(--pine); border-color: var(--pine)
 .price-report { display: inline-block; margin-top: 8px; padding: 4px 0; color: inherit; font-size: .85rem; }
 .origin-options select { flex: 1 1 10rem; }
 .origin-options button { flex: 0 0 auto; }
+
+.custom-budget { align-items: center; margin-top: 8px; }
+.custom-budget label { flex-basis: 100%; margin-bottom: 0; }
+.custom-budget input { width: 7rem; min-height: 44px; padding-inline: 8px; font: inherit; }

@@ -3,6 +3,13 @@ import type { WalkLimit } from "./location";
 import type { RankingOrder } from "./ranking";
 
 export const budgetOptions = [10, 15, 20] as const;
+export const minBudget = 1;
+export const maxBudget = 100;
+
+export function isValidBudget(amount: number) {
+  return Number.isFinite(amount) && amount >= minBudget && amount <= maxBudget
+    && Math.round(amount * 100) / 100 === amount;
+}
 
 type Preferences = { campus: Campus; budget: number; mood: Mood; order: RankingOrder; walkLimit: WalkLimit };
 
@@ -23,12 +30,13 @@ function freshSearch(preferences: Preferences): SearchState {
   return { preferences, rejectedIds: new Set(), recentTopPickIds: [], allowOverBudget: false };
 }
 
-export const initialSearch = freshSearch({ campus: "uw", budget: 15, mood: "Anything", order: "best-fit", walkLimit: 10 });
+export const initialSearch = freshSearch({ campus: "uw", budget: 15, mood: "Anything", order: "best-fit", walkLimit: 15 });
 
 export function updateSearch(state: SearchState, action: Action): SearchState {
   switch (action.type) {
     case "preference": {
       const next = { ...state.preferences, ...action.change };
+      if (!isValidBudget(next.budget)) return state;
       const { campus, budget, mood, order, walkLimit } = state.preferences;
       return next.campus === campus && next.budget === budget && next.mood === mood && next.order === order && next.walkLimit === walkLimit
         ? state : freshSearch(next);

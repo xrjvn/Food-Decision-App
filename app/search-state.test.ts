@@ -62,3 +62,12 @@ test("budget ranking toggle switches to cheapest and back to best fit", () => {
   const restored = updateSearch(cheapest, { type: "preference", change: { order: "best-fit" } });
   assert.equal(top(restored), "1200");
 });
+
+test("custom dollar-and-cent budgets apply without changing the default walking limit", () => {
+  assert.equal(initialSearch.preferences.walkLimit, 15);
+  const custom = updateSearch(initialSearch, { type: "preference", change: { budget: 13.56 } });
+  assert.equal(custom.preferences.budget, 13.56);
+  assert.equal(top(custom), "1200");
+  assert.equal(top(updateSearch(custom, { type: "preference", change: { budget: 13.55 } })), "800");
+  assert.equal(updateSearch(custom, { type: "preference", change: { budget: 13.555 } }), custom);
+});
