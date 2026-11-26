@@ -5,3 +5,5 @@ next-env.d.ts
 *.tsbuildinfo
 
 .nominatim-cache.jsonl
+
+.env*.local

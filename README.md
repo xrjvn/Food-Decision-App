@@ -36,7 +36,7 @@ The CSV can supply coordinates. Menu URLs and deal details come from the seed. M
 
 ## Configure price reports
 
-Set `NEXT_PUBLIC_REPORT_URL` to the Google Form's full `viewform` URL before building. Until configured, the link uses a placeholder. To prefill the form's restaurant question, also set `NEXT_PUBLIC_REPORT_RESTAURANT_FIELD` to its `entry.<id>` key from a Google Forms prefilled link. Without that setting, the app appends a generic `restaurant` query parameter. Rebuild the static export after changing either setting.
+Set `NEXT_PUBLIC_REPORT_URL` to the Google Form's full `viewform` URL before building. Until configured, the link uses a placeholder. To prefill the form's restaurant question, also set `NEXT_PUBLIC_REPORT_RESTAURANT_FIELD` to its `entry.<id>` key from a Google Forms prefilled link. Without that setting, the app appends a generic `restaurant` query parameter. Supply both values to the build environment. Local builds can use an ignored `.env.local` file. Rebuild the static export after changing either setting. If the hosting platform reuses a saved archive for the same source commit, publish a fresh source version and build with the new values.
 
 ### Spreadsheet column names
 
