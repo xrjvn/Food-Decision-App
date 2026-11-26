@@ -1,6 +1,6 @@
 import { chooseMeal, type MealOption } from "./meals";
 
-type Point = readonly [latitude: number, longitude: number];
+import { distanceMetres, metresPerMinute, walkingMinutes, type Point, type WalkLimit } from "./location";
 
 export type OpeningWindow = {
   days: readonly number[]; // 0 is Sunday
@@ -57,22 +57,12 @@ const MAX_DEAL_AGE_DAYS = 30;
 const DAY_MS = 86_400_000;
 const NOVELTY_PENALTY = 4;
 const MAX_VALUE_FIT = 30;
-const radians = Math.PI / 180;
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const waterlooTime = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Toronto",
   year: "numeric", month: "2-digit", day: "2-digit",
   weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23",
 });
-
-function distanceMetres(from: Point, to: Point) {
-  const [lat, lon] = from;
-  const [targetLat, targetLon] = to;
-  const a = Math.sin((targetLat - lat) * radians / 2) ** 2
-    + Math.cos(lat * radians) * Math.cos(targetLat * radians)
-    * Math.sin((targetLon - lon) * radians / 2) ** 2;
-  return 12_742_000 * Math.asin(Math.sqrt(a));
-}
 
 function isWithinHours(hours: readonly OpeningWindow[], day: number, minute: number) {
   const previousDay = (day + 6) % 7;
@@ -94,6 +84,8 @@ function activeDeal(deal: Deal | undefined, date: string, day: number, minute: n
 
 type Search = {
   origin: Point;
+  walkLimit?: WalkLimit;
+  distances?: ReadonlyMap<string, number>;
   mood: string;
   budgetCents: number;
   order?: RankingOrder;
@@ -111,18 +103,20 @@ type RankingResult<Spot extends RankingSpot> = {
 
 export function rankSpots<Spot extends RankingSpot>(
   spots: readonly Spot[],
-  { origin, mood, budgetCents, now, order = "best-fit", rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
+  { origin, walkLimit, distances, mood, budgetCents, now, order = "best-fit", rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
 ): RankingResult<Spot> {
   const parts = Object.fromEntries(waterlooTime.formatToParts(now).map(({ type, value }) => [type, value]));
   const date = [parts.year, parts.month, parts.day].join("-");
   const day = weekdays.indexOf(parts.weekday);
   const minute = Number(parts.hour) * 60 + Number(parts.minute);
+  const maxDistance = walkLimit === undefined ? EXPANDED_METRES : walkLimit * metresPerMinute;
   const unknown: RankedPick<Spot>[] = [];
   const open = spots.flatMap((spot): RankedPick<Spot>[] => {
     if (!spot.point.every(Number.isFinite)) return [];
-    const distance = distanceMetres(origin, spot.point);
+    const distance = distances ? distances.get(spot.id) : distanceMetres(origin, spot.point);
+    if (distance === undefined || !Number.isFinite(distance)) return [];
     const unknownHours = spot.hoursUnknown === true && spot.hours.length === 0;
-    if (distance > EXPANDED_METRES || (unknownHours
+    if (distance > maxDistance || (unknownHours
       ? spot.verifiedPrice !== true
       : !isWithinHours(spot.hours, day, minute))) return [];
 
@@ -146,7 +140,7 @@ export function rankSpots<Spot extends RankingSpot>(
     const dealBonus = deal ? 8 : 0;
     const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
     const score = valueFit + moodBonus + dealBonus - distance / 100 - noveltyPenalty;
-    const pick = { ...spot, deal, total, selectedMeal: selected?.meal, usesTypicalMeal, usesPerPersonPrice, distance, score, walkMinutes: Math.max(1, Math.round(distance / 80)) };
+    const pick = { ...spot, deal, total, selectedMeal: selected?.meal, usesTypicalMeal, usesPerPersonPrice, distance, score, walkMinutes: walkingMinutes(distance) };
     if (unknownHours) {
       if (total <= budgetCents && !rejectedIds.has(spot.id)) unknown.push(pick);
       return [];
@@ -165,20 +159,21 @@ export function rankSpots<Spot extends RankingSpot>(
     return unknownHoursPicks.length ? { ...result, unknownHoursPicks } : result;
   }
 
-  if (!open.length) return withFallback({ kind: "nothing-open", picks: [] }, EXPANDED_METRES);
+  if (!open.length) return withFallback({ kind: "nothing-open", picks: [] }, maxDistance);
   const remaining = open.filter((spot) => !rejectedIds.has(spot.id));
-  if (!remaining.length) return withFallback({ kind: "exhausted", picks: [] }, EXPANDED_METRES);
+  if (!remaining.length) return withFallback({ kind: "exhausted", picks: [] }, maxDistance);
 
   const affordable = remaining.filter((spot) => spot.total <= budgetCents)
     .sort(compare);
+  if (walkLimit !== undefined && affordable.length) return withFallback({ kind: "nearby", picks: affordable }, maxDistance);
   const nearby = affordable.filter((spot) => spot.distance <= NEARBY_METRES);
   if (nearby.length && rejectedIds.size < REROLLS_BEFORE_EXPANDING) {
     return withFallback({ kind: "nearby", picks: nearby }, NEARBY_METRES);
   }
-  if (affordable.length) return withFallback({ kind: "wider", picks: affordable }, EXPANDED_METRES);
-  if (!allowOverBudget) return withFallback({ kind: "ask-over-budget", picks: [] }, EXPANDED_METRES);
+  if (affordable.length) return withFallback({ kind: "wider", picks: affordable }, maxDistance);
+  if (!allowOverBudget) return withFallback({ kind: "ask-over-budget", picks: [] }, maxDistance);
   return withFallback({
     kind: "over-budget",
     picks: remaining.sort(byPrice),
-  }, EXPANDED_METRES);
+  }, maxDistance);
 }

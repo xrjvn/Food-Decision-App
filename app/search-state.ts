@@ -1,7 +1,8 @@
 import type { Campus, Mood } from "./catalogue";
+import type { WalkLimit } from "./location";
 import type { RankingOrder } from "./ranking";
 
-type Preferences = { campus: Campus; budget: number; mood: Mood; order: RankingOrder };
+type Preferences = { campus: Campus; budget: number; mood: Mood; order: RankingOrder; walkLimit: WalkLimit };
 
 type SearchState = {
   preferences: Preferences;
@@ -20,14 +21,14 @@ function freshSearch(preferences: Preferences): SearchState {
   return { preferences, rejectedIds: new Set(), recentTopPickIds: [], allowOverBudget: false };
 }
 
-export const initialSearch = freshSearch({ campus: "uw", budget: 15, mood: "Anything", order: "best-fit" });
+export const initialSearch = freshSearch({ campus: "uw", budget: 15, mood: "Anything", order: "best-fit", walkLimit: 10 });
 
 export function updateSearch(state: SearchState, action: Action): SearchState {
   switch (action.type) {
     case "preference": {
       const next = { ...state.preferences, ...action.change };
-      const { campus, budget, mood, order } = state.preferences;
-      return next.campus === campus && next.budget === budget && next.mood === mood && next.order === order
+      const { campus, budget, mood, order, walkLimit } = state.preferences;
+      return next.campus === campus && next.budget === budget && next.mood === mood && next.order === order && next.walkLimit === walkLimit
         ? state : freshSearch(next);
     }
     case "reject":
