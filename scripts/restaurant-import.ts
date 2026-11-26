@@ -1,4 +1,5 @@
 import { parse } from "csv-parse/sync";
+import { isDeliveryAppPrice, isEligiblePrice } from "./price-status";
 import { LATITUDE, LONGITUDE, parseCoordinate } from "./coordinates";
 import type { OpeningWindow, RankingSpot } from "../app/ranking";
 
@@ -8,7 +9,7 @@ const columns = [
   "Cheapest complete meal", "Cheapest meal pre-tax", "Price source", "Price date checked", "Price confidence",
 ] as const;
 
-type Row = Record<typeof columns[number], string> & Partial<Record<typeof LATITUDE | typeof LONGITUDE, string>>;
+type Row = Record<typeof columns[number], string> & Partial<Record<typeof LATITUDE | typeof LONGITUDE | "Menu link", string>>;
 
 export type SeedSpot = {
   id: string;
@@ -24,6 +25,7 @@ export type SeedSpot = {
   dietary_notes?: string;
   moods: string[];
   menu: string | null;
+  deliveryAppPrice?: boolean;
   hours: OpeningWindow[];
   hours_unknown?: boolean;
   hoursSource: string | null;
@@ -110,7 +112,7 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
       for (const column of columns) {
         if (names.filter((name) => name === column).length !== 1) throw new Error(`Expected exactly one "${column}" column.`);
       }
-      for (const column of [LATITUDE, LONGITUDE]) {
+      for (const column of [LATITUDE, LONGITUDE, "Menu link"]) {
         if (names.filter((name) => name === column).length > 1) throw new Error(`Duplicate "${column}" column.`);
       }
       return names;
@@ -145,7 +147,7 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
       const cheapestPrice = priceCents(row["Cheapest meal pre-tax"], "Cheapest meal pre-tax");
       const checkedDate = row["Price date checked"];
       if (checkedDate && !isoDate(checkedDate)) throw new Error("Price date checked must be a valid YYYY-MM-DD date.");
-      const verified = row["Row status"].startsWith("Verified") && cheapestPrice !== null && Boolean(cheapestMeal);
+      const verified = isEligiblePrice(row["Row status"]) && cheapestPrice !== null && Boolean(cheapestMeal);
       const datedStatus = row["Row status"].match(/\b\d{4}-\d{2}-\d{2}\b/)?.[0];
       if (verified && datedStatus && !isoDate(datedStatus)) throw new Error("Row status contains an invalid snapshot date.");
       const samePrice = metadata?.typical_meal_pre_tax_price_cents === price && metadata.meal === row["Typical meal"];
@@ -156,6 +158,16 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
       const priceDate = (checkedDate || datedStatus) ?? snapshotDate ?? (sameCheapest ? metadata?.price_snapshot_date : null);
 
       const hours = parseHours(row.Hours, metadata?.hours);
+
+      const menuLink = raw["Menu link"]?.trim();
+      if (menuLink) {
+        try {
+          const url = new URL(menuLink);
+          if (!["https:", "http:"].includes(url.protocol) || url.username || url.password) throw new Error();
+        } catch {
+          throw new Error("Menu link must be a full HTTP or HTTPS URL.");
+        }
+      }
 
       return {
         id,
@@ -173,11 +185,12 @@ export function importRestaurants(csv: string, existing: readonly SeedSpot[] = [
         serves: servings(row["Serves (people)"]),
         typical_meal_pre_tax_price_cents: price,
         verified,
+        ...(isDeliveryAppPrice(row["Row status"]) ? { deliveryAppPrice: true } : {}),
         price_snapshot_date: verified ? priceDate : null,
         hours,
         hours_unknown: !row.Hours && (metadata?.hours_unknown ?? hours.length === 0),
         hoursSource: row.Hours ? null : metadata?.hoursSource ?? null,
-        menu: metadata?.menu ?? null,
+        menu: menuLink || metadata?.menu || null,
         latitude: hasCoordinates ? latitude : metadata?.latitude ?? null,
         longitude: hasCoordinates ? longitude : metadata?.longitude ?? null,
         deal: samePrice ? metadata.deal : null,

@@ -1,4 +1,5 @@
 import { parse } from "csv-parse/sync";
+import { isDeliveryAppPrice, isEligiblePrice } from "./price-status";
 import { mealPeriods, mealTiers, type MealOption } from "../app/meals";
 import { isoDate, priceCents, servings } from "./restaurant-import";
 
@@ -47,8 +48,8 @@ export function importMeals(csv: string, restaurants: readonly Restaurant[]) {
       if (seen.has(id.toLowerCase())) throw new Error("Duplicate Meal ID.");
       seen.add(id.toLowerCase());
       if (!restaurantStatus.has(restaurantId)) throw new Error("Restaurant ID not found in the Restaurants seed.");
-      if (!restaurantStatus.get(restaurantId)) throw new Error("Restaurant is not verified in the Restaurants seed.");
-      if (!row["Row status"].startsWith("Verified")) throw new Error("Meal row is not verified.");
+      if (!restaurantStatus.get(restaurantId)) throw new Error("Restaurant is not eligible in the Restaurants seed.");
+      if (!isEligiblePrice(row["Row status"])) throw new Error("Meal row is not verified.");
 
       const cents = priceCents(row["Pre-tax price"], "Pre-tax price");
       if (cents === null) throw new Error("Pre-tax price is blank.");
@@ -64,6 +65,7 @@ export function importMeals(csv: string, restaurants: readonly Restaurant[]) {
         priceSource: row["Price source"],
         priceConfidence: row["Price confidence"],
         notes: row.Notes,
+        ...(isDeliveryAppPrice(row["Row status"]) ? { deliveryAppPrice: true } : {}),
       });
     } catch (error) {
       reason = (error as Error).message;

@@ -17,6 +17,7 @@ type Spot = RankingSpot & {
   area: string;
   menu: string | null;
   address?: string;
+  deliveryAppPrice?: boolean;
   priceSnapshotDate: string | null;
   serves: number | null;
 };
@@ -39,9 +40,9 @@ export const spots: readonly Spot[] = catalogue
   .map(({
     latitude, longitude, typical_meal_pre_tax_price_cents, deal,
     cheapest_meal, cheapest_meal_pre_tax_price_cents,
-    id, name, meal, area, address, moods, menu, hours, hours_unknown, serves, price_snapshot_date,
+    id, name, meal, area, address, moods, menu, hours, hours_unknown, deliveryAppPrice, serves, price_snapshot_date,
   }) => ({
-    id, name, meal, area, address, moods, menu, hours, serves,
+    id, name, meal, area, address, moods, menu, hours, serves, deliveryAppPrice,
     priceSnapshotDate: price_snapshot_date,
     mealOptions: mealsByRestaurant.get(id),
     hoursUnknown: hours_unknown ?? hours.length === 0,

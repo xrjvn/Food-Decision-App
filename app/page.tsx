@@ -39,6 +39,7 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
     : spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined
       ? spot.priceSnapshotDate : spot.deal.verifiedOn;
   const verifiedDate = spot.selectedMeal ? spot.selectedMeal.priceDate : legacyDate;
+  const deliveryAppPrice = spot.deliveryAppPrice || spot.selectedMeal?.deliveryAppPrice;
   const mealName = spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal);
 
   return (
@@ -57,9 +58,10 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
           <strong>{money.format(spot.total / 100)}</strong>
           {spot.usesPerPersonPrice && <small>per person · serves {spot.selectedMeal?.serves ?? spot.serves}</small>}
           <small>est. total with tax, tip not included</small>
+          {deliveryAppPrice && <small>Delivery-app price, likely lower in store.</small>}
           <small>{verifiedDate
-            ? <>Price verified <time dateTime={verifiedDate}>{verifiedDate}</time></>
-            : "Price verification date unavailable"}
+            ? <>Price checked <time dateTime={verifiedDate}>{verifiedDate}</time></>
+            : "Price check date unavailable"}
           </small>
         </div>
       </div>
@@ -68,7 +70,7 @@ function Pick({ spot, primary }: { spot: PickData; primary?: boolean }) {
       </p>}
       <div className="links">
         <a href={`https://www.google.com/maps/dir/?${directions}`} target="_blank" rel="noreferrer">Directions</a>
-        {spot.menu && <a href={spot.menu} target="_blank" rel="noreferrer">Menu</a>}
+        {spot.menu && <a href={spot.menu} target="_blank" rel="noreferrer">Menu / order</a>}
       </div>
       <a className="price-report" href={reportPriceUrl(spot.name)} target="_blank" rel="noreferrer">
         Report a wrong price
@@ -172,6 +174,10 @@ export default function Home() {
               <div className="alternates">{unknownHoursPicks.map((spot) => <Pick key={spot.id} spot={spot} />)}</div>
             </section>
           )}
+          <details className="footnote">
+            <summary>How prices work</summary>
+            <p>Prices are estimates per person. They include 13% Ontario HST and exclude tip. Each result shows the date its price was checked when available. We mark delivery-app prices because they can be higher than in-store prices.</p>
+          </details>
           {(top || unknownHoursPicks.length > 0) && <p className="footnote">Check with the restaurant for current prices and holiday hours. Walk times are based on straight-line distance. Location data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>}
         </section>
       </div>

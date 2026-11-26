@@ -13,6 +13,7 @@ export type MealOption = {
   priceSource: string;
   priceConfidence: string;
   notes: string;
+  deliveryAppPrice?: boolean;
 };
 
 export function chooseMeal(

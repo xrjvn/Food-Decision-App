@@ -157,3 +157,17 @@ test("Daily 00:00-24:00 imports as continuously open through midnight", () => {
     assert.equal(result.picks.length, 1);
   }
 });
+
+test("delivery-app prices enter the eligible seed and explicit menu links override old links", () => {
+  const data = csv([...row({ 9: "Third-party price (delivery app)" }), "https://example.com/order"])
+    .replace(header, header + ",Menu link");
+  const [spot] = importRestaurants(data, seed);
+  assert.equal(spot.verified, true);
+  assert.equal(spot.deliveryAppPrice, true);
+  assert.equal(spot.menu, "https://example.com/order");
+  assert.throws(() => importRestaurants(data.replace("https://example.com/order", "javascript:alert(1)")), /Menu link/);
+  assert.equal(importRestaurants(csv(row({ 9: "Third-party price (delivery app)", 13: "" })))[0].verified, false);
+  for (const status of ["Ready to verify", "Needs price", "Needs name check", "Closed"]) {
+    assert.equal(importRestaurants(csv(row({ 9: status })))[0].verified, false);
+  }
+});

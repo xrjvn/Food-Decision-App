@@ -133,7 +133,7 @@ export function rankSpots<Spot extends RankingSpot>(
 
     const minimumTotal = taxed(price);
     const typical = spot.typicalMealPriceCents;
-    const servings = order === "cheapest" ? spot.serves || 1 : 1;
+    const servings = spot.serves || 1;
     const typicalTotal = typical === undefined
       ? undefined : Math.round(taxed(typical) / servings);
     const usesTypicalMeal = !selected && typicalTotal !== undefined && (order === "cheapest"

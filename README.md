@@ -8,7 +8,7 @@ Use Node.js 20.9 or newer. Run `npm ci` and `npm run dev`, then open the local U
 
 ## Campus preview
 
-Edit `data/restaurants.seed.json` to maintain the catalogue. Store cheapest complete meal and typical meal pre-tax prices in Canadian cents and use `serves` for the number of people the listed meal feeds. `price_snapshot_date` is the date the menu price was checked (YYYY-MM-DD), or null when unconfirmed. Keep `verified` false until the location, menu price and weekly hours have been checked against the linked sources. Only verified rows enter ranking. Menu prices can still change.
+Edit `data/restaurants.seed.json` to maintain the catalogue. Store cheapest complete meal and typical meal pre-tax prices in Canadian cents and use `serves` for the number of people the listed meal feeds. `price_snapshot_date` is the date the menu price was checked (YYYY-MM-DD), or null when unconfirmed. Keep `verified` false until the location, menu price and weekly hours have been checked against the linked sources. Rows with a verified or third-party delivery-app price can enter ranking. The app labels third-party delivery-app prices. Menu prices can still change.
 
 The browser calculates tax-inclusive totals from the cheapest complete meal on new imports and ranks by mood, proximity and active deals. A small penalty for the last three distinct top picks within the current page visit helps introduce variety. Approximate walk times use straight-line distance.
 
@@ -40,7 +40,7 @@ Set `NEXT_PUBLIC_REPORT_URL` to the Google Form's full `viewform` URL before bui
 
 ### Spreadsheet column names
 
-Required headers are `ID`, `Name`, `Area`, `Address`, `Cuisine`, `Mood tags`, `Typical meal`, `Serves (people)`, `Typical meal pre-tax`, `Row status`, `Hours`, `Dietary notes`, `Cheapest complete meal`, `Cheapest meal pre-tax`, `Price source`, `Price date checked`, and `Price confidence`. The importer also accepts `Cheapest meal, pre-tax` as an alias. Optional headers are `Latitude` and `Longitude`. Fill them together with decimal degrees, or leave both blank to use coordinates already in the seed for that location. The importer ignores other columns, including `Geocode status`.
+Required headers are `ID`, `Name`, `Area`, `Address`, `Cuisine`, `Mood tags`, `Typical meal`, `Serves (people)`, `Typical meal pre-tax`, `Row status`, `Hours`, `Dietary notes`, `Cheapest complete meal`, `Cheapest meal pre-tax`, `Price source`, `Price date checked`, and `Price confidence`. The importer also accepts `Cheapest meal, pre-tax` as an alias. Optional headers are `Menu link`, `Latitude`, and `Longitude`. A full HTTP(S) menu or order URL replaces the existing link. A blank or omitted `Menu link` keeps the prior link for the same location. Fill them together with decimal degrees, or leave both blank to use coordinates already in the seed for that location. The importer ignores other columns, including `Geocode status`.
 
 ### One-off geocoding
 
@@ -52,6 +52,6 @@ Include the street number, street name, and city in each address. Review the `Ge
 
 ### Import a Meals CSV
 
-Run `npm run import:meals -- /path/to/meals.csv` from the repository root. Add `--report /path/to/report.csv` for a row-by-row list of imported and skipped meals. This writes `data/meals.seed.json` separately from the Restaurants seed. Only verified meal rows with a verified parent restaurant and valid price are imported. Serve counts default to one when blank. The helper column and empty rows are ignored.
+Run `npm run import:meals -- /path/to/meals.csv` from the repository root. Add `--report /path/to/report.csv` for a row-by-row list of imported and skipped meals. This writes `data/meals.seed.json` separately from the Restaurants seed. Only meal rows with a verified or third-party delivery-app price, an eligible parent restaurant, and a valid price are imported. Serve counts default to one when blank. The helper column and empty rows are ignored.
 
 Best fit uses an affordable Typical or Big meal when available and otherwise chooses the Value option closest to budget. Cheapest first chooses the lowest tax-inclusive per-person total. Breakfast meals are eligible from 06:00 up to 11:00 Waterloo time. Restaurants with imported meal options use those options for all searches.

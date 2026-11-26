@@ -13,7 +13,16 @@ test("imports verified restaurant meals, skips invalid rows and ignores the help
   ].join("\n");
   const result = importMeals(csv, [{ id: "R1", verified: true }, { id: "R2", verified: false }]);
   assert.deepEqual(result.meals.map(({ id, priceCents, period }) => [id, priceCents, period]), [["M1", 850, "Breakfast"]]);
-  assert.deepEqual(result.report.map((row) => row.at(-1)), ["", "Restaurant is not verified in the Restaurants seed.",
+  assert.deepEqual(result.report.map((row) => row.at(-1)), ["", "Restaurant is not eligible in the Restaurants seed.",
     "Meal row is not verified.", "Pre-tax price is blank."]);
   assert.equal(result.blankRows, 1);
+});
+
+test("imports a delivery-app meal when the parent restaurant is eligible", () => {
+  const csv = [
+    "Meal ID,Restaurant ID,Restaurant,Tier,Meal,Pre-tax price,Serves (people),Price source,Price date checked,Price confidence,Row status,Notes,Meal period",
+    "M1,R1,Example,Value,Wrap,9,1,Menu,,Medium,Third-party price (delivery app),,Any time",
+  ].join("\n");
+  assert.equal(importMeals(csv, [{ id: "R1", verified: true }]).meals[0].deliveryAppPrice, true);
+  assert.equal(importMeals(csv, [{ id: "R1", verified: false }]).meals.length, 0);
 });
