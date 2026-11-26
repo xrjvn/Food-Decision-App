@@ -49,7 +49,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": "https://www.baosandwichbar.com/menu",
+    "menu": "https://order.tbdine.com/pickup/23290/menu",
     "latitude": 43.4765166,
     "longitude": -80.5300034,
     "deal": null
@@ -73,8 +73,9 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 2200,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-22",
     "hours": [
       {
         "days": [
@@ -183,8 +184,9 @@
     "price_confidence": "Medium",
     "serves": 2,
     "typical_meal_pre_tax_price_cents": 2699,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-22",
     "hours": [
       {
         "days": [
@@ -309,7 +311,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.subway.com/en-ca/restaurant/2969-0/menu/category/sandwiches",
     "latitude": 43.472292,
     "longitude": -80.537834,
     "deal": null
@@ -333,8 +335,9 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1120,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-22",
     "hours": [
       {
         "days": [
@@ -561,8 +564,9 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1599,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-23",
     "hours": [
       {
         "days": [
@@ -726,10 +730,42 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1799,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-23",
+    "hours": [
+      {
+        "days": [
+          2,
+          3
+        ],
+        "opens": 960,
+        "closes": 1435
+      },
+      {
+        "days": [
+          4
+        ],
+        "opens": 975,
+        "closes": 1435
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 840,
+        "closes": 0
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 1435
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/the-redbox-280-lester-st/vxhBeg6GUg2ZWfsGFGg5Bg?diningMode=PICKUP",
     "latitude": 43.475842,
@@ -802,7 +838,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": "https://lanzhou.ca/waterloo/",
+    "menu": "https://order.mrsdigi.com/112210200804055/3c07a831-5c58-54cb-8e82-b2d5fb477bb4#/menu-full",
     "latitude": 43.472636,
     "longitude": -80.536253,
     "deal": null
@@ -848,18 +884,39 @@
       "treat"
     ],
     "meal": "Rajma Chawal bowl (kidney bean curry with rice)",
-    "cheapest_meal": "Stuffed Kulcha Channa",
-    "cheapest_meal_pre_tax_price_cents": 1000,
-    "price_source": "DoorDash-powered storefront, pickup selected: https://order.online/store/royal-paan-23161510/?pickup=true",
+    "cheapest_meal": "Bombay Vada Pav, two pieces",
+    "cheapest_meal_pre_tax_price_cents": 999,
+    "price_source": "Uber Eats pickup (site points to third-party ordering): https://www.ubereats.com/ca/store/royal-paan-waterloo/7RGtMpyEVnO1TZ6sIE5SrA?diningMode=PICKUP",
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1199,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 690,
+        "closes": 0
+      },
+      {
+        "days": [
+          5,
+          6,
+          0
+        ],
+        "opens": 690,
+        "closes": 60
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ubereats.com/ca/store/royal-paan-waterloo/7RGtMpyEVnO1TZ6sIE5SrA?diningMode=PICKUP",
     "latitude": 43.4765452,
     "longitude": -80.5232523,
     "deal": null
@@ -882,12 +939,45 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1675,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 660,
+        "closes": 1380
+      },
+      {
+        "days": [
+          5
+        ],
+        "opens": 660,
+        "closes": 120
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 660,
+        "closes": 60
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ubereats.com/ca/store/mucho-burrito-210-220-king-street-n/I2np05bjRwOP3KB6tFyl4g?diningMode=PICKUP",
     "latitude": 43.4752903,
     "longitude": -80.5240098,
     "deal": null
@@ -942,7 +1032,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://juicybirdswaterloo.bycalibre.ca/menu",
     "latitude": 43.4752903,
     "longitude": -80.5240098,
     "deal": null
@@ -990,7 +1080,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://freshburrito.ca/flipdish#/restaurant/11433/collection/11796?menuItemId=4029",
     "latitude": 43.472696,
     "longitude": -80.537859,
     "deal": null
@@ -1007,18 +1097,45 @@
       "quick"
     ],
     "meal": "Chicken Burrito",
-    "cheapest_meal": "Bean & Veggies Burrito",
-    "cheapest_meal_pre_tax_price_cents": 1234,
-    "price_source": "DoorDash-powered storefront, pickup selected: https://order.online/store/guac-mexi-grill-waterloo-25556881/?pickup=true",
+    "cheapest_meal": "Bean & Veggies Crunch Wrap with salsa",
+    "cheapest_meal_pre_tax_price_cents": 1039,
+    "price_source": "Uber Eats pickup (restaurant-linked portal would not show a priced menu): https://www.ubereats.com/ca/store/guac-mexi-grill-waterloo/Aia_jB4hRdupbmnG_R8sDw?diningMode=PICKUP",
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1390,
-    "verified": false,
-    "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-24",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "opens": 660,
+        "closes": 1380
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 660,
+        "closes": 1260
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 1260
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ubereats.com/ca/store/guac-mexi-grill-waterloo/Aia_jB4hRdupbmnG_R8sDw?diningMode=PICKUP",
     "latitude": 43.476965,
     "longitude": -80.520584,
     "deal": null
@@ -1061,7 +1178,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": "https://campuspizza-alpha.vercel.app/menu",
+    "menu": "https://ritual.co/order/campus-pizza-university-phillip-waterloo/3db9",
     "latitude": 43.472153,
     "longitude": -80.538027,
     "deal": null
@@ -1128,7 +1245,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://score-pizza-uptownwaterloo.cloveronline.com/menu/mini-build-your-own-pizza-V92VQD0Z1V63M",
     "latitude": 43.4634622,
     "longitude": -80.5217344,
     "deal": null
@@ -1417,8 +1534,9 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1428,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-24",
     "hours": [
       {
         "days": [
@@ -1436,7 +1554,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ubereats.com/ca/store/mcdonalds-waterloo/TbEf1HHST021Qg32I62Nww?diningMode=PICKUP",
     "latitude": 43.4817406,
     "longitude": -80.5255502,
     "deal": null
@@ -1568,8 +1686,9 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1698,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-24",
     "hours": [
       {
         "days": [
@@ -1587,7 +1706,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ubereats.com/ca/store/a%26w-university-st/R4xoBDPAS8mg-xwgMF6YgA?diningMode=PICKUP",
     "latitude": 43.483605,
     "longitude": -80.506896,
     "deal": null
@@ -1609,8 +1728,9 @@
     "price_confidence": "Medium",
     "serves": 1,
     "typical_meal_pre_tax_price_cents": 1698,
-    "verified": false,
-    "price_snapshot_date": null,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-24",
     "hours": [
       {
         "days": [
@@ -1628,7 +1748,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ubereats.com/ca/store/a%26w-656-erb-st-w/IvnQGK_oTtaMvY5u-7k6Vg?diningMode=PICKUP",
     "latitude": 43.4477787,
     "longitude": -80.5738089,
     "deal": null
