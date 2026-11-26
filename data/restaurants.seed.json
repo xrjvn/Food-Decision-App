@@ -355,7 +355,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.ginospizza.ca/locations?city=waterloo&store=0085",
     "latitude": 43.4767305,
     "longitude": -80.5253485,
     "deal": null
@@ -398,7 +398,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.harveys.ca/en/menus/pickup/store-2606/on/waterloo/170-university-ave-w.html",
     "latitude": 43.471776,
     "longitude": -80.538886,
     "deal": null
@@ -453,7 +453,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://custom.order.online/en-CA/store/osmows-shawarma-25482103",
     "latitude": 43.4750052,
     "longitude": -80.5241659,
     "deal": null
@@ -1423,7 +1423,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.popeyeschicken.ca/restaurants/restaurant_84247",
     "latitude": 43.4781281,
     "longitude": -80.5186589,
     "deal": null
@@ -1483,7 +1483,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.popeyeschicken.ca/restaurants/restaurant_878629",
     "latitude": 43.461637,
     "longitude": -80.537628,
     "deal": null
@@ -1664,7 +1664,7 @@
     ],
     "hours_unknown": false,
     "hoursSource": null,
-    "menu": null,
+    "menu": "https://www.pizzapizza.ca/restaurant-locator/ontario/waterloo/496-albert-street/",
     "latitude": 43.4864611,
     "longitude": -80.5405682,
     "deal": null
