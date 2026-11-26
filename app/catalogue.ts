@@ -9,7 +9,7 @@ export const campuses = {
   laurier: { name: "Wilfrid Laurier University", point: [43.4739, -80.5275] },
 } as const;
 
-export const moods = ["Anything", "Quick", "Filling", "Light", "Treat"] as const;
+export const moods = ["Anything", "Quick", "Filling"] as const;
 export type Campus = keyof typeof campuses;
 export type Mood = typeof moods[number];
 

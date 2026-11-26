@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { cravings, diets } from "./meals";
 import { moods } from "./catalogue";
 import { walkOptions } from "./location";
 import { rankingOrders } from "./ranking";
@@ -12,7 +13,7 @@ const identity = {
   sessionId: "42757923-dda5-4a0a-8037-fccf31954493",
 };
 const context = {
-  budget: 15, mood: "Quick", rankingMode: "best-fit", locationMode: "device", walkLimitMinutes: 10,
+  budget: 15, mood: "Quick", craving: "Snack", diet: "Vegetarian only", rankingMode: "best-fit", locationMode: "device", walkLimitMinutes: 10,
 } as const;
 const event = { type: "result_shown", restaurantId: "R01", mealId: "M007", rankPosition: 1 } as const;
 
@@ -25,11 +26,13 @@ test("only allowlisted fields reach the insert payload even if callers pass loca
   assert.deepEqual(eventPayload(identity, input, richEvent), {
     browser_id: identity.browserId, session_id: identity.sessionId,
     event_type: "result_shown", restaurant_id: "R01", meal_id: "M007", rank_position: 1,
-    budget: 15, mood: "Quick", ranking_mode: "best-fit", location_mode: "device", walk_limit_minutes: 10,
+    budget: 15, mood: "Quick", craving: "Snack", diet: "Vegetarian only", ranking_mode: "best-fit", location_mode: "device", walk_limit_minutes: 10,
   });
 });
 
 test("coordinate strings and objects are rejected in typed payload fields", () => {
+  assert.equal(eventPayload(identity, { ...context, craving: "43.12,-80.12" } as never, event), null);
+  assert.equal(eventPayload(identity, { ...context, diet: "123 Example St" } as never, event), null);
   assert.equal(eventPayload(identity, { ...context, locationMode: "43.12,-80.12" } as never, event), null);
   assert.equal(eventPayload(identity, context, { ...event, restaurantId: "43.12,-80.12" }), null);
   assert.equal(eventPayload(identity, context, {
@@ -89,7 +92,7 @@ test("the SQL CHECK constraints exactly match app and logger options", () => {
   const sql = readFileSync(new URL("../supabase/events.sql", import.meta.url), "utf8");
   assert.ok(sql.includes(`budget numeric(5,2) not null check (budget between ${minBudget} and ${maxBudget})`));
   for (const [column, values] of Object.entries({
-    mood: moods, walk_limit_minutes: walkOptions,
+    mood: moods, craving: cravings, diet: diets, walk_limit_minutes: walkOptions,
     ranking_mode: rankingOrders, location_mode: locationModes, event_type: pilotEventTypes,
   })) {
     const match = sql.match(new RegExp(String.raw`check \(${column} in \(([^)]*)\)`));

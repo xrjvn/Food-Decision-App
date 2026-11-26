@@ -256,3 +256,47 @@ test("breakfast is available from 06:00 until 11:00 Waterloo time and cannot fal
     }
   }
 });
+
+test("filters meal options by craving and diet before choosing a price for either ranking mode", () => {
+  const restaurant = spot("multi", { mealOptions: [
+    option("chicken", "Typical", 750, { craving: "Meal", diet: "Contains meat or fish" }),
+    option("salad", "Value", 600, { craving: "Meal", diet: "Vegetarian" }),
+    option("mystery", "Value", 400, { craving: "Meal", diet: "Unknown" }),
+    option("cookie", "Value", 200, { craving: "Dessert/Drink", diet: "Vegetarian" }),
+    option("snack", "Value", 300, { craving: "Snack", diet: "Vegetarian" }),
+  ] });
+  const legacy = spot("legacy");
+  for (const order of ["best-fit", "cheapest"] as const) {
+    for (const [craving, diet, expected] of [
+      ["Meal", "Meat or fish only", "chicken"],
+      ["Meal", "Vegetarian only", "salad"],
+      ["Dessert/Drink", "Anything", "cookie"],
+      ["Dessert/Drink", "Meat or fish only", undefined],
+      ["Snack", "Vegetarian only", "snack"],
+    ] as const) {
+      const result = rankSpots([restaurant, legacy], { ...search, order, mealFilters: { craving, diet }, allowOverBudget: true });
+      assert.deepEqual(result.picks.map((pick) => pick.selectedMeal?.id), expected ? [expected] : []);
+    }
+  }
+  const unfiltered = rankSpots([restaurant], { ...search, order: "cheapest" });
+  assert.equal(unfiltered.picks[0]?.selectedMeal?.id, "mystery");
+});
+
+test("most protein chooses and ranks affordable meals by known grams and falls back to Big", () => {
+  const searchOptions = { ...search, order: "most-protein", budgetCents: 1000 } as const;
+  const known = spot("known", { mealOptions: [
+    option("unknown-big", "Big", 800),
+    option("known-value", "Value", 600, { proteinGrams: 32 }),
+    option("over-budget", "Typical", 1000, { proteinGrams: 70 }),
+  ] });
+  const less = spot("less", { mealOptions: [option("known-less", "Typical", 850, { proteinGrams: 21 })] });
+  const zero = spot("zero", { mealOptions: [option("known-zero", "Value", 600, { proteinGrams: 0 })] });
+  const big = spot("big", { mealOptions: [option("big", "Big", 650), option("typical", "Typical", 850)] });
+  const typical = spot("typical", { mealOptions: [option("typical", "Typical", 850)] });
+  assert.deepEqual(rankSpots([typical, big, zero, less, known], searchOptions)
+    .picks.map(({ selectedMeal }) => selectedMeal?.id), ["known-value", "known-less", "known-zero", "big", "typical"]);
+  const unknown = { ...known, hours: [], hoursUnknown: true, verifiedPrice: true };
+  const fallback = rankSpots([big, unknown], searchOptions);
+  assert.equal(fallback.picks[0]?.id, "big");
+  assert.equal(fallback.unknownHoursPicks?.[0]?.id, "known");
+});

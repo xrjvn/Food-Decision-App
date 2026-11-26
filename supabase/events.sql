@@ -14,8 +14,10 @@ create table public.events (
   meal_id varchar(12) check (meal_id ~ '^M[0-9]{1,11}$'),
   rank_position smallint check (rank_position between 1 and 100),
   budget numeric(5,2) not null check (budget between 1 and 100),
-  mood varchar(12) not null check (mood in ('Anything', 'Quick', 'Filling', 'Light', 'Treat')),
-  ranking_mode varchar(12) not null check (ranking_mode in ('best-fit', 'cheapest')),
+  mood varchar(12) not null check (mood in ('Anything', 'Quick', 'Filling')),
+  craving varchar(16) not null check (craving in ('Meal', 'Snack', 'Dessert/Drink')),
+  diet varchar(24) not null check (diet in ('Anything', 'Meat or fish only', 'Vegetarian only')),
+  ranking_mode varchar(12) not null check (ranking_mode in ('best-fit', 'cheapest', 'most-protein')),
   location_mode varchar(6) not null check (location_mode in ('campus', 'device')),
   walk_limit_minutes smallint not null check (walk_limit_minutes in (5, 10, 15, 20)),
   check (
@@ -31,7 +33,7 @@ alter table public.events enable row level security;
 revoke all on table public.events from public, anon, authenticated;
 grant insert (
   browser_id, session_id, event_type, restaurant_id, meal_id, rank_position,
-  budget, mood, ranking_mode, location_mode, walk_limit_minutes
+  budget, mood, craving, diet, ranking_mode, location_mode, walk_limit_minutes
 ) on table public.events to anon;
 
 create policy "Anonymous clients may insert pilot events"

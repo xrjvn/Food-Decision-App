@@ -1,3 +1,4 @@
+import { cravings, diets, type Craving, type Diet } from "./meals";
 import { moods, type Mood } from "./catalogue";
 import { walkOptions, type WalkLimit } from "./location";
 import { rankingOrders, type RankingOrder } from "./ranking";
@@ -18,6 +19,8 @@ type Event = {
 type Context = {
   budget: number;
   mood: Mood;
+  craving: Craving;
+  diet: Diet;
   rankingMode: RankingOrder;
   locationMode: typeof locationModes[number];
   walkLimitMinutes: WalkLimit;
@@ -31,6 +34,7 @@ export function eventPayload(identity: Identity, context: Context, event: Event)
       || !uuid.test(identity.browserId) || !uuid.test(identity.sessionId)) return null;
   if (!isValidBudget(context.budget) ||
       !moods.includes(context.mood) ||
+      !cravings.includes(context.craving) || !diets.includes(context.diet) ||
       !rankingOrders.includes(context.rankingMode) ||
       !locationModes.includes(context.locationMode) ||
       !walkOptions.includes(context.walkLimitMinutes)) return null;
@@ -53,6 +57,8 @@ export function eventPayload(identity: Identity, context: Context, event: Event)
     rank_position: isSpotEvent ? event.rankPosition : null,
     budget: context.budget,
     mood: context.mood,
+    craving: context.craving,
+    diet: context.diet,
     ranking_mode: context.rankingMode,
     location_mode: context.locationMode,
     walk_limit_minutes: context.walkLimitMinutes,

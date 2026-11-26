@@ -1752,5 +1752,467 @@
     "latitude": 43.4477787,
     "longitude": -80.5738089,
     "deal": null
+  },
+  {
+    "id": "R40",
+    "name": "CoCo Bubble Tea (203 Lester St)",
+    "area": "Between (Lester St)",
+    "address": "203 Lester St, Unit 3, Waterloo",
+    "cuisine": "Bubble tea and drinks",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat",
+      "quick"
+    ],
+    "meal": "Pearl Milk Tea",
+    "cheapest_meal": "Black Tea or Green Tea",
+    "cheapest_meal_pre_tax_price_cents": 754,
+    "price_source": "https://www.ubereats.com/ca/store/coco-bubble-tea-lester-st/6ffNWNbXQLWrWP4eGbdS1A?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 910,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-25",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 720,
+        "closes": 1245
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://www.ubereats.com/ca/store/coco-bubble-tea-lester-st/6ffNWNbXQLWrWP4eGbdS1A?diningMode=PICKUP",
+    "latitude": 43.472498,
+    "longitude": -80.533958,
+    "deal": null
+  },
+  {
+    "id": "R41",
+    "name": "The Bingsu Cafe (150 University Ave W)",
+    "area": "Between (University Plaza)",
+    "address": "150 University Ave W, Unit 2, Waterloo",
+    "cuisine": "Korean shaved-ice dessert",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat"
+    ],
+    "meal": "Mango Bingsu",
+    "cheapest_meal": "Matcha Almond Bingsu",
+    "cheapest_meal_pre_tax_price_cents": 1499,
+    "price_source": "https://www.ubereats.com/ca/store/the-bingsu-cafe-150-university-avenue-west/ezp_cw4VUhS7-PUbXh2U3w?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1599,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-25",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 810,
+        "closes": 1290
+      },
+      {
+        "days": [
+          5,
+          6,
+          0
+        ],
+        "opens": 750,
+        "closes": 1290
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://www.ubereats.com/ca/store/the-bingsu-cafe-150-university-avenue-west/ezp_cw4VUhS7-PUbXh2U3w?diningMode=PICKUP",
+    "latitude": 43.472419,
+    "longitude": -80.535892,
+    "deal": null
+  },
+  {
+    "id": "R42",
+    "name": "Tim Hortons (65 University Ave E)",
+    "area": "Between (University Ave E)",
+    "address": "65 University Ave E, Waterloo",
+    "cuisine": "Coffee and donuts (chain)",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "quick",
+      "cheap",
+      "treat"
+    ],
+    "meal": "Boston Cream Donut",
+    "cheapest_meal": "Three Chocolate Glazed Timbits (3 x $0.49)",
+    "cheapest_meal_pre_tax_price_cents": 147,
+    "price_source": "https://www.ubereats.com/ca/store/tim-hortons-65-university-ave-east/1yi4Aob-QJadjJ0xLpZUow?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 219,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-25",
+    "hours": [],
+    "hours_unknown": true,
+    "hoursSource": null,
+    "menu": "https://www.ubereats.com/ca/store/tim-hortons-65-university-ave-east/1yi4Aob-QJadjJ0xLpZUow?diningMode=PICKUP",
+    "latitude": 43.476998,
+    "longitude": -80.521487,
+    "deal": null
+  },
+  {
+    "id": "R43",
+    "name": "Sweet Lou's Cookies (341 Weber St N)",
+    "area": "Uptown / north",
+    "address": "341 Weber St N, Waterloo",
+    "cuisine": "Cookies, ice cream sandwiches",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat",
+      "late night"
+    ],
+    "meal": "Super Ice Cream Sandwich",
+    "cheapest_meal": "Old Reliable chocolate chunk cookie",
+    "cheapest_meal_pre_tax_price_cents": 425,
+    "price_source": "https://www.ubereats.com/ca/store/sweet-lous-cookies/oCJ89nqcTV2Evn8nZNHXzg?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1298,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-25",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 1020,
+        "closes": 60
+      },
+      {
+        "days": [
+          5,
+          6,
+          0
+        ],
+        "opens": 720,
+        "closes": 60
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://www.ubereats.com/ca/store/sweet-lous-cookies/oCJ89nqcTV2Evn8nZNHXzg?diningMode=PICKUP",
+    "latitude": 43.481862,
+    "longitude": -80.523647,
+    "deal": null
+  },
+  {
+    "id": "R44",
+    "name": "Cinnaholic (130 King St S)",
+    "area": "Uptown",
+    "address": "130 King St S, Unit 101, Waterloo",
+    "cuisine": "Cinnamon rolls, cookies",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat"
+    ],
+    "meal": "Old Skool Roll",
+    "cheapest_meal": "Chocolate Chip Cookie or Cinnadoodle Cookie ($3.00 each)",
+    "cheapest_meal_pre_tax_price_cents": 300,
+    "price_source": "https://cinnaholicca.order.tryperdiem.com/order?fulfillmentType=PICKUP&locationId=L7G4GAGD49NN5",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 595,
+    "verified": true,
+    "price_snapshot_date": "2026-11-25",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 660,
+        "closes": 1320
+      },
+      {
+        "days": [
+          5,
+          6,
+          0
+        ],
+        "opens": 600,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://cinnaholicca.order.tryperdiem.com/order?fulfillmentType=PICKUP&locationId=L7G4GAGD49NN5",
+    "latitude": 43.462325,
+    "longitude": -80.521314,
+    "deal": null
+  },
+  {
+    "id": "R45",
+    "name": "Now Tea (280 Lester St)",
+    "area": "Between (Lester St)",
+    "address": "280 Lester St, Unit 106, Waterloo",
+    "cuisine": "Bubble tea and drinks",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat",
+      "quick"
+    ],
+    "meal": "Now Tea Trio",
+    "cheapest_meal": "Black Milk Tea",
+    "cheapest_meal_pre_tax_price_cents": 519,
+    "price_source": "https://www.ubereats.com/ca/store/now-tea-waterloo/BeYXEp8jTf6o03LU7PfZ4g?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 599,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-26",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://www.ubereats.com/ca/store/now-tea-waterloo/BeYXEp8jTf6o03LU7PfZ4g?diningMode=PICKUP",
+    "latitude": 43.4754442,
+    "longitude": -80.5356777,
+    "deal": null
+  },
+  {
+    "id": "R46",
+    "name": "The Alley (170 University Ave W, Unit 7)",
+    "area": "Between (University Plaza)",
+    "address": "170 University Ave W, Unit 7, Waterloo",
+    "cuisine": "Bubble tea",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat",
+      "quick"
+    ],
+    "meal": "Crunchy Tiramisu Milk Tea",
+    "cheapest_meal": "Jasmine Green Tea",
+    "cheapest_meal_pre_tax_price_cents": 600,
+    "price_source": "https://www.ubereats.com/ca/store/the-alley-waterloo/f3C2_cZxRQCNbAOxEpFqjQ?diningMode=PICKUP",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 800,
+    "verified": false,
+    "price_snapshot_date": null,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 690,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://www.ubereats.com/ca/store/the-alley-waterloo/f3C2_cZxRQCNbAOxEpFqjQ?diningMode=PICKUP",
+    "latitude": null,
+    "longitude": null,
+    "deal": null
+  },
+  {
+    "id": "R47",
+    "name": "Sweet Dreams Teashop (170 University Ave W, Unit 14)",
+    "area": "Between (University Plaza)",
+    "address": "170 University Ave W, Unit 14, Waterloo",
+    "cuisine": "Bubble tea and drinks",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat",
+      "quick"
+    ],
+    "meal": "",
+    "cheapest_meal": "",
+    "cheapest_meal_pre_tax_price_cents": null,
+    "price_source": "",
+    "price_confidence": "Low",
+    "serves": null,
+    "typical_meal_pre_tax_price_cents": null,
+    "verified": false,
+    "price_snapshot_date": null,
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 420,
+        "closes": 1260
+      },
+      {
+        "days": [
+          5
+        ],
+        "opens": 420,
+        "closes": 1320
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 480,
+        "closes": 1320
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 480,
+        "closes": 1200
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": null,
+    "longitude": null,
+    "deal": null
+  },
+  {
+    "id": "R48",
+    "name": "Snowday Bingsu (57 King St N)",
+    "area": "Uptown",
+    "address": "57 King St N, Waterloo",
+    "cuisine": "Korean shaved-ice dessert, drinks",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat"
+    ],
+    "meal": "Strawberry Bingsu",
+    "cheapest_meal": "Green Tea or Taro drink ($5.00 each)",
+    "cheapest_meal_pre_tax_price_cents": 500,
+    "price_source": "https://order.online/store/SnowdayBingsu-31114014",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1600,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-26",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3
+        ],
+        "opens": 1020,
+        "closes": 1350
+      },
+      {
+        "days": [
+          4,
+          5,
+          6
+        ],
+        "opens": 780,
+        "closes": 1380
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 780,
+        "closes": 1350
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": "https://order.online/store/SnowdayBingsu-31114014",
+    "latitude": 43.4667209,
+    "longitude": -80.5229605,
+    "deal": null
+  },
+  {
+    "id": "R49",
+    "name": "Four All Ice Cream (75 King St S, Willis Way)",
+    "area": "Uptown",
+    "address": "75 King St S, Unit 56, Willis Way entrance, Waterloo",
+    "cuisine": "Ice cream",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat"
+    ],
+    "meal": "Vanilla Bean ice cream tub",
+    "cheapest_meal": "Vanilla Bean Mini Cups, two-pack",
+    "cheapest_meal_pre_tax_price_cents": 886,
+    "price_source": "Own shop; product pages and pickup policy (exact URLs not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1200,
+    "verified": true,
+    "price_snapshot_date": "2026-11-26",
+    "hours": [
+      {
+        "days": [
+          2,
+          3,
+          4
+        ],
+        "opens": 900,
+        "closes": 1260
+      },
+      {
+        "days": [
+          5,
+          6,
+          0
+        ],
+        "opens": 720,
+        "closes": 1260
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4631722,
+    "longitude": -80.5232865,
+    "deal": null
   }
 ]

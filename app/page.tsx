@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useRef, useState } from "react";
+import { cravings, diets } from "./meals";
 import { campuses, moods, spots, type Campus } from "./catalogue";
 
 import { rankSpots, type RankedPick } from "./ranking";
@@ -28,6 +29,13 @@ function Pick({ spot, primary, usingLocation, onTap }: {
   const deliveryAppPrice = spot.deliveryAppPrice || spot.selectedMeal?.deliveryAppPrice;
   const mealName = spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal);
 
+  const { mainProtein, calories, proteinGrams } = spot.selectedMeal ?? {};
+  const nutrition = [
+    mainProtein,
+    calories === undefined ? undefined : `${calories} cal`,
+    proteinGrams === undefined ? undefined : `${proteinGrams} g protein`,
+  ].filter(Boolean).join(" · ");
+
   return (
     <article className={primary ? "pick featured" : "pick"}>
       <div className="pick-top">
@@ -35,6 +43,7 @@ function Pick({ spot, primary, usingLocation, onTap }: {
           {primary && <p className="eyebrow">TOP PICK</p>}
           {primary ? <h2>{spot.name}</h2> : <h3>{spot.name}</h3>}
           <p className="meal">{mealName}</p>
+          {nutrition && <p className="location">{nutrition}</p>}
           {!spot.selectedMeal && !spot.usesTypicalMeal && spot.cheapestMeal && spot.meal && spot.meal !== spot.cheapestMeal && (
             <p className="location">Typical meal · {spot.meal}</p>
           )}
@@ -68,7 +77,7 @@ function Pick({ spot, primary, usingLocation, onTap }: {
 export default function Home() {
   const [search, dispatch] = useReducer(updateSearch, initialSearch);
   const { preferences, rejectedIds, recentTopPickIds, allowOverBudget } = search;
-  const { campus, budget, mood, order, walkLimit } = preferences;
+  const { campus, budget, mood, craving, diet, order, walkLimit } = preferences;
   const [now, setNow] = useState<Date>();
   const [showAll, setShowAll] = useState(false);
 
@@ -122,6 +131,7 @@ export default function Home() {
     walkLimit,
     distances,
     mood,
+    mealFilters: { craving, diet },
     budgetCents,
     order,
     now,
@@ -133,7 +143,7 @@ export default function Home() {
   const [top, ...alternates] = matches.slice(0, 4);
   const unknownHoursPicks = result?.unknownHoursPicks ?? [];
   const locationMode = distances ? "device" : "campus";
-  const pilotContext = { budget, mood, rankingMode: order, locationMode, walkLimitMinutes: walkLimit } as const;
+  const pilotContext = { budget, mood, craving, diet, rankingMode: order, locationMode, walkLimitMinutes: walkLimit } as const;
   const lastImpression = useRef("");
   const lastExpandedImpression = useRef("");
   const fallbackVisible = useRef(false);
@@ -232,12 +242,29 @@ export default function Home() {
             <div className="options">
               <button aria-pressed={order === "best-fit"} onClick={() => setRanking("best-fit")}>Best fit for my budget</button>
               <button aria-pressed={order === "cheapest"} onClick={() => setRanking("cheapest")}>Cheapest first</button>
+              <button aria-pressed={order === "most-protein"} onClick={() => setRanking("most-protein")}>Most protein</button>
             </div>
           </fieldset>
           <fieldset>
-            <legend>In the mood for</legend>
+            <legend>Craving</legend>
             <div className="options">
-              {moods.map((item) => <button key={item} aria-pressed={item === mood} onClick={() => dispatch({ type: "preference", change: { mood: item } })}>{item}</button>)}
+              {cravings.map((item) => <button key={item} aria-pressed={item === craving}
+                onClick={() => dispatch({ type: "preference", change: { craving: item } })}>
+                {item === "Dessert/Drink" ? "Dessert and drinks" : item}
+              </button>)}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Diet</legend>
+            <div className="options">
+              {diets.map((item) => <button key={item} aria-pressed={item === diet}
+                onClick={() => dispatch({ type: "preference", change: { diet: item } })}>{item}</button>)}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Preference</legend>
+            <div className="options">
+              {moods.map((item) => <button key={item} aria-pressed={item === mood} onClick={() => dispatch({ type: "preference", change: { mood: item } })}>{item === "Anything" ? "No preference" : item}</button>)}
             </div>
           </fieldset>
         </section>

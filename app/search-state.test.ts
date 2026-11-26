@@ -43,7 +43,10 @@ test("changing any preference clears re-rolls, novelty and consent and ignores s
   const reject = { type: "reject", id: "1200", preferences } as const;
   const consent = { type: "allow-over-budget", preferences } as const;
   const dirty = updateSearch(updateSearch(initialSearch, reject), consent);
-  const changes = [{ budget: 20 }, { mood: "Quick" }, { campus: "laurier" }] as const;
+  const changes = [
+    { budget: 20 }, { mood: "Quick" }, { campus: "laurier" },
+    { craving: "Snack" }, { diet: "Vegetarian only" },
+  ] as const;
   for (const change of changes) {
     const fresh = updateSearch(dirty, { type: "preference", change });
     assert.deepEqual(fresh.preferences, { ...preferences, ...change });

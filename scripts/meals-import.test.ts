@@ -26,3 +26,34 @@ test("imports a delivery-app meal when the parent restaurant is eligible", () =>
   assert.equal(importMeals(csv, [{ id: "R1", verified: true }]).meals[0].deliveryAppPrice, true);
   assert.equal(importMeals(csv, [{ id: "R1", verified: false }]).meals.length, 0);
 });
+
+test("imports meal-level craving and diet under either Diet header and reports invalid labels", () => {
+  for (const dietHeader of ["Diet", "Diet (my judgment from item name)"]) {
+    const csv = [
+      `Meal ID,Restaurant ID,Restaurant,Tier,Meal,Pre-tax price,Serves (people),Price source,Price date checked,Price confidence,Row status,Notes,Meal period,Craving,${dietHeader},Helper`,
+      "M1,R1,Example,Value,Tea,5,1,Menu,,High,Verified online,,Any time,Dessert/Drink,Vegetarian,unused",
+      "M2,R1,Example,Value,Wrap,9,1,Menu,,High,Verified online,,Any time,Meal,Meat,unused",
+      "M3,R1,Example,Value,Fries,3,1,Menu,,High,Verified online,,Any time,Late night,Vegetarian,unused",
+    ].join("\n");
+    const result = importMeals(csv, [{ id: "R1", verified: true }]);
+    assert.deepEqual(result.meals.map(({ craving, diet }) => [craving, diet]), [["Dessert/Drink", "Vegetarian"]]);
+    assert.match(result.report[1].at(-1) ?? "", /^Diet must be/);
+    assert.match(result.report[2].at(-1) ?? "", /^Craving must be/);
+  }
+});
+
+test("imports optional nutrition, preserves zero and decimal grams, and reports malformed amounts", () => {
+  const csv = [
+    "Meal ID,Restaurant ID,Restaurant,Tier,Meal,Pre-tax price,Serves (people),Price source,Price date checked,Price confidence,Row status,Notes,Meal period,Main protein,Calories,Protein (g)",
+    "M1,R1,Example,Typical,Bowl,9,1,Menu,,High,Verified online,,Any time,Chicken and beans,580,29.5",
+    "M2,R1,Example,Value,Tea,5,1,Menu,,High,Verified online,,Any time,,0,0",
+    "M3,R1,Example,Value,Wrap,9,1,Menu,,High,Verified online,,Any time,,unknown,",
+    "M4,R1,Example,Value,Salad,9,1,Menu,,High,Verified online,,Any time,,200,-1",
+    "M5,R1,Example,Value,Cookie,3,1,Menu,,High,Verified online,,Any time,,,",
+  ].join("\n");
+  const { meals, report } = importMeals(csv, [{ id: "R1", verified: true }]);
+  assert.deepEqual(meals.map(({ mainProtein, calories, proteinGrams }) => [mainProtein, calories, proteinGrams]),
+    [["Chicken and beans", 580, 29.5], [undefined, 0, 0], [undefined, undefined, undefined]]);
+  assert.match(report[2].at(-1) ?? "", /^Calories must be/);
+  assert.match(report[3].at(-1) ?? "", /^Protein \(g\) must be/);
+});

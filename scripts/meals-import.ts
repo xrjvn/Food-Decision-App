@@ -1,6 +1,6 @@
 import { parse } from "csv-parse/sync";
 import { isDeliveryAppPrice, isEligiblePrice } from "./price-status";
-import { mealPeriods, mealTiers, type MealOption } from "../app/meals";
+import { cravings, mealDiets, mealPeriods, mealTiers, type MealOption } from "../app/meals";
 import { isoDate, priceCents, servings } from "./restaurant-import";
 
 const columns = [
@@ -8,13 +8,26 @@ const columns = [
   "Price source", "Price date checked", "Price confidence", "Row status", "Notes", "Meal period",
 ] as const;
 
-type Row = Record<typeof columns[number], string>;
+const dietColumns = ["Diet", "Diet (my judgment from item name)"] as const;
+const nutritionColumns = ["Main protein", "Calories", "Protein (g)"] as const;
+type Row = Record<typeof columns[number], string>
+  & Partial<Record<"Craving" | typeof dietColumns[number] | typeof nutritionColumns[number], string>>;
 type Restaurant = { id: string; verified: boolean };
 
 function choice<T extends string>(value: string, choices: readonly T[], column: string): T {
   const match = choices.find((entry) => entry === value);
   if (!match) throw new Error(`${column} must be one of ${choices.join(", ")}.`);
   return match;
+}
+
+function nutritionAmount(raw: string | undefined, column: "Calories" | "Protein (g)") {
+  if (!raw) return undefined;
+  const format = column === "Calories" ? /^\d+$/ : /^\d+(?:\.\d+)?$/;
+  const value = Number(raw);
+  if (!format.test(raw) || !Number.isFinite(value) || value > Number.MAX_SAFE_INTEGER) {
+    throw new Error(`${column} must be a non-negative ${column === "Calories" ? "whole number" : "number"}.`);
+  }
+  return value;
 }
 
 export function importMeals(csv: string, restaurants: readonly Restaurant[]) {
@@ -27,6 +40,12 @@ export function importMeals(csv: string, restaurants: readonly Restaurant[]) {
       for (const name of columns) {
         if (headers.filter((header) => header === name).length !== 1) throw new Error(`Expected one "${name}" column.`);
       }
+      for (const name of ["Craving", ...nutritionColumns]) {
+        if (headers.filter((header) => header === name).length > 1) throw new Error(`Expected at most one "${name}" column.`);
+      }
+      if (headers.filter((header) => dietColumns.some((name) => header === name)).length > 1) {
+        throw new Error("Expected at most one Diet column.");
+      }
       return headers;
     },
   });
@@ -36,7 +55,9 @@ export function importMeals(csv: string, restaurants: readonly Restaurant[]) {
   let blankRows = 0;
   for (const raw of rows) {
     const row = Object.fromEntries(columns.map((column) => [column, raw[column].trim()])) as Row;
-    if (columns.every((column) => !row[column])) {
+    const craving = raw.Craving?.trim();
+    const diet = (raw.Diet ?? raw[dietColumns[1]])?.trim();
+    if (columns.every((column) => !row[column]) && !craving && !diet && nutritionColumns.every((column) => !raw[column]?.trim())) {
       blankRows++;
       continue;
     }
@@ -59,6 +80,11 @@ export function importMeals(csv: string, restaurants: readonly Restaurant[]) {
         id, restaurantId, meal: row.Meal,
         tier: choice(row.Tier, mealTiers, "Tier"),
         period: choice(row["Meal period"], mealPeriods, "Meal period"),
+        craving: choice(craving ?? "Meal", cravings, "Craving"),
+        diet: choice(diet ?? "Unknown", mealDiets, "Diet"),
+        mainProtein: raw["Main protein"]?.trim() || undefined,
+        calories: nutritionAmount(raw.Calories, "Calories"),
+        proteinGrams: nutritionAmount(raw["Protein (g)"], "Protein (g)"),
         priceCents: cents,
         serves: servings(row["Serves (people)"]) ?? 1,
         priceDate,

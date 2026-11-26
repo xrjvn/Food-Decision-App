@@ -1,4 +1,4 @@
-import { chooseMeal, type MealOption } from "./meals";
+import { chooseMeal, compareProtein, defaultMealFilters, type MealFilters, type MealOption, type RankingOrder } from "./meals";
 
 import { distanceMetres, metresPerMinute, walkingMinutes, type Point, type WalkLimit } from "./location";
 
@@ -17,8 +17,7 @@ type Deal = {
   priceCents?: number;
 };
 
-export const rankingOrders = ["best-fit", "cheapest"] as const;
-export type RankingOrder = typeof rankingOrders[number];
+export { rankingOrders, type RankingOrder } from "./meals";
 
 export type RankingSpot = {
   id: string;
@@ -88,6 +87,7 @@ type Search = {
   walkLimit?: WalkLimit;
   distances?: ReadonlyMap<string, number>;
   mood: string;
+  mealFilters?: MealFilters;
   budgetCents: number;
   order?: RankingOrder;
   now: Date;
@@ -104,7 +104,7 @@ type RankingResult<Spot extends RankingSpot> = {
 
 export function rankSpots<Spot extends RankingSpot>(
   spots: readonly Spot[],
-  { origin, walkLimit, distances, mood, budgetCents, now, order = "best-fit", rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
+  { origin, walkLimit, distances, mood, mealFilters = defaultMealFilters, budgetCents, now, order = "best-fit", rejectedIds = new Set(), recentTopPickIds = [], allowOverBudget = false }: Search,
 ): RankingResult<Spot> {
   const parts = Object.fromEntries(waterlooTime.formatToParts(now).map(({ type, value }) => [type, value]));
   const date = [parts.year, parts.month, parts.day].join("-");
@@ -123,8 +123,8 @@ export function rankSpots<Spot extends RankingSpot>(
 
     const deal = unknownHours ? undefined : activeDeal(spot.deal, date, day, minute);
     const price = spot.cheapestMealPriceCents ?? deal?.priceCents ?? spot.priceCents;
-    const selected = spot.mealOptions && chooseMeal(spot.mealOptions, minute, budgetCents, order === "cheapest", taxed);
-    if (spot.mealOptions && !selected) return [];
+    const selected = spot.mealOptions && chooseMeal(spot.mealOptions, minute, budgetCents, order, taxed, mealFilters);
+    if (!selected && (spot.mealOptions || mealFilters.craving !== "Meal" || mealFilters.diet !== "Anything")) return [];
 
     const minimumTotal = taxed(price);
     const typical = spot.typicalMealPriceCents;
@@ -152,7 +152,9 @@ export function rankSpots<Spot extends RankingSpot>(
   const byScore = (a: RankedPick<Spot>, b: RankedPick<Spot>) => b.score - a.score || a.total - b.total;
 
   const byPrice = (a: RankedPick<Spot>, b: RankedPick<Spot>) => a.total - b.total || byScore(a, b);
-  const compare = order === "cheapest" ? byPrice : byScore;
+  const byProtein = (a: RankedPick<Spot>, b: RankedPick<Spot>) =>
+    compareProtein(a.selectedMeal, b.selectedMeal) || byScore(a, b);
+  const compare = order === "cheapest" ? byPrice : order === "most-protein" ? byProtein : byScore;
 
   function withFallback(result: RankingResult<Spot>, radius: number): RankingResult<Spot> {
     if (result.picks.length >= 3) return result;
