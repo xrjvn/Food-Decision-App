@@ -6,15 +6,20 @@ import { campuses, moods, spots, type Campus } from "./catalogue";
 import { rankSpots, type RankedPick } from "./ranking";
 import { nextWalkLimit, requestLocation, walkOptions } from "./location";
 import { directionsUrl, reportPriceUrl } from "./outbound-links";
-import { initialSearch, updateSearch } from "./search-state";
+import { pilotLoggingEnabled, sendPilotEvents, type SpotEventType } from "./pilot-events";
+import { budgetOptions, initialSearch, updateSearch } from "./search-state";
 
 type PickData = RankedPick<typeof spots[number]>;
 
 const money = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" });
-const presets = [10, 15, 20];
 
 
-function Pick({ spot, primary, usingLocation }: { spot: PickData; primary?: boolean; usingLocation: boolean }) {
+function Pick({ spot, primary, usingLocation, onTap }: {
+  spot: PickData;
+  primary?: boolean;
+  usingLocation: boolean;
+  onTap: (type: "menu_tap" | "directions_tap" | "report_tap") => void;
+}) {
   const legacyDate = spot.usesTypicalMeal && spot.cheapestMealPriceCents !== undefined
     ? null
     : spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined
@@ -50,10 +55,10 @@ function Pick({ spot, primary, usingLocation }: { spot: PickData; primary?: bool
         {spot.deal.description} · <a href={spot.deal.source} target="_blank" rel="noreferrer">verified on {spot.deal.verifiedOn}</a>
       </p>}
       <div className="links">
-        <a href={directionsUrl(spot.name, spot.address || spot.area)} target="_blank" rel="noreferrer">Directions</a>
-        {spot.menu && <a href={spot.menu} target="_blank" rel="noreferrer">Menu / order</a>}
+        <a href={directionsUrl(spot.name, spot.address || spot.area)} onClick={() => onTap("directions_tap")} target="_blank" rel="noreferrer">Directions</a>
+        {spot.menu && <a href={spot.menu} onClick={() => onTap("menu_tap")} target="_blank" rel="noreferrer">Menu / order</a>}
       </div>
-      <a className="price-report" href={reportPriceUrl(spot.name)} target="_blank" rel="noreferrer">
+      <a className="price-report" href={reportPriceUrl(spot.name)} onClick={() => onTap("report_tap")} target="_blank" rel="noreferrer">
         Report a wrong price
       </a>
     </article>
@@ -124,6 +129,38 @@ export default function Home() {
   });
   const [top, ...alternates] = result?.picks.slice(0, 4) ?? [];
   const unknownHoursPicks = result?.unknownHoursPicks ?? [];
+  const locationMode = distances ? "device" : "campus";
+  const pilotContext = { budget, mood, rankingMode: order, locationMode, walkLimitMinutes: walkLimit } as const;
+  const lastImpression = useRef("");
+  const fallbackVisible = useRef(false);
+
+  function spotEvent(type: SpotEventType, spot: PickData, rankPosition: number) {
+    return { type, restaurantId: spot.id, mealId: spot.selectedMeal?.id, rankPosition };
+  }
+
+  function logTap(type: SpotEventType, spot: PickData, rankPosition: number) {
+    void sendPilotEvents(pilotContext, [spotEvent(type, spot, rankPosition)]);
+  }
+
+  function setRanking(next: typeof order) {
+    if (order !== next) void sendPilotEvents({ ...pilotContext, rankingMode: next }, [{ type: "ranking_toggle" }]);
+    dispatch({ type: "preference", change: { order: next } });
+  }
+
+  useEffect(() => {
+    if (!pilotLoggingEnabled || !result) return;
+    const displayed = [...result.picks.slice(0, 4), ...(result.unknownHoursPicks ?? [])];
+    const shown = displayed.map((spot, index) => spotEvent("result_shown", spot, index + 1));
+    const signature = JSON.stringify([pilotContext, shown]);
+    const fallback = Boolean(result.unknownHoursPicks?.length);
+    const events: Parameters<typeof sendPilotEvents>[1][number][] = [];
+    if (signature !== lastImpression.current) events.push(...shown);
+    if (fallback && !fallbackVisible.current) events.push({ type: "hours_fallback_shown" });
+    lastImpression.current = signature;
+    fallbackVisible.current = fallback;
+    if (events.length) void sendPilotEvents(pilotContext, events);
+  }, [result, pilotContext]);
+
   const widerLimit = result && nextWalkLimit(walkLimit, result.picks.filter((pick) => pick.total <= budget * 100).length);
   const messages = {
     nearby: `Showing picks within a ${walkLimit}-minute walk.`,
@@ -167,14 +204,14 @@ export default function Home() {
           <fieldset>
             <legend>Meal budget</legend>
             <div className="options">
-              {presets.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => dispatch({ type: "preference", change: { budget: amount } })}>${amount}</button>)}
+              {budgetOptions.map((amount) => <button key={amount} aria-pressed={amount === budget} onClick={() => dispatch({ type: "preference", change: { budget: amount } })}>${amount}</button>)}
             </div>
           </fieldset>
           <fieldset>
             <legend>Rank results by</legend>
             <div className="options">
-              <button aria-pressed={order === "best-fit"} onClick={() => dispatch({ type: "preference", change: { order: "best-fit" } })}>Best fit for my budget</button>
-              <button aria-pressed={order === "cheapest"} onClick={() => dispatch({ type: "preference", change: { order: "cheapest" } })}>Cheapest first</button>
+              <button aria-pressed={order === "best-fit"} onClick={() => setRanking("best-fit")}>Best fit for my budget</button>
+              <button aria-pressed={order === "cheapest"} onClick={() => setRanking("cheapest")}>Cheapest first</button>
             </div>
           </fieldset>
           <fieldset>
@@ -190,8 +227,11 @@ export default function Home() {
           </p>
           {top ? <>
             {message && <p className="result-note">{message}</p>}
-            <Pick spot={top} primary usingLocation={Boolean(distances)} />
-            <button className="result-action" onClick={() => dispatch({ type: "reject", id: top.id, preferences })}>
+            <Pick spot={top} primary usingLocation={Boolean(distances)} onTap={(type) => logTap(type, top, 1)} />
+            <button className="result-action" onClick={() => {
+              logTap("reroll", top, 1);
+              dispatch({ type: "reject", id: top.id, preferences });
+            }}>
               Not feeling it
             </button>
           </> : <div className="pick">
@@ -203,7 +243,7 @@ export default function Home() {
           </div>}
           {alternates.length > 0 && <>
             <h2 className="alternate-title">Other nearby picks</h2>
-            <div className="alternates">{alternates.map((spot) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} />)}</div>
+            <div className="alternates">{alternates.map((spot, i) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} onTap={(type) => logTap(type, spot, i + 2)} />)}</div>
           </>}
           {widerLimit && (
             <button className="result-action" onClick={() => dispatch({ type: "preference", change: { walkLimit: widerLimit } })}>
@@ -213,7 +253,7 @@ export default function Home() {
           {unknownHoursPicks.length > 0 && (
             <section aria-labelledby="unknown-hours-heading">
               <h2 className="alternate-title" id="unknown-hours-heading">Hours not confirmed, check before you go</h2>
-              <div className="alternates">{unknownHoursPicks.map((spot) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} />)}</div>
+              <div className="alternates">{unknownHoursPicks.map((spot, i) => <Pick key={spot.id} spot={spot} usingLocation={Boolean(distances)} onTap={(type) => logTap(type, spot, i + (top ? alternates.length + 1 : 0) + 1)} />)}</div>
             </section>
           )}
           <details className="footnote">
@@ -221,6 +261,7 @@ export default function Home() {
             <p>Prices are estimates per person. They include 13% Ontario HST and exclude tip. Each result shows the date its price was checked when available. We mark delivery-app prices because they can be higher than in-store prices.</p>
           </details>
           {(top || unknownHoursPicks.length > 0) && <p className="footnote">Check with the restaurant for current prices and holiday hours. Approximate walk times use straight-line distances adjusted for detours. Location data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>}
+          {pilotLoggingEnabled && <p className="footnote">Anonymous usage stats. Your location is never stored.</p>}
         </section>
       </div>
     </main>

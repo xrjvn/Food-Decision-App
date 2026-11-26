@@ -2,6 +2,8 @@ import type { Campus, Mood } from "./catalogue";
 import type { WalkLimit } from "./location";
 import type { RankingOrder } from "./ranking";
 
+export const budgetOptions = [10, 15, 20] as const;
+
 type Preferences = { campus: Campus; budget: number; mood: Mood; order: RankingOrder; walkLimit: WalkLimit };
 
 type SearchState = {

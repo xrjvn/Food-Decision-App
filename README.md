@@ -55,3 +55,9 @@ Include the street number, street name, and city in each address. Review the `Ge
 Run `npm run import:meals -- /path/to/meals.csv` from the repository root. Add `--report /path/to/report.csv` for a row-by-row list of imported and skipped meals. This writes `data/meals.seed.json` separately from the Restaurants seed. Only meal rows with a verified or third-party delivery-app price, an eligible parent restaurant, and a valid price are imported. Serve counts default to one when blank. The helper column and empty rows are ignored.
 
 Best fit uses an affordable Typical or Big meal when available and otherwise chooses the Value option closest to budget. Cheapest first chooses the lowest tax-inclusive per-person total. Breakfast meals are eligible from 06:00 up to 11:00 Waterloo time. Restaurants with imported meal options use those options for all searches.
+
+## Pilot usage stats
+
+Run `supabase/events.sql` in the project's SQL Editor before enabling logging. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the publishable key) at build time. Keep local values in the ignored `.env.local` file. With either value missing, the app skips logging and does not create a browser identifier.
+
+A browser ID persists in local storage, and a page load gets a new visit ID. Event payloads contain only catalogue IDs, rank and enumerated search choices. Supabase sets the timestamp and Waterloo date. Use `supabase/pilot-queries.sql` in the owner dashboard to inspect permissions, measure the pilot and export events.

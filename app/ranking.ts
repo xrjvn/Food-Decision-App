@@ -17,7 +17,8 @@ type Deal = {
   priceCents?: number;
 };
 
-export type RankingOrder = "best-fit" | "cheapest";
+export const rankingOrders = ["best-fit", "cheapest"] as const;
+export type RankingOrder = typeof rankingOrders[number];
 
 export type RankingSpot = {
   id: string;
