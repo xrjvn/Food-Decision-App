@@ -300,3 +300,18 @@ test("most protein chooses and ranks affordable meals by known grams and falls b
   assert.equal(fallback.picks[0]?.id, "big");
   assert.equal(fallback.unknownHoursPicks?.[0]?.id, "known");
 });
+
+test("a selected meal's price status determines the delivery-app label", () => {
+  const deliveryMeal = option("delivery", "Value", 500, { deliveryAppPrice: true });
+  const verifiedMeal = option("verified", "Typical", 650);
+  const cases = [
+    [false, [deliveryMeal], true],
+    [true, [verifiedMeal], false],
+    [true, undefined, true],
+    [false, undefined, false],
+  ] as const;
+  for (const [deliveryAppPrice, mealOptions, expected] of cases) {
+    const restaurant = spot("mixed-prices", { deliveryAppPrice, mealOptions });
+    assert.equal(rankSpots([restaurant], search).picks[0]?.usesDeliveryAppPrice, expected);
+  }
+});

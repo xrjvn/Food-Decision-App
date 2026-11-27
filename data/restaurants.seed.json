@@ -1866,8 +1866,22 @@
     "verified": true,
     "deliveryAppPrice": true,
     "price_snapshot_date": "2026-11-25",
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 0,
+        "closes": 1440
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/tim-hortons-65-university-ave-east/1yi4Aob-QJadjJ0xLpZUow?diningMode=PICKUP",
     "latitude": 43.476998,
@@ -2009,8 +2023,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/now-tea-waterloo/BeYXEp8jTf6o03LU7PfZ4g?diningMode=PICKUP",
-    "latitude": 43.4754442,
-    "longitude": -80.5356777,
+    "latitude": 43.475303,
+    "longitude": -80.535546,
     "deal": null
   },
   {
@@ -2051,8 +2065,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://www.ubereats.com/ca/store/the-alley-waterloo/f3C2_cZxRQCNbAOxEpFqjQ?diningMode=PICKUP",
-    "latitude": null,
-    "longitude": null,
+    "latitude": 43.471753,
+    "longitude": -80.538673,
     "deal": null
   },
   {
@@ -2165,8 +2179,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": "https://order.online/store/SnowdayBingsu-31114014",
-    "latitude": 43.4667209,
-    "longitude": -80.5229605,
+    "latitude": 43.466739,
+    "longitude": -80.522987,
     "deal": null
   },
   {
@@ -2211,8 +2225,8 @@
     "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
-    "latitude": 43.4631722,
-    "longitude": -80.5232865,
+    "latitude": 43.463295,
+    "longitude": -80.523151,
     "deal": null
   }
 ]

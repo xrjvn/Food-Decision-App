@@ -34,6 +34,7 @@ export type RankingSpot = {
   hours: readonly OpeningWindow[];
   hoursUnknown?: boolean;
   verifiedPrice?: boolean;
+  deliveryAppPrice?: boolean;
   deal?: Deal;
 };
 
@@ -41,6 +42,7 @@ export type RankedPick<Spot extends RankingSpot> = Omit<Spot, "deal"> & {
   deal: Deal | undefined;
   total: number;
   usesTypicalMeal: boolean;
+  usesDeliveryAppPrice: boolean;
   selectedMeal?: MealOption;
   usesPerPersonPrice: boolean;
   distance: number;
@@ -141,7 +143,11 @@ export function rankSpots<Spot extends RankingSpot>(
     const dealBonus = deal ? 8 : 0;
     const noveltyPenalty = recentTopPickIds.includes(spot.id) ? NOVELTY_PENALTY : 0;
     const score = valueFit + moodBonus + dealBonus - distance / 100 - noveltyPenalty;
-    const pick = { ...spot, deal, total, selectedMeal: selected?.meal, usesTypicalMeal, usesPerPersonPrice, distance, score, walkMinutes: walkingMinutes(distance) };
+    const usesDeliveryAppPrice = selected ? selected.meal.deliveryAppPrice === true : spot.deliveryAppPrice === true;
+    const pick = {
+      ...spot, deal, total, selectedMeal: selected?.meal, usesTypicalMeal, usesDeliveryAppPrice,
+      usesPerPersonPrice, distance, score, walkMinutes: walkingMinutes(distance),
+    };
     if (unknownHours) {
       if (total <= budgetCents && !rejectedIds.has(spot.id)) unknown.push(pick);
       return [];

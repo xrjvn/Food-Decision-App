@@ -26,7 +26,6 @@ function Pick({ spot, primary, usingLocation, onTap }: {
     : spot.cheapestMealPriceCents !== undefined || spot.deal?.priceCents === undefined
       ? spot.priceSnapshotDate : spot.deal.verifiedOn;
   const verifiedDate = spot.selectedMeal ? spot.selectedMeal.priceDate : legacyDate;
-  const deliveryAppPrice = spot.deliveryAppPrice || spot.selectedMeal?.deliveryAppPrice;
   const mealName = spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal);
 
   const { mainProtein, calories, proteinGrams } = spot.selectedMeal ?? {};
@@ -53,7 +52,7 @@ function Pick({ spot, primary, usingLocation, onTap }: {
           <strong>{money.format(spot.total / 100)}</strong>
           {spot.usesPerPersonPrice && <small>per person · serves {spot.selectedMeal?.serves ?? spot.serves}</small>}
           <small>est. total with tax, tip not included</small>
-          {deliveryAppPrice && <small>Delivery-app price, likely lower in store.</small>}
+          {spot.usesDeliveryAppPrice && <small>Delivery-app price, likely lower in store.</small>}
           <small>{verifiedDate
             ? <>Price checked <time dateTime={verifiedDate}>{verifiedDate}</time></>
             : "Price check date unavailable"}
@@ -301,7 +300,7 @@ export default function Home() {
                     <strong>{spot.name}</strong> · {spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal)}
                     {" · "}{money.format(spot.total / 100)}{spot.usesPerPersonPrice ? " per person" : ""}
                     {" · "}approx. {spot.walkMinutes} min walk
-                    {(spot.deliveryAppPrice || spot.selectedMeal?.deliveryAppPrice) && " · Delivery-app price, likely lower in store."}
+                    {spot.usesDeliveryAppPrice && " · Delivery-app price, likely lower in store."}
                   </li>
                 ))}
               </ol>

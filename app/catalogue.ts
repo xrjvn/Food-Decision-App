@@ -17,7 +17,6 @@ type Spot = RankingSpot & {
   area: string;
   menu: string | null;
   address?: string;
-  deliveryAppPrice?: boolean;
   priceSnapshotDate: string | null;
   serves: number | null;
 };
