@@ -1,4 +1,4 @@
-export const rankingOrders = ["best-fit", "cheapest", "most-protein"] as const;
+export const rankingOrders = ["best-fit", "cheapest", "most-protein", "protein-per-dollar"] as const;
 export type RankingOrder = typeof rankingOrders[number];
 
 export const mealTiers = ["Value", "Typical", "Big"] as const;
@@ -54,6 +54,22 @@ export function compareProtein(a: MealOption | undefined, b: MealOption | undefi
   return Number(b?.tier === "Big") - Number(a?.tier === "Big");
 }
 
+export function proteinPerDollar(meal: MealOption | undefined, perPersonCents: number) {
+  if (meal?.proteinGrams === undefined || perPersonCents <= 0) return undefined;
+  return (meal.proteinGrams / meal.serves) / (perPersonCents / 100);
+}
+
+type PricedMeal = { meal?: MealOption; total: number };
+
+export function compareProteinValue(a: PricedMeal, b: PricedMeal) {
+  const aValue = proteinPerDollar(a.meal, a.total);
+  const bValue = proteinPerDollar(b.meal, b.total);
+  if (aValue !== undefined || bValue !== undefined) {
+    return (bValue ?? -1) - (aValue ?? -1);
+  }
+  return Number(b.meal?.tier === "Big") - Number(a.meal?.tier === "Big");
+}
+
 export function chooseMeal(
   meals: readonly MealOption[],
   minute: number,
@@ -68,8 +84,10 @@ export function chooseMeal(
   const affordable = available.filter(({ total }) => total <= budgetCents);
 
   if (order === "cheapest" || !affordable.length) return available.sort(byPrice)[0];
+  const compareNutrition = order === "protein-per-dollar" ? compareProteinValue
+    : order === "most-protein" ? (a: PricedMeal, b: PricedMeal) => compareProtein(a.meal, b.meal) : undefined;
   return affordable.sort((a, b) =>
-    (order === "most-protein" ? compareProtein(a.meal, b.meal) : 0)
+    (compareNutrition?.(a, b) ?? 0)
     || Number(a.meal.tier === "Value") - Number(b.meal.tier === "Value")
     || b.total - a.total || a.meal.id.localeCompare(b.meal.id)
   )[0];

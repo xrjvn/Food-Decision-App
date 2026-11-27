@@ -17,7 +17,7 @@ create table public.events (
   mood varchar(12) not null check (mood in ('Anything', 'Quick', 'Filling')),
   craving varchar(16) not null check (craving in ('Meal', 'Snack', 'Dessert/Drink')),
   diet varchar(24) not null check (diet in ('Anything', 'Meat or fish only', 'Vegetarian only')),
-  ranking_mode varchar(12) not null check (ranking_mode in ('best-fit', 'cheapest', 'most-protein')),
+  ranking_mode varchar(24) not null check (ranking_mode in ('best-fit', 'cheapest', 'most-protein', 'protein-per-dollar')),
   location_mode varchar(6) not null check (location_mode in ('campus', 'device')),
   walk_limit_minutes smallint not null check (walk_limit_minutes in (5, 10, 15, 20)),
   check (

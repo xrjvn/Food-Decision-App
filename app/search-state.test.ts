@@ -74,3 +74,12 @@ test("custom dollar-and-cent budgets apply without changing the default walking 
   assert.equal(top(updateSearch(custom, { type: "preference", change: { budget: 13.55 } })), "800");
   assert.equal(updateSearch(custom, { type: "preference", change: { budget: 13.555 } }), custom);
 });
+
+test("switching Diet to Anything preserves the other search choices and starts a fresh search", () => {
+  const restricted = updateSearch(initialSearch, {
+    type: "preference", change: { diet: "Meat or fish only", craving: "Dessert/Drink", budget: 20, order: "protein-per-dollar" },
+  });
+  const restarted = updateSearch(restricted, { type: "preference", change: { diet: "Anything" } });
+  assert.deepEqual(restarted.preferences, { ...restricted.preferences, diet: "Anything" });
+  assert.notEqual(restarted.preferences, restricted.preferences);
+});

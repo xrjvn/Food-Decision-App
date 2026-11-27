@@ -320,7 +320,7 @@
     "id": "R08",
     "name": "Gino's Pizza (King St N & University Ave)",
     "area": "Between",
-    "address": "253 King St N, Waterloo",
+    "address": "253 King St N, Unit 2, Waterloo",
     "cuisine": "Pizza",
     "dietary_notes": "Unknown",
     "moods": [
@@ -538,8 +538,22 @@
     "typical_meal_pre_tax_price_cents": null,
     "verified": false,
     "price_snapshot_date": null,
-    "hours": [],
-    "hours_unknown": true,
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 1020,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
     "hoursSource": null,
     "menu": null,
     "latitude": 43.4774007,
@@ -2080,13 +2094,13 @@
       "treat",
       "quick"
     ],
-    "meal": "",
-    "cheapest_meal": "",
-    "cheapest_meal_pre_tax_price_cents": null,
-    "price_source": "",
+    "meal": "Strawberry Milk Tea",
+    "cheapest_meal": "Taro Milk Tea",
+    "cheapest_meal_pre_tax_price_cents": 725,
+    "price_source": "Uber Eats pickup-only menu (exact URL not captured)",
     "price_confidence": "Low",
-    "serves": null,
-    "typical_meal_pre_tax_price_cents": null,
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 725,
     "verified": false,
     "price_snapshot_date": null,
     "hours": [
@@ -2227,6 +2241,877 @@
     "menu": null,
     "latitude": 43.463295,
     "longitude": -80.523151,
+    "deal": null
+  },
+  {
+    "id": "R50",
+    "name": "Kabob Hut (170 University Ave W)",
+    "area": "UW side",
+    "address": "170 University Ave W, Waterloo (unit not captured)",
+    "cuisine": "Persian kabobs and wraps",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Mini Koobideh with saffron rice and grilled tomato",
+    "cheapest_meal": "Falafel Wrap",
+    "cheapest_meal_pre_tax_price_cents": 1599,
+    "price_source": "Uber Eats / third-party pickup (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 2099,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.471808,
+    "longitude": -80.538781,
+    "deal": null
+  },
+  {
+    "id": "R51",
+    "name": "iPotato (170 University Ave W)",
+    "area": "UW side",
+    "address": "170 University Ave W, Unit 21, Waterloo",
+    "cuisine": "Doner boxes, falafel salads",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "quick"
+    ],
+    "meal": "Chicken Doner Box",
+    "cheapest_meal": "Falafel Salad",
+    "cheapest_meal_pre_tax_price_cents": 1299,
+    "price_source": "Uber Eats / third-party pickup (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1999,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.472332,
+    "longitude": -80.538791,
+    "deal": null
+  },
+  {
+    "id": "R52",
+    "name": "Tahini's (250 Phillip St)",
+    "area": "UW side",
+    "address": "250 Phillip St, Units A & B, Waterloo",
+    "cuisine": "Middle Eastern shawarma and bowls",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "late night"
+    ],
+    "meal": "50/50 Bowl",
+    "cheapest_meal": "Chicken Shawarma",
+    "cheapest_meal_pre_tax_price_cents": 1399,
+    "price_source": "Uber Eats / third-party pickup (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1649,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2
+        ],
+        "opens": 660,
+        "closes": 120
+      },
+      {
+        "days": [
+          3,
+          4,
+          5
+        ],
+        "opens": 660,
+        "closes": 240
+      },
+      {
+        "days": [
+          6,
+          0
+        ],
+        "opens": 660,
+        "closes": 120
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.473146,
+    "longitude": -80.536683,
+    "deal": null
+  },
+  {
+    "id": "R53",
+    "name": "Foodie Fruitie (203 Lester St, Unit 7)",
+    "area": "UW side",
+    "address": "203 Lester St, Unit 7, Waterloo",
+    "cuisine": "Japanese and Chinese rolls, rice dishes",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Crispy Fried Curry Chicken with Rice",
+    "cheapest_meal": "Eight-piece Spicy Crispy Salmon Roll",
+    "cheapest_meal_pre_tax_price_cents": 1150,
+    "price_source": "Uber Eats / third-party pickup (exact URL not captured)",
+    "price_confidence": "Low",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1495,
+    "verified": false,
+    "price_snapshot_date": null,
+    "hours": [
+      {
+        "days": [
+          1
+        ],
+        "opens": 960,
+        "closes": 1380
+      },
+      {
+        "days": [
+          2
+        ],
+        "opens": 660,
+        "closes": 1380
+      },
+      {
+        "days": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1410
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.472522,
+    "longitude": -80.534015,
+    "deal": null
+  },
+  {
+    "id": "R54",
+    "name": "Hey Chefz (203 Lester St)",
+    "area": "UW side",
+    "address": "203 Lester St, Unit 2, Waterloo",
+    "cuisine": "Japanese rice dishes, omurice",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "treat"
+    ],
+    "meal": "Sliced Beef Teppan Pepper Rice",
+    "cheapest_meal": "Pork Cutlet Omurice with Spicy Curry Sauce",
+    "cheapest_meal_pre_tax_price_cents": 1799,
+    "price_source": "Uber Eats / third-party pickup (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1899,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.472409,
+    "longitude": -80.534106,
+    "deal": null
+  },
+  {
+    "id": "R55",
+    "name": "Song's Lamian (203 Lester St, Unit 1)",
+    "area": "UW side",
+    "address": "203 Lester St, Unit 1, Waterloo",
+    "cuisine": "Chinese hand-pulled noodles",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Small Braised Beef Noodle",
+    "cheapest_meal": "Small Traditional Beef Noodle",
+    "cheapest_meal_pre_tax_price_cents": 1199,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1299,
+    "verified": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.472659,
+    "longitude": -80.5340111,
+    "deal": null
+  },
+  {
+    "id": "R56",
+    "name": "Izna Poke Plus (170 University Ave W, Unit 6B)",
+    "area": "UW side",
+    "address": "170 University Ave W, Unit 6B, Waterloo",
+    "cuisine": "Poke bowls",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "healthy",
+      "filling"
+    ],
+    "meal": "Salmon Bowl",
+    "cheapest_meal": "Tofu Bowl",
+    "cheapest_meal_pre_tax_price_cents": 1499,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1699,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1260
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4717593,
+    "longitude": -80.5387664,
+    "deal": null
+  },
+  {
+    "id": "R57",
+    "name": "Onnuri (140 University Ave W, Unit 6B)",
+    "area": "UW side",
+    "address": "140 University Ave W, Unit 6B, Waterloo",
+    "cuisine": "Korean",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Bulgogi with steamed rice",
+    "cheapest_meal": "Pork Bone Soup",
+    "cheapest_meal_pre_tax_price_cents": 1873,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 2498,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 690,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4729106,
+    "longitude": -80.5354332,
+    "deal": null
+  },
+  {
+    "id": "R58",
+    "name": "Indian Sweet Master (170 University Ave W, Unit 1B)",
+    "area": "UW side",
+    "address": "170 University Ave W, Unit 1B, Waterloo",
+    "cuisine": "Indian, sweets",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "treat"
+    ],
+    "meal": "Rice with Butter Chicken and Mithai",
+    "cheapest_meal": "Chana Bhatura",
+    "cheapest_meal_pre_tax_price_cents": 1199,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1599,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 720,
+        "closes": 0
+      },
+      {
+        "days": [
+          5
+        ],
+        "opens": 720,
+        "closes": 60
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 660,
+        "closes": 60
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4715629,
+    "longitude": -80.5383595,
+    "deal": null
+  },
+  {
+    "id": "R59",
+    "name": "Mel's Diner (140 University Ave W, Unit 7)",
+    "area": "UW side",
+    "address": "140 University Ave W, Unit 7, Waterloo",
+    "cuisine": "Diner breakfast",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Hungry Mel (eggs, breakfast meats, home fries, toast, pancake or French toast)",
+    "cheapest_meal": "Mel's Favourite (eggs, toast, a side)",
+    "cheapest_meal_pre_tax_price_cents": 1199,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 2099,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 450,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4728911,
+    "longitude": -80.5355579,
+    "deal": null
+  },
+  {
+    "id": "R60",
+    "name": "Kismet (160 University Ave W, Unit 20)",
+    "area": "Between (University Plaza)",
+    "address": "160 University Ave W, Unit 20, Waterloo",
+    "cuisine": "Bangladeshi / Indian",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Chicken Biryani",
+    "cheapest_meal": "Vegetable Biryani",
+    "cheapest_meal_pre_tax_price_cents": 1450,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1550,
+    "verified": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "opens": 720,
+        "closes": 1290
+      },
+      {
+        "days": [
+          5,
+          6
+        ],
+        "opens": 720,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.472623,
+    "longitude": -80.5371762,
+    "deal": null
+  },
+  {
+    "id": "R61",
+    "name": "Lazeez Shawarma (170 University Ave W)",
+    "area": "Between (University Plaza)",
+    "address": "170 University Ave W, Waterloo",
+    "cuisine": "Shawarma",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "quick"
+    ],
+    "meal": "Chicken Shawarma Wrap",
+    "cheapest_meal": "Yalla Falafel Bowl",
+    "cheapest_meal_pre_tax_price_cents": 1599,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1699,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.472395,
+    "longitude": -80.5387903,
+    "deal": null
+  },
+  {
+    "id": "R62",
+    "name": "Nuri Village (160 University Ave W, Units 7-8)",
+    "area": "Between (University Plaza)",
+    "address": "160 University Ave W, Units 7-8, Waterloo",
+    "cuisine": "Korean",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Bulgogi Stone Bowl",
+    "cheapest_meal": "Vegetable Stone Bowl Bibimbap",
+    "cheapest_meal_pre_tax_price_cents": 1720,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1950,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 1380
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4722743,
+    "longitude": -80.5377782,
+    "deal": null
+  },
+  {
+    "id": "R63",
+    "name": "Aunty's Kitchen (160 University Ave W)",
+    "area": "Between (University Plaza)",
+    "address": "160 University Ave W, Waterloo",
+    "cuisine": "Indian and shawarma",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "late night"
+    ],
+    "meal": "Butter Chicken Dinner (with a side choice)",
+    "cheapest_meal": "Shawarma On Rice",
+    "cheapest_meal_pre_tax_price_cents": 1249,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1895,
+    "verified": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 180
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4722018,
+    "longitude": -80.5373263,
+    "deal": null
+  },
+  {
+    "id": "R64",
+    "name": "Ken Sushi (256 Phillip St)",
+    "area": "Laurier side",
+    "address": "256 Phillip St, Waterloo",
+    "cuisine": "Japanese sushi",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling"
+    ],
+    "meal": "Dynamite Roll, 10 pieces",
+    "cheapest_meal": "Philadelphia Roll",
+    "cheapest_meal_pre_tax_price_cents": 1125,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1625,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "opens": 690,
+        "closes": 900
+      },
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "opens": 960,
+        "closes": 1320
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 720,
+        "closes": 900
+      },
+      {
+        "days": [
+          6
+        ],
+        "opens": 960,
+        "closes": 1320
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 720,
+        "closes": 900
+      },
+      {
+        "days": [
+          0
+        ],
+        "opens": 960,
+        "closes": 1260
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4734517,
+    "longitude": -80.5370013,
+    "deal": null
+  },
+  {
+    "id": "R65",
+    "name": "King Tin (318 Spruce St)",
+    "area": "Laurier side",
+    "address": "318 Spruce St, Waterloo",
+    "cuisine": "Chinese",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "cheap"
+    ],
+    "meal": "Fried Rice Noodle with Sliced Beef",
+    "cheapest_meal": "Fried Rice Young-Chow Style",
+    "cheapest_meal_pre_tax_price_cents": 1350,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "High",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1600,
+    "verified": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          1
+        ],
+        "opens": 660,
+        "closes": 1020
+      },
+      {
+        "days": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          0
+        ],
+        "opens": 660,
+        "closes": 1320
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.4790684,
+    "longitude": -80.5263584,
+    "deal": null
+  },
+  {
+    "id": "R66",
+    "name": "Fat Bastard Burrito (255 King St N)",
+    "area": "Laurier side",
+    "address": "255 King St N, Waterloo",
+    "cuisine": "Burritos",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "filling",
+      "quick",
+      "cheap"
+    ],
+    "meal": "BIG Burrito",
+    "cheapest_meal": "Lil Burrito with Waffle Fries",
+    "cheapest_meal_pre_tax_price_cents": 899,
+    "price_source": "Ordering page (exact URL not captured)",
+    "price_confidence": "Medium",
+    "serves": 1,
+    "typical_meal_pre_tax_price_cents": 1499,
+    "verified": true,
+    "deliveryAppPrice": true,
+    "price_snapshot_date": "2026-11-27",
+    "hours": [
+      {
+        "days": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "opens": 660,
+        "closes": 0
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": 43.477234,
+    "longitude": -80.52559,
+    "deal": null
+  },
+  {
+    "id": "R67",
+    "name": "The Pub on King (77 King St N)",
+    "area": "Laurier side",
+    "address": "77 King St N, Waterloo",
+    "cuisine": "Pub",
+    "dietary_notes": "Unknown",
+    "moods": [
+      "treat",
+      "late night"
+    ],
+    "meal": "",
+    "cheapest_meal": "",
+    "cheapest_meal_pre_tax_price_cents": null,
+    "price_source": "",
+    "price_confidence": "",
+    "serves": null,
+    "typical_meal_pre_tax_price_cents": null,
+    "verified": false,
+    "price_snapshot_date": null,
+    "hours": [
+      {
+        "days": [
+          1
+        ],
+        "opens": 1080,
+        "closes": 0
+      },
+      {
+        "days": [
+          2
+        ],
+        "opens": 960,
+        "closes": 120
+      },
+      {
+        "days": [
+          3
+        ],
+        "opens": 960,
+        "closes": 1380
+      },
+      {
+        "days": [
+          4,
+          5,
+          6
+        ],
+        "opens": 960,
+        "closes": 120
+      }
+    ],
+    "hours_unknown": false,
+    "hoursSource": null,
+    "menu": null,
+    "latitude": null,
+    "longitude": null,
     "deal": null
   }
 ]

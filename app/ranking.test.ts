@@ -3,6 +3,7 @@ import { test } from "node:test";
 import seed from "../data/restaurants.seed.json";
 import type { SeedSpot } from "../scripts/restaurant-import";
 import { spots as visibleSpots } from "./catalogue";
+import { proteinPerDollar } from "./meals";
 import { rankSpots, type RankingSpot } from "./ranking";
 
 const search = {
@@ -314,4 +315,28 @@ test("a selected meal's price status determines the delivery-app label", () => {
     const restaurant = spot("mixed-prices", { deliveryAppPrice, mealOptions });
     assert.equal(rankSpots([restaurant], search).picks[0]?.usesDeliveryAppPrice, expected);
   }
+});
+
+test("protein per dollar ranks known values using tax-inclusive per-person price and falls back to Big", () => {
+  const larger = option("larger", "Big", 1000, { proteinGrams: 28 });
+  const betterValue = option("better-value", "Value", 800, { proteinGrams: 24 });
+  const shareable = option("shareable", "Typical", 1200, { proteinGrams: 40, serves: 2 });
+  const zeroProtein = option("zero-protein", "Value", 400, { proteinGrams: 0 });
+  const noGramsBig = option("no-grams-big", "Big", 600);
+  const noGramsTypical = option("no-grams-typical", "Typical", 900);
+  const free = option("free", "Value", 0, { proteinGrams: 10 });
+  assert.equal(proteinPerDollar(shareable, 678), 20 / 6.78);
+  assert.equal(proteinPerDollar(free, 0), undefined);
+
+  const restaurants = [
+    spot("choices", { mealOptions: [larger, betterValue] }),
+    spot("shared", { mealOptions: [shareable] }),
+    spot("larger-only", { mealOptions: [larger] }),
+    spot("zero", { mealOptions: [zeroProtein] }),
+    spot("fallback-big", { mealOptions: [noGramsBig] }),
+    spot("fallback-typical", { mealOptions: [noGramsTypical] }),
+  ];
+  const ranked = rankSpots(restaurants, { ...search, order: "protein-per-dollar" });
+  assert.deepEqual(ranked.picks.map((pick) => pick.selectedMeal?.id),
+    ["shareable", "better-value", "larger", "zero-protein", "no-grams-big", "no-grams-typical"]);
 });

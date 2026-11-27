@@ -171,3 +171,18 @@ test("delivery-app prices enter the eligible seed and explicit menu links overri
     assert.equal(importRestaurants(csv(row({ 9: status })))[0].verified, false);
   }
 });
+
+test("multiple windows for the same day preserve a midday closure", () => {
+  const [record] = importRestaurants(csv(row({
+    10: "Mon-Fri 11:30-15:00; Mon-Fri 16:00-22:00; Sat 12:00-15:00; Sat 16:00-22:00; Sun 12:00-15:00; Sun 16:00-21:00",
+  })));
+  assert.equal(record.hours.length, 6);
+  assert.equal(record.hours_unknown, false);
+  const spot = { ...record, point: [43.47, -80.54] as const, priceCents: 799 };
+  for (const [time, expected] of [["14:59", 1], ["15:00", 0], ["15:59", 0], ["16:00", 1]] as const) {
+    const result = rankSpots([spot], {
+      origin: spot.point, mood: "Anything", budgetCents: 1500, now: new Date(`2026-11-27T${time}:00-05:00`),
+    });
+    assert.equal(result.picks.length, expected);
+  }
+});

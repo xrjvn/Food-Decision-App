@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useRef, useState } from "react";
-import { cravings, diets } from "./meals";
+import { cravings, diets, proteinPerDollar } from "./meals";
 import { campuses, moods, spots, type Campus } from "./catalogue";
 
 import { rankSpots, type RankedPick } from "./ranking";
@@ -29,10 +29,12 @@ function Pick({ spot, primary, usingLocation, onTap }: {
   const mealName = spot.selectedMeal?.meal ?? (spot.usesTypicalMeal ? spot.meal : spot.cheapestMeal || spot.meal);
 
   const { mainProtein, calories, proteinGrams } = spot.selectedMeal ?? {};
+  const proteinValue = proteinPerDollar(spot.selectedMeal, spot.total);
   const nutrition = [
     mainProtein,
     calories === undefined ? undefined : `${calories} cal`,
     proteinGrams === undefined ? undefined : `${proteinGrams} g protein`,
+    proteinValue === undefined ? undefined : `${proteinValue.toFixed(1)} g protein per $`,
   ].filter(Boolean).join(" · ");
 
   return (
@@ -189,7 +191,16 @@ export default function Home() {
     "nothing-open": `No spots are confirmed open within a ${walkLimit}-minute walk right now.`,
     exhausted: `You’ve skipped all the open picks within a ${walkLimit}-minute walk.`,
   };
-  const message = result ? messages[result.kind] : "Checking listed hours…";
+  const empty = Boolean(result && !top && unknownHoursPicks.length === 0);
+  const canBroadenDiet = empty && diet !== "Anything";
+  const cravingLabel = craving === "Dessert/Drink" ? "dessert and drinks" : craving.toLowerCase();
+  const matching = `${cravingLabel} options${canBroadenDiet ? ` with Diet set to ${diet}` : ""}`;
+  const emptyReason = result?.kind === "ask-over-budget"
+    ? `No open ${matching} fit your budget within a ${walkLimit}-minute walk.`
+    : result?.kind === "exhausted"
+      ? `You’ve skipped all the open ${matching} within a ${walkLimit}-minute walk.`
+      : `No ${matching} are available within a ${walkLimit}-minute walk right now.`;
+  const message = empty ? emptyReason : result ? messages[result.kind] : "Checking listed hours…";
 
   return (
     <main>
@@ -242,6 +253,7 @@ export default function Home() {
               <button aria-pressed={order === "best-fit"} onClick={() => setRanking("best-fit")}>Best fit for my budget</button>
               <button aria-pressed={order === "cheapest"} onClick={() => setRanking("cheapest")}>Cheapest first</button>
               <button aria-pressed={order === "most-protein"} onClick={() => setRanking("most-protein")}>Most protein</button>
+              <button aria-pressed={order === "protein-per-dollar"} onClick={() => setRanking("protein-per-dollar")}>Most protein per dollar</button>
             </div>
           </fieldset>
           <fieldset>
@@ -282,6 +294,9 @@ export default function Home() {
             </button>
           </> : <div className="pick">
             <p>{message}</p>
+            {canBroadenDiet && <button className="result-action" onClick={() => dispatch({ type: "preference", change: { diet: "Anything" } })}>
+              Switch Diet to Anything
+            </button>}
             {result?.kind === "ask-over-budget" && <button className="result-action" onClick={() => dispatch({ type: "allow-over-budget", preferences })}>
               Show over-budget picks
             </button>}

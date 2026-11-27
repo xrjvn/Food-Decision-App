@@ -1,4 +1,4 @@
-import { chooseMeal, compareProtein, defaultMealFilters, type MealFilters, type MealOption, type RankingOrder } from "./meals";
+import { chooseMeal, compareProtein, compareProteinValue, defaultMealFilters, type MealFilters, type MealOption, type RankingOrder } from "./meals";
 
 import { distanceMetres, metresPerMinute, walkingMinutes, type Point, type WalkLimit } from "./location";
 
@@ -160,7 +160,10 @@ export function rankSpots<Spot extends RankingSpot>(
   const byPrice = (a: RankedPick<Spot>, b: RankedPick<Spot>) => a.total - b.total || byScore(a, b);
   const byProtein = (a: RankedPick<Spot>, b: RankedPick<Spot>) =>
     compareProtein(a.selectedMeal, b.selectedMeal) || byScore(a, b);
-  const compare = order === "cheapest" ? byPrice : order === "most-protein" ? byProtein : byScore;
+  const byProteinValue = (a: RankedPick<Spot>, b: RankedPick<Spot>) =>
+    compareProteinValue({ meal: a.selectedMeal, total: a.total }, { meal: b.selectedMeal, total: b.total }) || byScore(a, b);
+  const compare = order === "cheapest" ? byPrice
+    : order === "most-protein" ? byProtein : order === "protein-per-dollar" ? byProteinValue : byScore;
 
   function withFallback(result: RankingResult<Spot>, radius: number): RankingResult<Spot> {
     if (result.picks.length >= 3) return result;
